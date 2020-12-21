@@ -17,6 +17,7 @@
 class Shredverb_fromscratchAudioProcessorEditor  : public juce::AudioProcessorEditor
 ,                                                    private juce::Button::Listener
 ,                                                    private juce::Slider::Listener
+,                                                    private juce::ComboBox::Listener
 {
 public:
     Shredverb_fromscratchAudioProcessorEditor (Shredverb_fromscratchAudioProcessor&, juce::AudioProcessorValueTreeState&);
@@ -49,6 +50,7 @@ public:
      */
     void sliderDragEnded (juce::Slider*) override {}
     //==============================================================================
+    void comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged) override {}
 
     
     juce::Slider decaySlider;
@@ -58,7 +60,7 @@ public:
     juce::AudioProcessorValueTreeState::SliderAttachment *sizeSliderAttachment;
     
     juce::ComboBox interpComboBox;
-    juce::ComboBoxParameterAttachment *interpComboBoxAttachment;
+    juce::AudioProcessorValueTreeState::ComboBoxAttachment *interpComboBoxAttachment;
     
     juce::Slider lopSlider;
     juce::AudioProcessorValueTreeState::SliderAttachment *lopSliderAttachment;
@@ -66,17 +68,11 @@ public:
     juce::Slider allpassSlider;
     juce::AudioProcessorValueTreeState::SliderAttachment *allpassSliderAttachment;
     
-    juce::Slider dist1Slider[4];
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist1SliderAttachment0;
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist1SliderAttachment1;
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist1SliderAttachment2;
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist1SliderAttachment3;
+    juce::Slider dist1inerSlider;
+    juce::Slider dist1outrSlider;
+    juce::AudioProcessorValueTreeState::SliderAttachment *dist1inerSliderAttachment;
+    juce::AudioProcessorValueTreeState::SliderAttachment *dist1outrSliderAttachment;
 
-    juce::Slider dist2Slider[4];
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist2SliderAttachment0;
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist2SliderAttachment1;
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist2SliderAttachment2;
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist2SliderAttachment3;
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.

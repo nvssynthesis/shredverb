@@ -34,15 +34,24 @@ Shredverb_fromscratchAudioProcessorEditor::Shredverb_fromscratchAudioProcessorEd
     //sizeSlider.setRange(0.f, 1.f);
     sizeSlider.setValue(0.f/*processor.fbParam*/);
     sizeSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    sizeSlider.setSkewFactor (0.25, false);
+    sizeSlider.setSkewFactor(0.005, false);
     sizeSliderAttachment = new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "size", sizeSlider);
+    
+    addAndMakeVisible(&interpComboBox);
+    interpComboBox.addListener(this);
+    interpComboBoxAttachment = new juce::AudioProcessorValueTreeState::ComboBoxAttachment(valueTreeState, "interp", interpComboBox);
+//    const std::string interpTypes[3] = {"Cubic", "Linear", "Floor"};
+//    juce::String str;
+//    const char *text = "Cubic";
+//    str = new juce::String(text);
+//    interpComboBox.addItemList ({"Cubic", "Linear", "Floor"}, 0);
     
     addAndMakeVisible(&lopSlider);
     lopSlider.addListener(this);
     //lopSlider.setRange(120.f, 20000.f);
     lopSlider.setValue(12000.f/*processor.fbParam*/);
     lopSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    lopSlider.setSkewFactor (0.25, false);
+    lopSlider.setSkewFactor (0.05, false);
     lopSliderAttachment = new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "lop", lopSlider);
     
     addAndMakeVisible(&allpassSlider);
@@ -51,39 +60,24 @@ Shredverb_fromscratchAudioProcessorEditor::Shredverb_fromscratchAudioProcessorEd
     allpassSlider.setValue(0.f/*processor.fbParam*/);
     allpassSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     allpassSliderAttachment = new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "apd_g", allpassSlider);
+
+    addAndMakeVisible(&dist1inerSlider);
+    dist1inerSlider.addListener(this);
+    //dist1Slider[n].setRange(0.f, 1.f);
+    dist1inerSlider.setValue(0.f/*processor.fbParam*/);
+    dist1inerSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    dist1inerSlider.setSkewFactor (0.25, false);
     
-    for (int n = 0; n < D_IJ; n++)
-    {
-        addAndMakeVisible(&dist1Slider[n]);
-        dist1Slider[n].addListener(this);
-        //dist1Slider[n].setRange(0.f, 1.f);
-        dist1Slider[n].setValue(0.f/*processor.fbParam*/);
-        dist1Slider[n].setSliderStyle(juce::Slider::SliderStyle::Rotary);
-        dist1Slider[n].setSkewFactor (0.25, false);
-        
-        //std::string str = "dist";
-        
-        //dist1SliderAttachment[0] = (new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist1", dist1Slider[0]));
+    addAndMakeVisible(&dist1outrSlider);
+    dist1outrSlider.addListener(this);
+    //dist1Slider[n].setRange(0.f, 1.f);
+    dist1outrSlider.setValue(0.f/*processor.fbParam*/);
+    dist1outrSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    dist1outrSlider.setSkewFactor (0.25, false);
 
-        addAndMakeVisible(&dist2Slider[n]);
-        dist2Slider[n].addListener(this);
-        //dist2Slider[n].setRange(0.f, 1.f);
-        dist2Slider[n].setValue(0.f/*processor.fbParam*/);
-        dist2Slider[n].setSliderStyle(juce::Slider::SliderStyle::Rotary);
-        dist2Slider[n].setSkewFactor (0.25, false);
-//        dist2SliderAttachment[n] = new[] juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist2", dist2Slider[n]);
-    }
+    dist1inerSliderAttachment = (new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist1iner", dist1inerSlider));
+    dist1outrSliderAttachment = (new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist1outr", dist1outrSlider));
 
-    dist1SliderAttachment0 = (new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist1a", dist1Slider[0]));
-    dist1SliderAttachment1 = (new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist1b", dist1Slider[1]));
-    dist1SliderAttachment2 = (new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist1c", dist1Slider[2]));
-    dist1SliderAttachment3 = (new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist1d", dist1Slider[3]));
-
-    dist2SliderAttachment0 = new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist2a", dist2Slider[0]);
-    dist2SliderAttachment1 = new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist2b", dist2Slider[1]);
-    dist2SliderAttachment2 = new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist2c", dist2Slider[2]);
-    dist2SliderAttachment3 = new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist2d", dist2Slider[3]);
-    
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (WIDTH, HEIGHT);
@@ -95,14 +89,10 @@ Shredverb_fromscratchAudioProcessorEditor::~Shredverb_fromscratchAudioProcessorE
     delete sizeSliderAttachment;
     delete lopSliderAttachment;
     delete allpassSliderAttachment;
-    delete dist1SliderAttachment0;
-    delete dist1SliderAttachment1;
-    delete dist1SliderAttachment2;
-    delete dist1SliderAttachment3;
-    delete dist2SliderAttachment0;
-    delete dist2SliderAttachment1;
-    delete dist2SliderAttachment2;
-    delete dist2SliderAttachment3;
+    delete dist1inerSliderAttachment;
+    delete dist1outrSliderAttachment;
+    
+    delete interpComboBoxAttachment;
 }
 
 //==============================================================================
@@ -139,16 +129,19 @@ void Shredverb_fromscratchAudioProcessorEditor::resized()
 
     sizeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, textWidth, textHeight);
     sizeSlider.setBounds    (unit[1] + offset, row_Y, knobWidth, knobHeight);
+    
+    interpComboBox.setBounds(unit[1] + offset + 105, row_Y + 20, 40, 20);
+    
     lopSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, textWidth, textHeight);
     lopSlider.setBounds     (unit[2] + offset, row_Y, knobWidth, knobHeight);
     allpassSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, textWidth, textHeight);
     allpassSlider.setBounds (unit[3] + offset, row_Y, knobWidth, knobHeight);
+    
+    
     row_Y = 200;
     
-    for (int n = 0; n < D_IJ; n++)  {
-        dist1Slider[n].setTextBoxStyle(juce::Slider::TextBoxBelow, false, textWidth, textHeight);
-        dist1Slider[n].setBounds   (unit[n] + offset, row_Y + 0, knobWidth, knobHeight);
-        dist2Slider[n].setTextBoxStyle(juce::Slider::TextBoxBelow, false, textWidth, textHeight);
-        dist2Slider[n].setBounds   (unit[n] + offset, row_Y + 150, knobWidth, knobHeight);
-    }
+    dist1inerSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, textWidth, textHeight);
+    dist1inerSlider.setBounds   (unit[0] + offset, row_Y + 0, knobWidth, knobHeight);
+    dist1outrSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, textWidth, textHeight);
+    dist1outrSlider.setBounds   (unit[1] + offset, row_Y + 0, knobWidth, knobHeight);
 }

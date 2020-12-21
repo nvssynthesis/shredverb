@@ -86,14 +86,10 @@ private:
     std::atomic<float>* sizeParam = nullptr;
     std::atomic<float>* lopParam = nullptr;
     std::atomic<float>* allpassParam = nullptr;
-    std::atomic<float>* dist1aParam = nullptr;
-    std::atomic<float>* dist1bParam = nullptr;
-    std::atomic<float>* dist1cParam = nullptr;
-    std::atomic<float>* dist1dParam = nullptr;
-    std::atomic<float>* dist2aParam = nullptr;
-    std::atomic<float>* dist2bParam = nullptr;
-    std::atomic<float>* dist2cParam = nullptr;
-    std::atomic<float>* dist2dParam = nullptr;
+    std::atomic<float>* dist1inerParam = nullptr;//metaparams for direct to L-R tvap outputs, controls f_pi_mod & f_b_mod
+    std::atomic<float>* dist1outrParam = nullptr;//metaparams for indirect to L-R tvap outputs, controls f_pi_mod & f_b_mod
+    
+    std::atomic<float>* interpParam = nullptr;
 
     juce::Random rando;
     //==============================================================================
