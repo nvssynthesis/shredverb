@@ -21,7 +21,7 @@ class Shredverb_fromscratchAudioProcessor  : public juce::AudioProcessor
 {
 public:
     //==============================================================================
-    Shredverb_fromscratchAudioProcessor();
+    Shredverb_fromscratchAudioProcessor ();
     ~Shredverb_fromscratchAudioProcessor() override;
 
     //==============================================================================
@@ -85,12 +85,20 @@ private:
     std::atomic<float>* fbParam  = nullptr;
     std::atomic<float>* sizeParam = nullptr;
     std::atomic<float>* lopParam = nullptr;
-    std::atomic<float>* allpassParam = nullptr;
-    std::atomic<float>* dist1inerParam = nullptr;//metaparams for direct to L-R tvap outputs, controls f_pi_mod & f_b_mod
-    std::atomic<float>* dist1outrParam = nullptr;//metaparams for indirect to L-R tvap outputs, controls f_pi_mod & f_b_mod
+    std::atomic<float>* dryWetParam = nullptr;
+
+    std::atomic<float>* allpassParam0 = nullptr;
+    std::atomic<float>* allpassParam1 = nullptr;
+    std::atomic<float>* allpassParam2 = nullptr;
+    std::atomic<float>* allpassParam3 = nullptr;
+
+    std::atomic<float>* dist1inerParam = nullptr;//metaparams for direct to L-R tvap outputs, controls f_pi_mod
+    std::atomic<float>* dist1outrParam = nullptr;//metaparams for indirect to L-R tvap outputs, controls f_pi_mod
+    std::atomic<float>* dist2inerParam = nullptr;//metaparams for direct to L-R tvap outputs, controls f_b_mod
+    std::atomic<float>* dist2outrParam = nullptr;//metaparams for indirect to L-R tvap outputs, controls f_b_mod
     
     std::atomic<float>* interpParam = nullptr;
-
+    std::atomic<float>* randomizeParam = nullptr;
     juce::Random rando;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Shredverb_fromscratchAudioProcessor)

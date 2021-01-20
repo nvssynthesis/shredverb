@@ -6,12 +6,12 @@
               pluginVST3Category="Delay,Distortion,Reverb">
   <MAINGROUP id="I3IFci" name="shredverb">
     <GROUP id="{38FE3FCD-D4FD-0CDA-F68B-E10F93AC75F5}" name="Source">
-      <FILE id="hKkLd9" name="nkvdu_delayFilters.h" compile="0" resource="0"
-            file="../gitstuff/nkvdu_libraries/nkvdu_delayFilters.h"/>
-      <FILE id="WFHtvZ" name="nkvdu_filters.h" compile="0" resource="0" file="../gitstuff/nkvdu_libraries/nkvdu_filters.h"/>
-      <FILE id="GhGtQC" name="nkvdu_LFO.h" compile="0" resource="0" file="../gitstuff/nkvdu_libraries/nkvdu_LFO.h"/>
-      <FILE id="TObwNN" name="nkvdu_memoryless.h" compile="0" resource="0"
-            file="../gitstuff/nkvdu_libraries/nkvdu_memoryless.h"/>
+      <FILE id="nWXE89" name="nkvdu_delayFilters.h" compile="0" resource="0"
+            file="../nkvdu_libraries/nkvdu_delayFilters.h"/>
+      <FILE id="tvmRle" name="nkvdu_filters.h" compile="0" resource="0" file="../nkvdu_libraries/nkvdu_filters.h"/>
+      <FILE id="xlVFIK" name="nkvdu_LFO.h" compile="0" resource="0" file="../nkvdu_libraries/nkvdu_LFO.h"/>
+      <FILE id="RRkb58" name="nkvdu_memoryless.h" compile="0" resource="0"
+            file="../nkvdu_libraries/nkvdu_memoryless.h"/>
       <FILE id="dY0DUK" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="NDHj53" name="PluginProcessor.h" compile="0" resource="0"
