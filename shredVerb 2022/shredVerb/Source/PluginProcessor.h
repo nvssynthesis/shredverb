@@ -6,6 +6,9 @@
   ==============================================================================
 */
 
+// TODO: add pre-gain, pre-delay, decouple metaparams
+// independent adjustment of delay times
+
 #pragma once
 
 #include <JuceHeader.h>

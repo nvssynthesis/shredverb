@@ -12,6 +12,12 @@
 #define HEIGHT 500
 #define NPARAMS 4
 
+/*
+ TODO: FIGURE OUT WHY THE FUCK THE SLIDER PARAMS (SKEW FACTOR, NUM DECIMALS TO DEISPLAY) ARENT UPDATING
+ 
+ 
+ */
+
 //==============================================================================
 ShredVerbAudioProcessorEditor::ShredVerbAudioProcessorEditor (ShredVerbAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
     //: AudioProcessorEditor (&p), audioProcessor (p)
@@ -23,9 +29,10 @@ ShredVerbAudioProcessorEditor::ShredVerbAudioProcessorEditor (ShredVerbAudioProc
     
     addAndMakeVisible(&decaySlider);
     decaySlider.addListener(this);
+    decaySlider.setNumDecimalPlacesToDisplay(3);
     //decaySlider.setRange(0.f, 1.5f);
-    decaySlider.setValue(0.f/*processor.fbParam*/);
-    decaySlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    decaySlider.setValue(0.f );
+    decaySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     decaySlider.setColour(juce::Slider::ColourIds::thumbColourId, thumbColour);
     decaySlider.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, fillColour);
     decaySliderAttachment = new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "feedbackGain", decaySlider);
@@ -35,22 +42,22 @@ ShredVerbAudioProcessorEditor::ShredVerbAudioProcessorEditor (ShredVerbAudioProc
     
     addAndMakeVisible(&sizeSlider);
     sizeSlider.addListener(this);
-    sizeSlider.setNumDecimalPlacesToDisplay(6);
+    sizeSlider.setNumDecimalPlacesToDisplay(4);
     //sizeSlider.setRange(0.f, 1.f);
-    sizeSlider.setValue(0.f/*processor.fbParam*/);
-    sizeSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    sizeSlider.setSkewFactor(0.002, false);
+    sizeSlider.setValue(0.f );
+    sizeSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+//    sizeSlider.setSkewFactor(0.002, false);
     sizeSliderAttachment = new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "size", sizeSlider);
     sizeLabel.setText("Size", juce::dontSendNotification);
     addAndMakeVisible(&sizeLabel);
 
     addAndMakeVisible(&dryWetSlider);
     dryWetSlider.addListener(this);
-    dryWetSlider.setNumDecimalPlacesToDisplay(6);
+    dryWetSlider.setNumDecimalPlacesToDisplay(3);
     //sizeSlider.setRange(0.f, 1.f);
     dryWetSlider.setValue(0.f/*processor.fbParam*/);
-    dryWetSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    dryWetSlider.setSkewFactor(0.002, false);
+    dryWetSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+//    dryWetSlider.setSkewFactor(0.002, false);
     dryWetSliderAttachment = new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dryWet", dryWetSlider);
     dryWelLabel.setText("Dry/Wet", juce::dontSendNotification);
     addAndMakeVisible(&dryWelLabel);
@@ -69,8 +76,8 @@ ShredVerbAudioProcessorEditor::ShredVerbAudioProcessorEditor (ShredVerbAudioProc
     lopSlider.addListener(this);
     //lopSlider.setRange(120.f, 20000.f);
     lopSlider.setValue(12000.f/*processor.fbParam*/);
-    lopSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    lopSlider.setSkewFactor (0.05, false);
+    lopSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+//    lopSlider.setSkewFactor (0.05, false);
     lopSliderAttachment = new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "lop", lopSlider);
     
     lopLabel.setText("Lowpass", juce::dontSendNotification);
@@ -81,33 +88,34 @@ ShredVerbAudioProcessorEditor::ShredVerbAudioProcessorEditor (ShredVerbAudioProc
     addAndMakeVisible(&allpassSlider0);
     allpassSlider0.addListener(this);
     allpassSlider0.setRange(20, 20000);
-    allpassSlider0.setSkewFactor(apSkew);
+//    allpassSlider0.setSkewFactor(apSkew);
     allpassSlider0.setValue(200);
-    allpassSlider0.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    allpassSlider0.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     allpassSliderAttachment0 = new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "tvap_0", allpassSlider0);
     
     addAndMakeVisible(&allpassSlider1);
     allpassSlider1.addListener(this);
     allpassSlider1.setRange(20, 20000);
-    allpassSlider1.setSkewFactor(apSkew);
+//    allpassSlider1.setSkewFactor(apSkew);
     allpassSlider1.setValue(2000);
-    allpassSlider1.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    allpassSlider1.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     allpassSliderAttachment1 = new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "tvap_1", allpassSlider1);
     
     addAndMakeVisible(&allpassSlider2);
     allpassSlider2.addListener(this);
     allpassSlider2.setRange(20, 20000);
-    allpassSlider2.setSkewFactor(apSkew);
+//    allpassSlider2.setSkewFactor(apSkew);
     allpassSlider2.setValue(5000);
-    allpassSlider2.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    allpassSlider2.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     allpassSliderAttachment2 = new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "tvap_2", allpassSlider2);
     
     addAndMakeVisible(&allpassSlider3);
     allpassSlider3.addListener(this);
     allpassSlider3.setRange(20, 20000);
-    allpassSlider3.setSkewFactor(apSkew);
+//    allpassSlider3.setSkewFactor(apSkew);
+    allpassSlider3.setSkewFactorFromMidPoint(200.f);
     allpassSlider3.setValue(9000);
-    allpassSlider3.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    allpassSlider3.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     allpassSliderAttachment3 = new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "tvap_3", allpassSlider3);
     
     allpassLabel.setText("Allpasses", juce::dontSendNotification);
@@ -115,21 +123,25 @@ ShredVerbAudioProcessorEditor::ShredVerbAudioProcessorEditor (ShredVerbAudioProc
 
     double distSkew = 0.05;
 
-    addAndMakeVisible(&dist1inerSlider);
     dist1inerSlider.addListener(this);
     //dist1Slider[n].setRange(0.f, 1.f);
     dist1inerSlider.setValue(0.f/*processor.fbParam*/);
-    dist1inerSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    dist1inerSlider.setSkewFactor (distSkew, false);
+    dist1inerSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+//    dist1inerSlider.setSkewFactor (distSkew, false);
+    dist1inerSlider.setSkewFactorFromMidPoint(0.3f);
+    dist1inerSlider.setRange(0.0, 1.0);
+    dist1inerSlider.setNumDecimalPlacesToDisplay(3);
     dist1inerSliderAttachment = (new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist1iner", dist1inerSlider));
     dist1inerLabel.setText("Inner Distortion 1", juce::dontSendNotification);
+    addAndMakeVisible(&dist1inerSlider);
     addAndMakeVisible(&dist1inerLabel);
 
     addAndMakeVisible(&dist1outrSlider);
     dist1outrSlider.addListener(this);
     dist1outrSlider.setValue(0.f/*processor.fbParam*/);
-    dist1outrSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    dist1outrSlider.setSkewFactor (distSkew, false);
+    dist1outrSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+//    dist1outrSlider.setSkewFactor (distSkew, false);
+    dist1outrSlider.setSkewFactorFromMidPoint(0.5f);
     dist1outrSlider.setRange(0, 1);
     dist1outrSlider.setNumDecimalPlacesToDisplay(3);
     dist1outrSliderAttachment = (new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist1outr", dist1outrSlider));
@@ -140,8 +152,9 @@ ShredVerbAudioProcessorEditor::ShredVerbAudioProcessorEditor (ShredVerbAudioProc
     dist2inerSlider.addListener(this);
     //dist1Slider[n].setRange(0.f, 1.f);
     dist2inerSlider.setValue(0.f/*processor.fbParam*/);
-    dist2inerSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    dist2inerSlider.setSkewFactor (distSkew);
+    dist2inerSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+//    dist2inerSlider.setSkewFactor (distSkew);
+    dist2inerSlider.setSkewFactorFromMidPoint(0.4f);
     dist2inerSlider.setRange(0, 1);
     dist2inerSlider.setNumDecimalPlacesToDisplay(3);
     dist2inerSliderAttachment = (new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist2iner", dist2inerSlider));
@@ -151,8 +164,9 @@ ShredVerbAudioProcessorEditor::ShredVerbAudioProcessorEditor (ShredVerbAudioProc
     addAndMakeVisible(&dist2outrSlider);
     dist2outrSlider.addListener(this);
     dist2outrSlider.setValue(0.f/*processor.fbParam*/);
-    dist2outrSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    dist2outrSlider.setSkewFactor (distSkew, false);
+    dist2outrSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+//    dist2outrSlider.setSkewFactor (distSkew, false);
+    dist2outrSlider.setSkewFactorFromMidPoint(0.4f);
     dist2outrSlider.setRange(0, 1);
     dist2outrSlider.setNumDecimalPlacesToDisplay(3);
     dist2outrSliderAttachment = (new juce::AudioProcessorValueTreeState::SliderAttachment (valueTreeState, "dist2outr", dist1outrSlider));

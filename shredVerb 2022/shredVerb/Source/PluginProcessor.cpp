@@ -388,10 +388,10 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 //        Y[3] = D[3][0].tick(tmp[0]) + D[3][1].tick(tmp[1])
 //        + D[3][2].tick(tmp[2]) + D[3][3].tick(tmp[3]);
 
-        float finalOutL = Y[1] * (1 - _dryWet) + leftSamp * _dryWet;
-        float finalOutR = Y[2] * (1 - _dryWet) + rightSamp * _dryWet;
+        float finalOutL = Y[1] * _dryWet + leftSamp * (1 - _dryWet) ;
+        float finalOutR = Y[2] * _dryWet + rightSamp * (1 - _dryWet) ;
 
-        *(outBuffL + samp) = finalOutL * 0.125f;
+        *(outBuffL + samp) = finalOutL;
         *(outBuffR + samp) = finalOutR;
     }
 }
