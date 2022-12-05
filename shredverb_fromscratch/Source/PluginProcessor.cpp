@@ -10,7 +10,7 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-Shredverb_fromscratchAudioProcessor::Shredverb_fromscratchAudioProcessor()
+ShredverbAudioProcessor::ShredverbAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
@@ -20,86 +20,7 @@ Shredverb_fromscratchAudioProcessor::Shredverb_fromscratchAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
-        paramVT(*this, nullptr, juce::Identifier ("APVTSshredverb"),
-            {
-                std::make_unique<juce::AudioParameterFloat> ("feedbackGain",            // parameterID
-                                                             "Feedback Gain",  // parameter name
-                                                             0.f,              // minimum value
-                                                             0.7071067f,  // maximum value
-                                                             0.1f),             // default value
-//                std::make_unique<juce::AudioParameterFloat> ("lfodepth",      // parameterID
-//                                                             "Depth",     // parameter name
-//                                                             0.0f,              // minimum value
-//                                                             1.0f,              // maximum value
-//                                                             0.5f),             // default value
-                std::make_unique<juce::AudioParameterFloat> ("size",      // parameterID
-                                                             "Spatial Size",     // parameter name
-                                                             0.0f,              // minimum value
-                                                             1.0f,              // maximum value
-                                                             0.2f),             // default value
-                std::make_unique<juce::AudioParameterFloat> ("lop",      // parameterID
-                                                             "LP Freq",     // parameter name
-                                                             200.0f,              // minimum value
-                                                             20000.0f,              // maximum value
-                                                             12000.f),             // default value
-                std::make_unique<juce::AudioParameterFloat> ("dryWet",      // parameterID
-                                                             "Dry/Wet",     // parameter name
-                                                             0,              // minimum value
-                                                             1,              // maximum value
-                                                             0),             // default value
-                std::make_unique<juce::AudioParameterFloat> ("tvap_0",      // parameterID
-                                                             "TVAP 0",     // parameter name
-                                                             20,              // minimum value
-                                                             20000,              // maximum value
-                                                             200),             // default value
-                std::make_unique<juce::AudioParameterFloat> ("tvap_1",      // parameterID
-                                                             "TVAP 1",     // parameter name
-                                                             20,              // minimum value
-                                                             20000,              // maximum value
-                                                             2000),             // default value
-                std::make_unique<juce::AudioParameterFloat> ("tvap_2",      // parameterID
-                                                             "TVAP 2",     // parameter name
-                                                             20,              // minimum value
-                                                             20000,              // maximum value
-                                                             500),             // default value
-                std::make_unique<juce::AudioParameterFloat> ("tvap_3",      // parameterID
-                                                             "TVAP 3",     // parameter name
-                                                             20,              // minimum value
-                                                             20000,              // maximum value
-                                                             9000),             // default value
-                std::make_unique<juce::AudioParameterFloat> ("dist1iner",      // parameterID
-                                                             "Distortion 1 Inner",     // parameter name
-                                                             0.f,              // minimum value
-                                                             1.f,              // maximum value
-                                                             0.f),             // default value
-                std::make_unique<juce::AudioParameterFloat> ("dist1outr",      // parameterID
-                                                             "Distortion 1 Outer",     // parameter name
-                                                             0.f,              // minimum value
-                                                             1.f,              // maximum value
-                                                             0.f),             // default value
-                std::make_unique<juce::AudioParameterFloat> ("dist2iner",      // parameterID
-                                                             "Distortion 2 Inner",     // parameter name
-                                                             0.f,              // minimum value
-                                                             1.f,              // maximum value
-                                                             0.f),             // default value
-                std::make_unique<juce::AudioParameterFloat> ("dist2outr",      // parameterID
-                                                             "Distortion 2 Outer",     // parameter name
-                                                             0.f,              // minimum value
-                                                             1.f,              // maximum value
-                                                             0.f),             // default value
-                
-                std::make_unique<juce::AudioParameterFloat> ("interp",      // parameterID
-                                                             "Interpolation Type",     // parameter name
-                                                             0.f,              // minimum value
-                                                             1.f,              // maximum value
-                                                             0.f),             // default value
-                std::make_unique<juce::AudioParameterFloat> ("randomizzze",      // parameterID
-                                                             "Randomize",     // parameter name
-                                                             0,              // minimum value
-                                                             1,              // maximum value
-                                                             0),             // default value
-                
-            })
+        paramVT(*this, nullptr, juce::Identifier ("APVTSshredverb"),createParams())
 #endif
 {
     // pointers are copied to items declared in object so they don't go out of scope
@@ -131,8 +52,8 @@ Shredverb_fromscratchAudioProcessor::Shredverb_fromscratchAudioProcessor()
      X = new float[D_IJ];
      Y = new float[D_IJ];
      
-     D = new nkvdu_delays::delay[D_IJ];
-     apd = new nkvdu_delays::allpass_delay[D_IJ];
+     D = new nvs_delays::delay[D_IJ];
+     apd = new nvs_delays::allpass_delay[D_IJ];
     
      int n;
      for (n = 0; n < D_IJ; n++) {
@@ -141,22 +62,22 @@ Shredverb_fromscratchAudioProcessor::Shredverb_fromscratchAudioProcessor()
          //G[n] = new float[D_IJ];
              // may want much shorter delay lines
          D_times[n] = 600.f * rando.nextFloat();
-         D[n] = *new nkvdu_delays::delay(32768, 44100.f);
+         D[n] = *new nvs_delays::delay(32768, 44100.f);
          D[n].setDelayTimeMS(D_times[n]);
-         D[n].setInterpolation(nkvdu_delays::delay::interp::floor);
+         D[n].setInterpolation(nvs_delays::delay::interp::floor);
          apd[n].setDelayTimeMS(D_times[n]);
-         apd[n].setInterpolation(nkvdu_delays::delay::interp::floor);
+         apd[n].setInterpolation(nvs_delays::delay::interp::floor);
      }
 
-    tvap = new nkvdu_filters::tvap[D_IJ + nIn];   //
-    //tvap = new nkvdu_filters::tvap[nIn * 4];  // run in series
+    tvap = new nvs_filters::tvap<float>[D_IJ + nIn];   //
+    //tvap = new nvs_filters::tvap[nIn * 4];  // run in series
     
-    //    predel = new nkvdu_delays::delay[nIn];
+    //    predel = new nvs_delays::delay[nIn];
     //
-    lp6dB = new nkvdu_filters::onePole[2 * (nIn + nOut)]; //input and every matrix out
+    lp6dB = new nvs_filters::onePole<float>[2 * (nIn + nOut)]; //input and every matrix out
 }
 
-Shredverb_fromscratchAudioProcessor::~Shredverb_fromscratchAudioProcessor()
+ShredverbAudioProcessor::~ShredverbAudioProcessor()
 {
     //delete[] apd;
     delete[] X;
@@ -166,12 +87,12 @@ Shredverb_fromscratchAudioProcessor::~Shredverb_fromscratchAudioProcessor()
 }
 
 //==============================================================================
-const juce::String Shredverb_fromscratchAudioProcessor::getName() const
+const juce::String ShredverbAudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool Shredverb_fromscratchAudioProcessor::acceptsMidi() const
+bool ShredverbAudioProcessor::acceptsMidi() const
 {
    #if JucePlugin_WantsMidiInput
     return true;
@@ -180,7 +101,7 @@ bool Shredverb_fromscratchAudioProcessor::acceptsMidi() const
    #endif
 }
 
-bool Shredverb_fromscratchAudioProcessor::producesMidi() const
+bool ShredverbAudioProcessor::producesMidi() const
 {
    #if JucePlugin_ProducesMidiOutput
     return true;
@@ -189,7 +110,7 @@ bool Shredverb_fromscratchAudioProcessor::producesMidi() const
    #endif
 }
 
-bool Shredverb_fromscratchAudioProcessor::isMidiEffect() const
+bool ShredverbAudioProcessor::isMidiEffect() const
 {
    #if JucePlugin_IsMidiEffect
     return true;
@@ -198,37 +119,37 @@ bool Shredverb_fromscratchAudioProcessor::isMidiEffect() const
    #endif
 }
 
-double Shredverb_fromscratchAudioProcessor::getTailLengthSeconds() const
+double ShredverbAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int Shredverb_fromscratchAudioProcessor::getNumPrograms()
+int ShredverbAudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
                 // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int Shredverb_fromscratchAudioProcessor::getCurrentProgram()
+int ShredverbAudioProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void Shredverb_fromscratchAudioProcessor::setCurrentProgram (int index)
+void ShredverbAudioProcessor::setCurrentProgram (int index)
 {
 }
 
-const juce::String Shredverb_fromscratchAudioProcessor::getProgramName (int index)
+const juce::String ShredverbAudioProcessor::getProgramName (int index)
 {
     return {};
 }
 
-void Shredverb_fromscratchAudioProcessor::changeProgramName (int index, const juce::String& newName)
+void ShredverbAudioProcessor::changeProgramName (int index, const juce::String& newName)
 {
 }
 
 //==============================================================================
-void Shredverb_fromscratchAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void ShredverbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     
      // Use this method as the place to do any pre-playback
@@ -274,14 +195,14 @@ void Shredverb_fromscratchAudioProcessor::prepareToPlay (double sampleRate, int 
      
 }
 
-void Shredverb_fromscratchAudioProcessor::releaseResources()
+void ShredverbAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool Shredverb_fromscratchAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool ShredverbAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
   #if JucePlugin_IsMidiEffect
     juce::ignoreUnused (layouts);
@@ -304,7 +225,7 @@ bool Shredverb_fromscratchAudioProcessor::isBusesLayoutSupported (const BusesLay
 }
 #endif
 
-void Shredverb_fromscratchAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void ShredverbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
     auto nIn  = getTotalNumInputChannels();
@@ -349,17 +270,17 @@ void Shredverb_fromscratchAudioProcessor::processBlock (juce::AudioBuffer<float>
     auto dist2Iner = paramVT.getRawParameterValue("dist2iner");
     auto dist2Outr = paramVT.getRawParameterValue("dist2outr");
     
-    nkvdu_memoryless::metaparamA(float(*dist1Iner), inner_f_pi);
-    nkvdu_memoryless::metaparamA(float(*dist1Outr), outer_f_pi);
-    nkvdu_memoryless::metaparamA(float(*dist2Iner), inner_f_b);
-    nkvdu_memoryless::metaparamA(float(*dist2Outr), outer_f_b);
-//    nkvdu_memoryless::metaparamA(float(*dist2Iner), f_pi_m);
-//    nkvdu_memoryless::metaparamA(float(*dist2Outr), metap[1]);
+    nvs_memoryless::metaparamA(float(*dist1Iner), inner_f_pi);
+    nvs_memoryless::metaparamA(float(*dist1Outr), outer_f_pi);
+    nvs_memoryless::metaparamA(float(*dist2Iner), inner_f_b);
+    nvs_memoryless::metaparamA(float(*dist2Outr), outer_f_b);
+//    nvs_memoryless::metaparamA(float(*dist2Iner), f_pi_m);
+//    nvs_memoryless::metaparamA(float(*dist2Outr), metap[1]);
 
-//    nkvdu_memoryless::metaparamA(metap[0][0], m[0]);
-//    nkvdu_memoryless::metaparamA(metap[0][1], m[2]);
-//    nkvdu_memoryless::metaparamA(metap[1][0], m[1]);
-//    nkvdu_memoryless::metaparamA(metap[1][1], m[3]);
+//    nvs_memoryless::metaparamA(metap[0][0], m[0]);
+//    nvs_memoryless::metaparamA(metap[0][1], m[2]);
+//    nvs_memoryless::metaparamA(metap[1][0], m[1]);
+//    nvs_memoryless::metaparamA(metap[1][1], m[3]);
 
     
 //_ap_dist1[1] = *dist1outrParam;
@@ -470,39 +391,148 @@ void Shredverb_fromscratchAudioProcessor::processBlock (juce::AudioBuffer<float>
         float finalOutL = Y[1] * (1 - _dryWet) + leftSamp * _dryWet;
         float finalOutR = Y[2] * (1 - _dryWet) + rightSamp * _dryWet;
 
-        *(outBuffL + samp) = finalOutL;
+        *(outBuffL + samp) = finalOutL * 0.125f;
         *(outBuffR + samp) = finalOutR;
     }
 }
 
 //==============================================================================
-bool Shredverb_fromscratchAudioProcessor::hasEditor() const
+bool ShredverbAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-juce::AudioProcessorEditor* Shredverb_fromscratchAudioProcessor::createEditor()
+juce::AudioProcessorEditor* ShredverbAudioProcessor::createEditor()
 {
-    return new Shredverb_fromscratchAudioProcessorEditor (*this, paramVT);
+    return new ShredverbAudioProcessorEditor (*this, paramVT);
 }
 
 //==============================================================================
-void Shredverb_fromscratchAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
+void ShredverbAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
 }
 
-void Shredverb_fromscratchAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void ShredverbAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout ShredverbAudioProcessor::createParams()
+{
+    const unsigned int versionHint = 1;
+
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+    juce::String parameterID_str = "feedbackGain";
+    juce::String parameterName = "Feedback Gain";
+    juce::NormalisableRange<float> normRange(0.f,   // min
+                                    0.7071067f,     // max
+                                             0.01f);  // interval value (?)
+    juce::NormalisableRange<float> nr(0,0.7071f, 0.f);
+    float defaultVal = 0.1f;
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, nr, defaultVal));
+    
+    parameterID_str = "size";      // parameterID
+    parameterName = "Spatial Size";     // parameter name
+    normRange.start = 0.f;
+    normRange.end = 1.f;
+    defaultVal = 0.2f;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
+
+    parameterID_str = "lop";      // parameterID
+    parameterName = "LP Freq";     // parameter name
+    normRange.start = 200.0f;
+    normRange.end = 20000.0f;
+    defaultVal = 12000.f;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
+
+    parameterID_str = "dryWet";      // parameterID
+    parameterName = "Dry/Wet";     // parameter name
+    normRange.start = 0.f;
+    normRange.end = 1.f;
+    defaultVal = 0.f;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
+
+    parameterID_str = "tvap_0";      // parameterID
+    parameterName = "TVAP 0";     // parameter name
+    normRange.start = 20.f;
+    normRange.end = 20000.f;
+    defaultVal = 200.f;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
+
+    parameterID_str = "tvap_1";      // parameterID
+    parameterName = "TVAP 1";     // parameter name
+    normRange.start = 20.f;
+    normRange.end = 20000.f;
+    defaultVal = 2000.f;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
+
+    parameterID_str = "tvap_2";      // parameterID
+    parameterName = "TVAP 2";     // parameter name
+    normRange.start = 20.f;
+    normRange.end = 20000.f;
+    defaultVal = 500.f;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
+
+    parameterID_str = "tvap_3";      // parameterID
+    parameterName = "TVAP 3";     // parameter name
+    normRange.start = 20.f;
+    normRange.end = 20000.f;
+    defaultVal = 9000.f;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
+
+    parameterID_str = "dist1iner";      // parameterID
+    parameterName = "Distortion 1 Inner";     // parameter name
+    normRange.start = 0.f;
+    normRange.end = 1.f;
+    defaultVal = 0.f;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
+
+    parameterID_str = "dist1outr";      // parameterID
+    parameterName = "Distortion 1 Outer";     // parameter name
+    normRange.start = 0.f;
+    normRange.end = 1.f;
+    defaultVal = 0.f;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
+
+    parameterID_str = "dist2iner";      // parameterID
+    parameterName = "Distortion 2 Inner";     // parameter name
+    normRange.start = 0.f;
+    normRange.end = 1.f;
+    defaultVal = 0.f;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
+
+    parameterID_str = "dist2outr";      // parameterID
+    parameterName = "Distortion 2 Outer";     // parameter name
+    normRange.start = 0.f;
+    normRange.end = 1.f;
+    defaultVal = 0.f;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
+
+    parameterID_str = "interp";      // parameterID
+    parameterName = "Interpolation Type";     // parameter name
+    normRange.start = 0.f;
+    normRange.end = 1.f;
+    defaultVal = 0.f;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
+
+    parameterID_str = "randomizzze";      // parameterID
+    parameterName = "Randomize";     // parameter name
+    normRange.start = 0.f;
+    normRange.end = 1.f;
+    defaultVal = 0.f;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
+
+    return { params.begin(), params.end() };
 }
 
 //==============================================================================
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new Shredverb_fromscratchAudioProcessor();
+    return new ShredverbAudioProcessor();
 }

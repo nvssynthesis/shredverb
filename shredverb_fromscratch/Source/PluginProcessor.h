@@ -9,20 +9,20 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "/Users/nicholassolem/development/gitstuff/nkvdu_libraries/nkvdu_delayFilters.h"
-#include "/Users/nicholassolem/development/gitstuff/nkvdu_libraries/nkvdu_filters.h"
+#include "include/nvs_delayFilters.h"
+#include "include/nvs_filters.h"
 #include <string>
 #define D_IJ 4
 
 //==============================================================================
 /**
 */
-class Shredverb_fromscratchAudioProcessor  : public juce::AudioProcessor
+class ShredverbAudioProcessor  : public juce::AudioProcessor
 {
 public:
     //==============================================================================
-    Shredverb_fromscratchAudioProcessor ();
-    ~Shredverb_fromscratchAudioProcessor() override;
+    ShredverbAudioProcessor ();
+    ~ShredverbAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -68,8 +68,8 @@ public:
         {0.f, 1.f, -1.f, 0.f}
     };
     
-    nkvdu_delays::delay *D = NULL;
-    nkvdu_delays::allpass_delay *apd = NULL;
+    nvs_delays::delay *D = NULL;
+    nvs_delays::allpass_delay *apd = NULL;
     float D_times[D_IJ];
 
     float *X = NULL;
@@ -77,11 +77,12 @@ public:
      
     //float **G = NULL;    // gain matrix
     
-    nkvdu_filters::tvap *tvap = NULL;
-    //    nkvdu_delays::delay *predel = NULL;
-    nkvdu_filters::onePole *lp6dB = NULL;
+    nvs_filters::tvap<float> *tvap = NULL;
+    //    nvs_delays::delay *predel = NULL;
+    nvs_filters::onePole<float> *lp6dB = NULL;
 private:
     juce::AudioProcessorValueTreeState paramVT;
+    juce::AudioProcessorValueTreeState::ParameterLayout createParams();
     std::atomic<float>* fbParam  = nullptr;
     std::atomic<float>* sizeParam = nullptr;
     std::atomic<float>* lopParam = nullptr;
@@ -101,5 +102,5 @@ private:
     std::atomic<float>* randomizeParam = nullptr;
     juce::Random rando;
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Shredverb_fromscratchAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ShredverbAudioProcessor)
 };

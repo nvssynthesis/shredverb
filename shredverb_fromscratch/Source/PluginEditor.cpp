@@ -13,7 +13,7 @@
 #define NPARAMS 4
 
 //==============================================================================
-Shredverb_fromscratchAudioProcessorEditor::Shredverb_fromscratchAudioProcessorEditor (Shredverb_fromscratchAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
+ShredverbAudioProcessorEditor::ShredverbAudioProcessorEditor (ShredverbAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
     //: AudioProcessorEditor (&p), audioProcessor (p)
     : AudioProcessorEditor (&p), processor (p), valueTreeState(vts)
 {
@@ -170,7 +170,7 @@ Shredverb_fromscratchAudioProcessorEditor::Shredverb_fromscratchAudioProcessorEd
     setSize (WIDTH, HEIGHT);
 }
 
-Shredverb_fromscratchAudioProcessorEditor::~Shredverb_fromscratchAudioProcessorEditor()
+ShredverbAudioProcessorEditor::~ShredverbAudioProcessorEditor()
 {
     delete decaySliderAttachment;
     delete sizeSliderAttachment;
@@ -193,18 +193,18 @@ Shredverb_fromscratchAudioProcessorEditor::~Shredverb_fromscratchAudioProcessorE
 }
 
 //==============================================================================
-void Shredverb_fromscratchAudioProcessorEditor::paint (juce::Graphics& g)
+void ShredverbAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     //g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-    g.fillAll (juce::Colours::indigo);
+    g.fillAll (juce::Colours::hotpink);
 
     g.setColour (juce::Colours::black);
     g.setFont (15.0f);
     //g.drawFittedText ("peh", getLocalBounds(), juce::Justification::centred, 1);
 }
 
-void Shredverb_fromscratchAudioProcessorEditor::resized()
+void ShredverbAudioProcessorEditor::resized()
 {
     
     int row_Y = 50;

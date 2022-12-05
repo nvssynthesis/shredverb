@@ -5,6 +5,8 @@
 
   ==============================================================================
 */
+// TODO: make all slider attachment pointers unique_ptr. this will allow to save memory while plugin window is closed.
+
 
 #pragma once
 
@@ -15,14 +17,14 @@
 /**
 */
 
-class Shredverb_fromscratchAudioProcessorEditor  : public juce::AudioProcessorEditor
+class ShredverbAudioProcessorEditor  : public juce::AudioProcessorEditor
 ,                                                    private juce::Button::Listener
 ,                                                    private juce::Slider::Listener
 ,                                                    private juce::ComboBox::Listener
 {
 public:
-    Shredverb_fromscratchAudioProcessorEditor (Shredverb_fromscratchAudioProcessor&, juce::AudioProcessorValueTreeState&);
-    ~Shredverb_fromscratchAudioProcessorEditor() override;
+    ShredverbAudioProcessorEditor (ShredverbAudioProcessor&, juce::AudioProcessorValueTreeState&);
+    ~ShredverbAudioProcessorEditor() override;
 
     //==============================================================================
     void paint (juce::Graphics&) override;
@@ -88,12 +90,12 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    Shredverb_fromscratchAudioProcessor& processor;
+    ShredverbAudioProcessor& processor;
     juce::AudioProcessorValueTreeState &valueTreeState;
     
     
     juce::Label decayLabel, sizeLabel, interpTypeLabel, lopLabel, dryWelLabel, allpassLabel, dist1inerLabel, dist1outrLabel, dist2inerLabel, dist2outrLabel;
     juce::Font labelFont;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Shredverb_fromscratchAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ShredverbAudioProcessorEditor)
 };

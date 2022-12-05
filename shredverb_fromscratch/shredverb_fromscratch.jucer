@@ -3,15 +3,16 @@
 <JUCERPROJECT id="W6b57X" name="shredverb" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
               companyName="nvssynthesis" companyWebsite="nvssynthesis.github.io"
-              pluginVST3Category="Delay,Distortion,Reverb">
+              pluginVST3Category="Delay,Distortion,Reverb" cppLanguageStandard="17"
+              headerPath="/Users/nicholassolem/development/gitstuff/nkvdu_libraries">
   <MAINGROUP id="I3IFci" name="shredverb">
     <GROUP id="{38FE3FCD-D4FD-0CDA-F68B-E10F93AC75F5}" name="Source">
-      <FILE id="nWXE89" name="nkvdu_delayFilters.h" compile="0" resource="0"
-            file="../nkvdu_libraries/nkvdu_delayFilters.h"/>
-      <FILE id="tvmRle" name="nkvdu_filters.h" compile="0" resource="0" file="../nkvdu_libraries/nkvdu_filters.h"/>
-      <FILE id="xlVFIK" name="nkvdu_LFO.h" compile="0" resource="0" file="../nkvdu_libraries/nkvdu_LFO.h"/>
-      <FILE id="RRkb58" name="nkvdu_memoryless.h" compile="0" resource="0"
-            file="../nkvdu_libraries/nkvdu_memoryless.h"/>
+      <FILE id="tb5PbO" name="nvs_delayFilters.h" compile="0" resource="0"
+            file="../../../../development/gitstuff/nkvdu_libraries/include/nvs_delayFilters.h"/>
+      <FILE id="fMcWpj" name="nvs_filters.h" compile="0" resource="0" file="../../../../development/gitstuff/nkvdu_libraries/include/nvs_filters.h"/>
+      <FILE id="DfOQO9" name="nvs_LFO.h" compile="0" resource="0" file="../../../../development/gitstuff/nkvdu_libraries/include/nvs_LFO.h"/>
+      <FILE id="bZGDnm" name="nvs_memoryless.h" compile="0" resource="0"
+            file="../../../../development/gitstuff/nkvdu_libraries/include/nvs_memoryless.h"/>
       <FILE id="dY0DUK" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="NDHj53" name="PluginProcessor.h" compile="0" resource="0"
@@ -25,8 +26,9 @@
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="shredverb_fromscratch"/>
-        <CONFIGURATION isDebug="0" name="Release" targetName="shredverb_fromscratch"/>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="shredverb_fromscratch" libraryPath="/Users/nicholassolem/development/gitstuff/nkvdu_libraries"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="shredverb_fromscratch"
+                       libraryPath="/Users/nicholassolem/development/gitstuff/nkvdu_libraries"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="../../../../Applications/JUCE/modules"/>
