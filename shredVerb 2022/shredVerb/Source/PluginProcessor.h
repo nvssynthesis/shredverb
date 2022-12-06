@@ -14,6 +14,7 @@
 #include <JuceHeader.h>
 #include "include/nvs_delayFilters.h"
 #include "include/nvs_filters.h"
+#include "params.h"
 #include <string>
 #define D_IJ 4
 
@@ -83,23 +84,41 @@ public:
     nvs_filters::tvap<float> *tvap = NULL;
     //    nvs_delays::delay *predel = NULL;
     nvs_filters::onePole<float> *lp6dB = NULL;
+    
+    param_stuff *getParamStuff(){
+        return &ps;
+    }
+    
 private:
     juce::AudioProcessorValueTreeState paramVT;
+    param_stuff ps;
+
     juce::AudioProcessorValueTreeState::ParameterLayout createParams();
+    
+    std::atomic<float>* driveParam = nullptr;
+    std::atomic<float>* predelayParam = nullptr;
+
     std::atomic<float>* fbParam  = nullptr;
     std::atomic<float>* sizeParam = nullptr;
     std::atomic<float>* lopParam = nullptr;
     std::atomic<float>* dryWetParam = nullptr;
 
-    std::atomic<float>* allpassParam0 = nullptr;
-    std::atomic<float>* allpassParam1 = nullptr;
-    std::atomic<float>* allpassParam2 = nullptr;
-    std::atomic<float>* allpassParam3 = nullptr;
-
+    std::atomic<float>* allpassFrequencyPiParam0 = nullptr;
+    std::atomic<float>* allpassFrequencyPiParam1 = nullptr;
+    std::atomic<float>* allpassFrequencyPiParam2 = nullptr;
+    std::atomic<float>* allpassFrequencyPiParam3 = nullptr;
+    
+    std::atomic<float>* allpassBandwidthParam0 = nullptr;
+    std::atomic<float>* allpassBandwidthParam1 = nullptr;
+    std::atomic<float>* allpassBandwidthParam2 = nullptr;
+    std::atomic<float>* allpassBandwidthParam3 = nullptr;
+    
     std::atomic<float>* dist1inerParam = nullptr;//metaparams for direct to L-R tvap outputs, controls f_pi_mod
     std::atomic<float>* dist1outrParam = nullptr;//metaparams for indirect to L-R tvap outputs, controls f_pi_mod
     std::atomic<float>* dist2inerParam = nullptr;//metaparams for direct to L-R tvap outputs, controls f_b_mod
     std::atomic<float>* dist2outrParam = nullptr;//metaparams for indirect to L-R tvap outputs, controls f_b_mod
+    
+    std::atomic<float>* outputGainParam = nullptr;
     
     std::atomic<float>* interpParam = nullptr;
     std::atomic<float>* randomizeParam = nullptr;

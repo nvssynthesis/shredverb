@@ -17,6 +17,7 @@
             file="../../gitstuff/nkvdu_libraries/include/nvs_memoryless.h"/>
       <FILE id="eUXMkk" name="nvs_delayFilters.h" compile="0" resource="0"
             file="../../gitstuff/nkvdu_libraries/include/nvs_delayFilters.h"/>
+      <FILE id="pDh9QS" name="params.h" compile="0" resource="0" file="Source/params.h"/>
       <FILE id="OMlUdc" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="Fg14UV" name="PluginProcessor.h" compile="0" resource="0"

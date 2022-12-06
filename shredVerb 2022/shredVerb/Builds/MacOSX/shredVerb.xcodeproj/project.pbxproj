@@ -128,6 +128,7 @@
 		B9C8ABB03DE4F4909DA0E83E /* JuceLV2Defines.h */ /* JuceLV2Defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceLV2Defines.h; path = ../../JuceLibraryCode/JuceLV2Defines.h; sourceTree = SOURCE_ROOT; };
 		BD5FF7196A0D93D3A781C6F9 /* juce_core */ /* juce_core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_core; path = /Applications/JUCE/modules/juce_core; sourceTree = "<absolute>"; };
 		C201B3AC1183761D8ACE30E9 /* LV2 Plugin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = shredVerb.so; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3364DE9338B8EB893DA94FE /* params.h */ /* params.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = params.h; path = ../../Source/params.h; sourceTree = SOURCE_ROOT; };
 		C499E32AD07AF53EF107B33B /* juce_graphics */ /* juce_graphics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_graphics; path = /Applications/JUCE/modules/juce_graphics; sourceTree = "<absolute>"; };
 		C5CAE81F5E8F94CA4EEFBB95 /* include_juce_audio_plugin_client_VST3.cpp */ /* include_juce_audio_plugin_client_VST3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_plugin_client_VST3.cpp; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_VST3.cpp; sourceTree = SOURCE_ROOT; };
 		C5E465C8D2CA1F5732F01E25 /* include_juce_gui_basics.mm */ /* include_juce_gui_basics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_gui_basics.mm; path = ../../JuceLibraryCode/include_juce_gui_basics.mm; sourceTree = SOURCE_ROOT; };
@@ -326,6 +327,7 @@
 				D1A321E0ABC1FD7732445C7B,
 				22248C3C855BFA2903BF4274,
 				07FB499C2A30609AAD8F7196,
+				C3364DE9338B8EB893DA94FE,
 				670B3F13AB75C1A46F88AB5A,
 				E58CE5ADDDF2FFC9B5208DF5,
 				14A92CD0F4403B05151A313C,

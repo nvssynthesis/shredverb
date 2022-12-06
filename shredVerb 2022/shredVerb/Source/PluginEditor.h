@@ -55,6 +55,12 @@ public:
     //==============================================================================
     void comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged) override {}
 
+    /*
+    juce::Slider driveSlider;
+    juce::AudioProcessorValueTreeState::SliderAttachment *driveSliderAttachment;
+    
+    juce::Slider predelaySlider;
+    juce::AudioProcessorValueTreeState::SliderAttachment *predelaySliderAttachment;
     
     juce::Slider decaySlider;
     juce::AudioProcessorValueTreeState::SliderAttachment *decaySliderAttachment;
@@ -71,10 +77,12 @@ public:
     juce::Slider dryWetSlider;
     juce::AudioProcessorValueTreeState::SliderAttachment *dryWetSliderAttachment;
     
-    juce::Slider allpassSlider0, allpassSlider1, allpassSlider2, allpassSlider3;
-    juce::AudioProcessorValueTreeState::SliderAttachment *allpassSliderAttachment0, *allpassSliderAttachment1, *allpassSliderAttachment2, *allpassSliderAttachment3;
+    juce::Slider allpass_fPiSlider0, allpass_fPiSlider1, allpass_fPiSlider2, allpass_fPiSlider3;
+    juce::AudioProcessorValueTreeState::SliderAttachment *allpass_fPiSliderAttachment0, *allpass_fPiSliderAttachment1, *allpass_fPiSliderAttachment2, *allpass_fPiSliderAttachment3;
     
-    
+   juce::Slider allpass_fB_Slider0, allpass_fB_Slider1, allpass_fB_Slider2, allpass_fB_Slider3;
+   juce::AudioProcessorValueTreeState::SliderAttachment *allpass_fB_SliderAttachment0, *allpass_fB_SliderAttachment1, *allpass_fB_SliderAttachment2, *allpass_fB_SliderAttachment3;
+
     juce::Slider dist1inerSlider;
     juce::Slider dist1outrSlider;
     juce::AudioProcessorValueTreeState::SliderAttachment *dist1inerSliderAttachment;
@@ -83,10 +91,10 @@ public:
     juce::Slider dist2outrSlider;
     juce::AudioProcessorValueTreeState::SliderAttachment *dist2inerSliderAttachment;
     juce::AudioProcessorValueTreeState::SliderAttachment *dist2outrSliderAttachment;
-
+*/
     
     juce::TextButton randomizeButton { "Randomize" };
-    juce::AudioProcessorValueTreeState::ButtonAttachment *randomizeButtonAttachment;
+//    juce::AudioProcessorValueTreeState::ButtonAttachment *randomizeButtonAttachment;
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
@@ -94,7 +102,7 @@ private:
     juce::AudioProcessorValueTreeState &valueTreeState;
     
     
-    juce::Label decayLabel, sizeLabel, interpTypeLabel, lopLabel, dryWelLabel, allpassLabel, dist1inerLabel, dist1outrLabel, dist2inerLabel, dist2outrLabel;
+//    juce::Label decayLabel, sizeLabel, interpTypeLabel, lopLabel, dryWelLabel, allpassLabel, dist1inerLabel, dist1outrLabel, dist2inerLabel, dist2outrLabel;
     juce::Font labelFont;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ShredVerbAudioProcessorEditor)
