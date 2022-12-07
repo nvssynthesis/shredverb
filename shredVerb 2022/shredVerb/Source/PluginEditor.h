@@ -95,6 +95,33 @@ public:
     
     juce::TextButton randomizeButton { "Randomize" };
 //    juce::AudioProcessorValueTreeState::ButtonAttachment *randomizeButtonAttachment;
+    juce::OwnedArray<juce::AudioProcessorValueTreeState::SliderAttachment> ownedSliderAttachmentPtrs;
+//    std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>, param_stuff::numParams> paramSliderAttachmentPtrs;
+
+    juce::AudioProcessorValueTreeState::SliderAttachment *drive_sap;
+    juce::AudioProcessorValueTreeState::SliderAttachment *predelay_sap;
+    juce::AudioProcessorValueTreeState::SliderAttachment *size_sap;
+    juce::AudioProcessorValueTreeState::SliderAttachment *lowpass_sap;
+    
+    juce::AudioProcessorValueTreeState::SliderAttachment *tvap0_f_pi_sap;
+    juce::AudioProcessorValueTreeState::SliderAttachment *tvap0_f_b_sap;
+    juce::AudioProcessorValueTreeState::SliderAttachment *tvap1_f_pi_sap;
+    juce::AudioProcessorValueTreeState::SliderAttachment *tvap1_f_b_sap;
+    
+    juce::AudioProcessorValueTreeState::SliderAttachment *tvap2_f_pi_sap;
+    juce::AudioProcessorValueTreeState::SliderAttachment *tvap2_f_b_sap;
+    juce::AudioProcessorValueTreeState::SliderAttachment *tvap3_f_pi_sap;
+    juce::AudioProcessorValueTreeState::SliderAttachment *tvap3_f_b_sap;
+    
+    juce::AudioProcessorValueTreeState::SliderAttachment *dist1_inner_sap;
+    juce::AudioProcessorValueTreeState::SliderAttachment *dist1_outer_sap;
+    juce::AudioProcessorValueTreeState::SliderAttachment *dist2_inner_sap;
+    juce::AudioProcessorValueTreeState::SliderAttachment *dist2_outer_sap;
+    
+    juce::AudioProcessorValueTreeState::SliderAttachment *decay_sap;
+    juce::AudioProcessorValueTreeState::SliderAttachment *output_gain_sap;
+    juce::AudioProcessorValueTreeState::SliderAttachment *drywet_sap;
+    
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.

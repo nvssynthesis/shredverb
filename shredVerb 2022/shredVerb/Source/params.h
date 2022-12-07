@@ -6,8 +6,6 @@
 //  Copyright © 2022 nvssynthesis. All rights reserved.
 //
 
-//#ifndef params_h
-//#define params_h
 #pragma once
 #include <array>
 #include <map>
@@ -17,9 +15,12 @@ struct param_stuff{
     enum class params_e{
         drive,
         predelay,
+        decay,
         size,
         lowpass,
-        
+
+        drywet,
+
         tvap0_f_pi,
         tvap0_f_b,
         tvap1_f_pi,
@@ -35,14 +36,13 @@ struct param_stuff{
         dist2_inner,
         dist2_outer,
         
-        decay,
-        output_gain,
-        drywet,
-        
-        count,
-        
         interp_type,
-        randomize
+        randomize,
+
+        output_gain,
+        
+        count
+        
     };
 
     inline static const std::map<params_e, std::string> paramIDs =
@@ -200,11 +200,10 @@ struct param_stuff{
     // to be defined/initialized in PluginEditor constructor
     static const size_t numParams = (size_t)(params_e::count);
     std::array<juce::Slider, numParams> paramSliders;
-    std::array<juce::AudioProcessorValueTreeState::SliderAttachment*, numParams> paramSliderAttachmentPtrs;
+    std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>, numParams> paramSliderAttachmentPtrs;
     std::array<juce::Label, numParams> paramLabels;
 };
 
 //static const std::map<param_stuff::params_e, std::string> param_stuff::paramIDs =
 
 
-//#endif /* params_h */
