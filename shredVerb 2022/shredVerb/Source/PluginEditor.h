@@ -54,73 +54,10 @@ public:
     void sliderDragEnded (juce::Slider*) override {}
     //==============================================================================
     void comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged) override {}
-
-    /*
-    juce::Slider driveSlider;
-    juce::AudioProcessorValueTreeState::SliderAttachment *driveSliderAttachment;
-    
-    juce::Slider predelaySlider;
-    juce::AudioProcessorValueTreeState::SliderAttachment *predelaySliderAttachment;
-    
-    juce::Slider decaySlider;
-    juce::AudioProcessorValueTreeState::SliderAttachment *decaySliderAttachment;
-    
-    juce::Slider sizeSlider;
-    juce::AudioProcessorValueTreeState::SliderAttachment *sizeSliderAttachment;
-    
-//    juce::ComboBox interpComboBox;
-//    juce::AudioProcessorValueTreeState::ComboBoxAttachment *interpComboBoxAttachment;
-
-    juce::Slider lopSlider;
-    juce::AudioProcessorValueTreeState::SliderAttachment *lopSliderAttachment;
-    
-    juce::Slider dryWetSlider;
-    juce::AudioProcessorValueTreeState::SliderAttachment *dryWetSliderAttachment;
-    
-    juce::Slider allpass_fPiSlider0, allpass_fPiSlider1, allpass_fPiSlider2, allpass_fPiSlider3;
-    juce::AudioProcessorValueTreeState::SliderAttachment *allpass_fPiSliderAttachment0, *allpass_fPiSliderAttachment1, *allpass_fPiSliderAttachment2, *allpass_fPiSliderAttachment3;
-    
-   juce::Slider allpass_fB_Slider0, allpass_fB_Slider1, allpass_fB_Slider2, allpass_fB_Slider3;
-   juce::AudioProcessorValueTreeState::SliderAttachment *allpass_fB_SliderAttachment0, *allpass_fB_SliderAttachment1, *allpass_fB_SliderAttachment2, *allpass_fB_SliderAttachment3;
-
-    juce::Slider dist1inerSlider;
-    juce::Slider dist1outrSlider;
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist1inerSliderAttachment;
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist1outrSliderAttachment;
-    juce::Slider dist2inerSlider;
-    juce::Slider dist2outrSlider;
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist2inerSliderAttachment;
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist2outrSliderAttachment;
-*/
     
     juce::TextButton randomizeButton { "Randomize" };
 //    juce::AudioProcessorValueTreeState::ButtonAttachment *randomizeButtonAttachment;
     juce::OwnedArray<juce::AudioProcessorValueTreeState::SliderAttachment> ownedSliderAttachmentPtrs;
-//    std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>, param_stuff::numParams> paramSliderAttachmentPtrs;
-
-    juce::AudioProcessorValueTreeState::SliderAttachment *drive_sap;
-    juce::AudioProcessorValueTreeState::SliderAttachment *predelay_sap;
-    juce::AudioProcessorValueTreeState::SliderAttachment *size_sap;
-    juce::AudioProcessorValueTreeState::SliderAttachment *lowpass_sap;
-    
-    juce::AudioProcessorValueTreeState::SliderAttachment *tvap0_f_pi_sap;
-    juce::AudioProcessorValueTreeState::SliderAttachment *tvap0_f_b_sap;
-    juce::AudioProcessorValueTreeState::SliderAttachment *tvap1_f_pi_sap;
-    juce::AudioProcessorValueTreeState::SliderAttachment *tvap1_f_b_sap;
-    
-    juce::AudioProcessorValueTreeState::SliderAttachment *tvap2_f_pi_sap;
-    juce::AudioProcessorValueTreeState::SliderAttachment *tvap2_f_b_sap;
-    juce::AudioProcessorValueTreeState::SliderAttachment *tvap3_f_pi_sap;
-    juce::AudioProcessorValueTreeState::SliderAttachment *tvap3_f_b_sap;
-    
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist1_inner_sap;
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist1_outer_sap;
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist2_inner_sap;
-    juce::AudioProcessorValueTreeState::SliderAttachment *dist2_outer_sap;
-    
-    juce::AudioProcessorValueTreeState::SliderAttachment *decay_sap;
-    juce::AudioProcessorValueTreeState::SliderAttachment *output_gain_sap;
-    juce::AudioProcessorValueTreeState::SliderAttachment *drywet_sap;
     
 private:
     // This reference is provided as a quick way for your editor to

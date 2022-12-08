@@ -16,9 +16,8 @@
 				1A9F1B56A8E5F1605A3CC833,
 				11452912226AEFE8D87984A9,
 				E649E08FBD8105BA69D9F99A,
-				5D0AEDA5E1085D66ADD8F2E6,
+				A70D0803CA9918D427D792C9,
 				304C624F6BB98988573BD8D6,
-				653E8B3B37FC5E8388427650,
 			);
 			name = "shredVerb - All";
 			productName = shredVerb;
@@ -29,23 +28,23 @@
 		002A7FC037D9E2BE59212A50 /* include_juce_gui_extra.mm */ = {isa = PBXBuildFile; fileRef = FBEA7D93590F0AF326568257; };
 		05CFCD383F7D9B215320E525 /* include_juce_audio_plugin_client_AU.r */ = {isa = PBXBuildFile; fileRef = 7675CEFA52D8D982660811FC; };
 		076CC85328BA55AD8AB31C4C /* include_juce_audio_processors_ara.cpp */ = {isa = PBXBuildFile; fileRef = EA6FC7F0BB305BB4E4CEACBD; };
-		07C8501F9DC438DF41019240 /* juce_LV2TurtleDumpProgram.cpp */ = {isa = PBXBuildFile; fileRef = AE33DCAA983DE16470CE242F; settings = { COMPILER_FLAGS = "-std=c++11 -w -DJUCE_SKIP_PRECOMPILED_HEADER"; }; };
 		080710BF336DC84118DEADBD /* include_juce_audio_plugin_client_AUv3.mm */ = {isa = PBXBuildFile; fileRef = E3A54A95A5A3EF9ACE9DD5CC; };
 		1E3B9F6810E763B48BBB566B /* include_juce_audio_processors_lv2_libs.cpp */ = {isa = PBXBuildFile; fileRef = 12C983B7C9D59F9404789367; };
+		1EDE92DFC00B1FEEDD977531 /* Standalone Plugin */ = {isa = PBXBuildFile; fileRef = 656E53107ED087CD155BC3CA; };
 		2EEB2D5438F146A6CFD96295 /* AU */ = {isa = PBXBuildFile; fileRef = 341055ABECEDBF3FDA836916; };
 		2FB384C30ACB1581BD5F6744 /* include_juce_audio_plugin_client_AU_2.mm */ = {isa = PBXBuildFile; fileRef = 79465E31E41E8FDE2B81B755; };
 		314FA812428124EDBDE98441 /* include_juce_audio_utils.mm */ = {isa = PBXBuildFile; fileRef = B8BE9254566F53131E6A74FF; };
 		349A361E5EEC1E6A32BC9603 /* CoreMIDI.framework */ = {isa = PBXBuildFile; fileRef = 312BCFA3CB81D3A34665E1D6; };
 		377952AD6E5185BEAF412FC4 /* include_juce_gui_basics.mm */ = {isa = PBXBuildFile; fileRef = C5E465C8D2CA1F5732F01E25; };
 		4176B2AA21160B653FF02E7B /* include_juce_events.mm */ = {isa = PBXBuildFile; fileRef = 33E6DE221E30C4A5BD21B444; };
+		43316D6269E2DA46351DE958 /* include_juce_audio_plugin_client_Standalone.cpp */ = {isa = PBXBuildFile; fileRef = C1B7EEB8D6B35606BED3F2DC; };
 		44CC1EF84CDB5274E17BFF6E /* include_juce_audio_basics.mm */ = {isa = PBXBuildFile; fileRef = D75F178C15DAD2E073B3DFF5; };
 		503DE227EA9B51430ABEC665 /* Cocoa.framework */ = {isa = PBXBuildFile; fileRef = 7B9F67D1CE630DE9E397ABDB; };
 		60141D74A51E9EAAB4924AEB /* Shared Code */ = {isa = PBXBuildFile; fileRef = 996B28563F947490DD092A8A; };
 		6AFC4B487BABE28C985E5359 /* include_juce_audio_plugin_client_utils.cpp */ = {isa = PBXBuildFile; fileRef = 7CFFD23003CA8CBBF50BC693; };
 		6C351C157F0BFE2088DDB761 /* PluginEditor.cpp */ = {isa = PBXBuildFile; fileRef = 14A92CD0F4403B05151A313C; };
-		758C5CFFC923701A518F5801 /* include_juce_audio_plugin_client_LV2.mm */ = {isa = PBXBuildFile; fileRef = 733A5E351563FF4D253F2B0F; };
-		7BEBC5AC4C619A330C3ED9D3 /* LV2 Plugin */ = {isa = PBXBuildFile; fileRef = C201B3AC1183761D8ACE30E9; };
 		7C2D6AF4D46306CE3CBE6E6F /* IOKit.framework */ = {isa = PBXBuildFile; fileRef = B2BF5CFFF23BAC6BD81C5307; };
+		810EC0C9E3977CD8CF5A18E3 /* include_juce_cryptography.mm */ = {isa = PBXBuildFile; fileRef = 55B3B05A63FEBBABF01E9785; };
 		83D9013F207D8BF718588F15 /* include_juce_graphics.mm */ = {isa = PBXBuildFile; fileRef = 24A15D9B1DB70EF5E6CFA007; };
 		85212D67292711EDF63F083C /* include_juce_audio_formats.mm */ = {isa = PBXBuildFile; fileRef = E9E40084A592F665242F5974; };
 		8A457FDF06DEB85F4FA178C8 /* AVFoundation.framework */ = {isa = PBXBuildFile; fileRef = A54B9960FE2456B4A5319F27; };
@@ -56,7 +55,9 @@
 		9DC3D434F603509300017D07 /* include_juce_data_structures.mm */ = {isa = PBXBuildFile; fileRef = 72645117DA087D01F28B5EA0; };
 		A3D1E8F7A31D77F039B1CCBF /* CoreAudio.framework */ = {isa = PBXBuildFile; fileRef = F687BBE2528BA5707A9205A6; };
 		A52628625209F0A03F179E32 /* include_juce_audio_plugin_client_VST3.cpp */ = {isa = PBXBuildFile; fileRef = C5CAE81F5E8F94CA4EEFBB95; };
+		B07AFF3B23E899DCD7591B7F /* include_juce_dsp.mm */ = {isa = PBXBuildFile; fileRef = 86028238A47A46D7ED70DC64; };
 		B51D698FE7A56522211418D6 /* CoreAudioKit.framework */ = {isa = PBXBuildFile; fileRef = 41540552503A6C81082AF601; };
+		B7B76C47D28C2A89300AE6FF /* include_foleys_gui_magic.cpp */ = {isa = PBXBuildFile; fileRef = 1EDDFABBAB6EDEA048CEEA4F; };
 		BE356F1865407CACEDB9172D /* Accelerate.framework */ = {isa = PBXBuildFile; fileRef = 8230AF7DFD4F221DD0FC05C9; };
 		C0C24C99CABBAFD0F7062218 /* AudioToolbox.framework */ = {isa = PBXBuildFile; fileRef = 338ED08C20EC201D7F6B58F4; };
 		C0D6FA1B92794E2B40DCD5C3 /* include_juce_audio_plugin_client_AU_1.mm */ = {isa = PBXBuildFile; fileRef = 301B2337237B733D50DCE800; };
@@ -64,7 +65,6 @@
 		CAF41BFD7BF13CD8F71D83B3 /* Foundation.framework */ = {isa = PBXBuildFile; fileRef = 512D4FD4B3115F1311FB55D0; };
 		DA819D39D604F4970C3B86FD /* include_juce_audio_devices.mm */ = {isa = PBXBuildFile; fileRef = 8D1BFCD3BF495929745C9FCE; };
 		DB8F903BD0012F0F828EBDFF /* include_juce_audio_plugin_client_ARA.cpp */ = {isa = PBXBuildFile; fileRef = 0FE5C0C54E0BC75572E39F3F; };
-		E1DCC990C6840D2640E18A5D /* LV2 Manifest Helper */ = {isa = PBXBuildFile; fileRef = E5EB4EA32B34B6E3455B7FA9; };
 		E47FA5A360F7B4CBD6BEDE06 /* AUv3 AppExtension */ = {isa = PBXBuildFile; fileRef = 14BFF18964367695712440BA; };
 		EA2D05E6A6AD3387BE71E68A /* VST3 */ = {isa = PBXBuildFile; fileRef = FD52EA110028F19AEBE847B7; };
 		EC71F99828C525CBDE6114C8 /* include_juce_core.mm */ = {isa = PBXBuildFile; fileRef = 5545BCF83A7A1EB2B6F8D34D; };
@@ -73,18 +73,32 @@
 		FE3CF6F57F925599F7E0A8BF /* QuartzCore.framework */ = {isa = PBXBuildFile; fileRef = 552B6600C0A7220EE2168D7B; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		BFCF31DC7D7E1A247F9DBD6B /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E47FA5A360F7B4CBD6BEDE06,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		02CEAB5F2819D9264599A5AB /* DiscRecording.framework */ /* DiscRecording.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiscRecording.framework; path = System/Library/Frameworks/DiscRecording.framework; sourceTree = SDKROOT; };
 		06924D8D98A38F048CE5569B /* include_juce_audio_plugin_client_VST_utils.mm */ /* include_juce_audio_plugin_client_VST_utils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_plugin_client_VST_utils.mm; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_VST_utils.mm; sourceTree = SOURCE_ROOT; };
-		07FB499C2A30609AAD8F7196 /* nvs_delayFilters.h */ /* nvs_delayFilters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nvs_delayFilters.h; path = ../../../../gitstuff/nkvdu_libraries/include/nvs_delayFilters.h; sourceTree = SOURCE_ROOT; };
 		0FE5C0C54E0BC75572E39F3F /* include_juce_audio_plugin_client_ARA.cpp */ /* include_juce_audio_plugin_client_ARA.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_plugin_client_ARA.cpp; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_ARA.cpp; sourceTree = SOURCE_ROOT; };
 		12C983B7C9D59F9404789367 /* include_juce_audio_processors_lv2_libs.cpp */ /* include_juce_audio_processors_lv2_libs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_processors_lv2_libs.cpp; path = ../../JuceLibraryCode/include_juce_audio_processors_lv2_libs.cpp; sourceTree = SOURCE_ROOT; };
 		14A92CD0F4403B05151A313C /* PluginEditor.cpp */ /* PluginEditor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PluginEditor.cpp; path = ../../Source/PluginEditor.cpp; sourceTree = SOURCE_ROOT; };
 		14BFF18964367695712440BA /* AUv3 AppExtension */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = shredVerb.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1919133AA6534BDAA8C2B57D /* PluginEditor.h */ /* PluginEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PluginEditor.h; path = ../../Source/PluginEditor.h; sourceTree = SOURCE_ROOT; };
 		19C5F7B9D59C4108366E61BD /* WebKit.framework */ /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		1E1509424112D3147E4ED7BB /* Info-Standalone_Plugin.plist */ /* Info-Standalone_Plugin.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-Standalone_Plugin.plist"; path = "Info-Standalone_Plugin.plist"; sourceTree = SOURCE_ROOT; };
+		1EDDFABBAB6EDEA048CEEA4F /* include_foleys_gui_magic.cpp */ /* include_foleys_gui_magic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_foleys_gui_magic.cpp; path = ../../JuceLibraryCode/include_foleys_gui_magic.cpp; sourceTree = SOURCE_ROOT; };
 		2043F2BE39A229989F1FFAB3 /* Info-VST3.plist */ /* Info-VST3.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-VST3.plist"; path = "Info-VST3.plist"; sourceTree = SOURCE_ROOT; };
-		22248C3C855BFA2903BF4274 /* nvs_memoryless.h */ /* nvs_memoryless.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nvs_memoryless.h; path = ../../../../gitstuff/nkvdu_libraries/include/nvs_memoryless.h; sourceTree = SOURCE_ROOT; };
 		24A15D9B1DB70EF5E6CFA007 /* include_juce_graphics.mm */ /* include_juce_graphics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_graphics.mm; path = ../../JuceLibraryCode/include_juce_graphics.mm; sourceTree = SOURCE_ROOT; };
 		301B2337237B733D50DCE800 /* include_juce_audio_plugin_client_AU_1.mm */ /* include_juce_audio_plugin_client_AU_1.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_plugin_client_AU_1.mm; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_AU_1.mm; sourceTree = SOURCE_ROOT; };
 		312BCFA3CB81D3A34665E1D6 /* CoreMIDI.framework */ /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
@@ -93,58 +107,61 @@
 		341055ABECEDBF3FDA836916 /* AU */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shredVerb.component; sourceTree = BUILT_PRODUCTS_DIR; };
 		382686B05570ED390FB51626 /* JuceHeader.h */ /* JuceHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceHeader.h; path = ../../JuceLibraryCode/JuceHeader.h; sourceTree = SOURCE_ROOT; };
 		41540552503A6C81082AF601 /* CoreAudioKit.framework */ /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
-		434E6CB3BAA03B959E373D9B /* Info-LV2_Manifest_Helper.plist */ /* Info-LV2_Manifest_Helper.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-LV2_Manifest_Helper.plist"; path = "Info-LV2_Manifest_Helper.plist"; sourceTree = SOURCE_ROOT; };
 		47223C55290CCE880A7B8CE0 /* RecentFilesMenuTemplate.nib */ /* RecentFilesMenuTemplate.nib */ = {isa = PBXFileReference; lastKnownFileType = file.nib; name = RecentFilesMenuTemplate.nib; path = RecentFilesMenuTemplate.nib; sourceTree = SOURCE_ROOT; };
 		4F28A05BE7A1AEF54A2C423E /* Info-AUv3_AppExtension.plist */ /* Info-AUv3_AppExtension.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-AUv3_AppExtension.plist"; path = "Info-AUv3_AppExtension.plist"; sourceTree = SOURCE_ROOT; };
 		512D4FD4B3115F1311FB55D0 /* Foundation.framework */ /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5319C6A01230D7F32CDF9C0B /* juce_audio_utils */ /* juce_audio_utils */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_utils; path = /Applications/JUCE/modules/juce_audio_utils; sourceTree = "<absolute>"; };
 		552B6600C0A7220EE2168D7B /* QuartzCore.framework */ /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5545BCF83A7A1EB2B6F8D34D /* include_juce_core.mm */ /* include_juce_core.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_core.mm; path = ../../JuceLibraryCode/include_juce_core.mm; sourceTree = SOURCE_ROOT; };
+		55B3B05A63FEBBABF01E9785 /* include_juce_cryptography.mm */ /* include_juce_cryptography.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_cryptography.mm; path = ../../JuceLibraryCode/include_juce_cryptography.mm; sourceTree = SOURCE_ROOT; };
 		5BB1C3E24481D93F8226A2B1 /* juce_gui_basics */ /* juce_gui_basics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_gui_basics; path = /Applications/JUCE/modules/juce_gui_basics; sourceTree = "<absolute>"; };
-		5F7B310385CE00C402CA0535 /* Info-LV2_Plugin.plist */ /* Info-LV2_Plugin.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-LV2_Plugin.plist"; path = "Info-LV2_Plugin.plist"; sourceTree = SOURCE_ROOT; };
+		656E53107ED087CD155BC3CA /* Standalone Plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shredVerb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		65D62BA9AAC55E1AA06897F8 /* AudioUnit.framework */ /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		670B3F13AB75C1A46F88AB5A /* PluginProcessor.cpp */ /* PluginProcessor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PluginProcessor.cpp; path = ../../Source/PluginProcessor.cpp; sourceTree = SOURCE_ROOT; };
+		6A94FCDB52D6027F1D5CE667 /* nvs_filters.h */ /* nvs_filters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nvs_filters.h; path = ../../../../../Documents/GitHub/nvs_libraries/nvs_libraries/include/nvs_filters.h; sourceTree = SOURCE_ROOT; };
 		72645117DA087D01F28B5EA0 /* include_juce_data_structures.mm */ /* include_juce_data_structures.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_data_structures.mm; path = ../../JuceLibraryCode/include_juce_data_structures.mm; sourceTree = SOURCE_ROOT; };
-		733A5E351563FF4D253F2B0F /* include_juce_audio_plugin_client_LV2.mm */ /* include_juce_audio_plugin_client_LV2.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_plugin_client_LV2.mm; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_LV2.mm; sourceTree = SOURCE_ROOT; };
 		7675CEFA52D8D982660811FC /* include_juce_audio_plugin_client_AU.r */ /* include_juce_audio_plugin_client_AU.r */ = {isa = PBXFileReference; lastKnownFileType = file.r; name = include_juce_audio_plugin_client_AU.r; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_AU.r; sourceTree = SOURCE_ROOT; };
 		787E5D6DC2F705B274973594 /* juce_audio_basics */ /* juce_audio_basics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_basics; path = /Applications/JUCE/modules/juce_audio_basics; sourceTree = "<absolute>"; };
 		79465E31E41E8FDE2B81B755 /* include_juce_audio_plugin_client_AU_2.mm */ /* include_juce_audio_plugin_client_AU_2.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_plugin_client_AU_2.mm; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_AU_2.mm; sourceTree = SOURCE_ROOT; };
 		7B9F67D1CE630DE9E397ABDB /* Cocoa.framework */ /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		7CFFD23003CA8CBBF50BC693 /* include_juce_audio_plugin_client_utils.cpp */ /* include_juce_audio_plugin_client_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_plugin_client_utils.cpp; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_utils.cpp; sourceTree = SOURCE_ROOT; };
 		8230AF7DFD4F221DD0FC05C9 /* Accelerate.framework */ /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		86028238A47A46D7ED70DC64 /* include_juce_dsp.mm */ /* include_juce_dsp.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_dsp.mm; path = ../../JuceLibraryCode/include_juce_dsp.mm; sourceTree = SOURCE_ROOT; };
 		88D23504B62C6C865BCA2880 /* juce_audio_processors */ /* juce_audio_processors */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_processors; path = /Applications/JUCE/modules/juce_audio_processors; sourceTree = "<absolute>"; };
 		8A15995717FA9FC9E9B54CC6 /* juce_audio_plugin_client */ /* juce_audio_plugin_client */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_plugin_client; path = /Applications/JUCE/modules/juce_audio_plugin_client; sourceTree = "<absolute>"; };
 		8B2ED9F122B2BCFE7AFF5672 /* JucePluginDefines.h */ /* JucePluginDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JucePluginDefines.h; path = ../../JuceLibraryCode/JucePluginDefines.h; sourceTree = SOURCE_ROOT; };
 		8D1BFCD3BF495929745C9FCE /* include_juce_audio_devices.mm */ /* include_juce_audio_devices.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_devices.mm; path = ../../JuceLibraryCode/include_juce_audio_devices.mm; sourceTree = SOURCE_ROOT; };
 		90824330D37902F04661584F /* juce_audio_formats */ /* juce_audio_formats */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_formats; path = /Applications/JUCE/modules/juce_audio_formats; sourceTree = "<absolute>"; };
+		962C86C94E102226799E42D5 /* nvs_memoryless.h */ /* nvs_memoryless.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nvs_memoryless.h; path = ../../../../../Documents/GitHub/nvs_libraries/nvs_libraries/include/nvs_memoryless.h; sourceTree = SOURCE_ROOT; };
 		96A8A85F5C88A04A046BFE09 /* juce_audio_devices */ /* juce_audio_devices */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_devices; path = /Applications/JUCE/modules/juce_audio_devices; sourceTree = "<absolute>"; };
 		996B28563F947490DD092A8A /* Shared Code */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libshredVerb.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D53A96DE2686485133FC324 /* PresetListBox.h */ /* PresetListBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PresetListBox.h; path = ../../Source/PresetListBox.h; sourceTree = SOURCE_ROOT; };
+		A024366AD1F17129BD578ABE /* nvs_LFO.h */ /* nvs_LFO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nvs_LFO.h; path = ../../../../../Documents/GitHub/nvs_libraries/nvs_libraries/include/nvs_LFO.h; sourceTree = SOURCE_ROOT; };
+		A0D21CB3ED3F256A38692320 /* juce_dsp */ /* juce_dsp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_dsp; path = /Applications/JUCE/modules/juce_dsp; sourceTree = "<absolute>"; };
 		A54B9960FE2456B4A5319F27 /* AVFoundation.framework */ /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A6CC2E367ECDADA37BC64593 /* AUv3_AppExtension.entitlements */ /* AUv3_AppExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = AUv3_AppExtension.entitlements; path = AUv3_AppExtension.entitlements; sourceTree = SOURCE_ROOT; };
-		AE33DCAA983DE16470CE242F /* juce_LV2TurtleDumpProgram.cpp */ /* juce_LV2TurtleDumpProgram.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_LV2TurtleDumpProgram.cpp; path = /Applications/JUCE/modules/juce_audio_plugin_client/LV2/juce_LV2TurtleDumpProgram.cpp; sourceTree = "<absolute>"; };
 		B2BF5CFFF23BAC6BD81C5307 /* IOKit.framework */ /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		B8BE9254566F53131E6A74FF /* include_juce_audio_utils.mm */ /* include_juce_audio_utils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_utils.mm; path = ../../JuceLibraryCode/include_juce_audio_utils.mm; sourceTree = SOURCE_ROOT; };
 		B8DF3AE48F7BC819C9547DEA /* include_juce_audio_processors.mm */ /* include_juce_audio_processors.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_processors.mm; path = ../../JuceLibraryCode/include_juce_audio_processors.mm; sourceTree = SOURCE_ROOT; };
-		B9C8ABB03DE4F4909DA0E83E /* JuceLV2Defines.h */ /* JuceLV2Defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceLV2Defines.h; path = ../../JuceLibraryCode/JuceLV2Defines.h; sourceTree = SOURCE_ROOT; };
+		BACF85CF62E4CD0AC2FF51EA /* juce_cryptography */ /* juce_cryptography */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_cryptography; path = /Applications/JUCE/modules/juce_cryptography; sourceTree = "<absolute>"; };
 		BD5FF7196A0D93D3A781C6F9 /* juce_core */ /* juce_core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_core; path = /Applications/JUCE/modules/juce_core; sourceTree = "<absolute>"; };
-		C201B3AC1183761D8ACE30E9 /* LV2 Plugin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = shredVerb.so; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1B7EEB8D6B35606BED3F2DC /* include_juce_audio_plugin_client_Standalone.cpp */ /* include_juce_audio_plugin_client_Standalone.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_plugin_client_Standalone.cpp; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_Standalone.cpp; sourceTree = SOURCE_ROOT; };
 		C3364DE9338B8EB893DA94FE /* params.h */ /* params.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = params.h; path = ../../Source/params.h; sourceTree = SOURCE_ROOT; };
 		C499E32AD07AF53EF107B33B /* juce_graphics */ /* juce_graphics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_graphics; path = /Applications/JUCE/modules/juce_graphics; sourceTree = "<absolute>"; };
 		C5CAE81F5E8F94CA4EEFBB95 /* include_juce_audio_plugin_client_VST3.cpp */ /* include_juce_audio_plugin_client_VST3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_plugin_client_VST3.cpp; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_VST3.cpp; sourceTree = SOURCE_ROOT; };
 		C5E465C8D2CA1F5732F01E25 /* include_juce_gui_basics.mm */ /* include_juce_gui_basics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_gui_basics.mm; path = ../../JuceLibraryCode/include_juce_gui_basics.mm; sourceTree = SOURCE_ROOT; };
-		D1A321E0ABC1FD7732445C7B /* nvs_LFO.h */ /* nvs_LFO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nvs_LFO.h; path = ../../../../gitstuff/nkvdu_libraries/include/nvs_LFO.h; sourceTree = SOURCE_ROOT; };
 		D75F178C15DAD2E073B3DFF5 /* include_juce_audio_basics.mm */ /* include_juce_audio_basics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_basics.mm; path = ../../JuceLibraryCode/include_juce_audio_basics.mm; sourceTree = SOURCE_ROOT; };
+		D8F2291C597AF816A2168869 /* foleys_gui_magic */ /* foleys_gui_magic */ = {isa = PBXFileReference; lastKnownFileType = folder; name = foleys_gui_magic; path = ../../Modules/foleys_gui_magic; sourceTree = SOURCE_ROOT; };
 		E17B2A84D3DB37F019910D3D /* juce_gui_extra */ /* juce_gui_extra */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_gui_extra; path = /Applications/JUCE/modules/juce_gui_extra; sourceTree = "<absolute>"; };
 		E3A54A95A5A3EF9ACE9DD5CC /* include_juce_audio_plugin_client_AUv3.mm */ /* include_juce_audio_plugin_client_AUv3.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_plugin_client_AUv3.mm; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_AUv3.mm; sourceTree = SOURCE_ROOT; };
 		E58CE5ADDDF2FFC9B5208DF5 /* PluginProcessor.h */ /* PluginProcessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PluginProcessor.h; path = ../../Source/PluginProcessor.h; sourceTree = SOURCE_ROOT; };
-		E5EB4EA32B34B6E3455B7FA9 /* LV2 Manifest Helper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = juce_lv2_helper; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9E40084A592F665242F5974 /* include_juce_audio_formats.mm */ /* include_juce_audio_formats.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_formats.mm; path = ../../JuceLibraryCode/include_juce_audio_formats.mm; sourceTree = SOURCE_ROOT; };
 		EA6FC7F0BB305BB4E4CEACBD /* include_juce_audio_processors_ara.cpp */ /* include_juce_audio_processors_ara.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_processors_ara.cpp; path = ../../JuceLibraryCode/include_juce_audio_processors_ara.cpp; sourceTree = SOURCE_ROOT; };
 		EBC3BDD15A32ED5E01121D07 /* juce_events */ /* juce_events */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_events; path = /Applications/JUCE/modules/juce_events; sourceTree = "<absolute>"; };
+		EE19DFEC03368A47C5645646 /* nvs_delayFilters.h */ /* nvs_delayFilters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nvs_delayFilters.h; path = ../../../../../Documents/GitHub/nvs_libraries/nvs_libraries/include/nvs_delayFilters.h; sourceTree = SOURCE_ROOT; };
 		F35360BF0F0414A7613C2654 /* juce_data_structures */ /* juce_data_structures */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_data_structures; path = /Applications/JUCE/modules/juce_data_structures; sourceTree = "<absolute>"; };
 		F687BBE2528BA5707A9205A6 /* CoreAudio.framework */ /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		F9C2A4D91E4F9781952251E9 /* Info-AU.plist */ /* Info-AU.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-AU.plist"; path = "Info-AU.plist"; sourceTree = SOURCE_ROOT; };
-		F9E71D7844A01D2D043E0771 /* nvs_filters.h */ /* nvs_filters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nvs_filters.h; path = ../../../../gitstuff/nkvdu_libraries/include/nvs_filters.h; sourceTree = SOURCE_ROOT; };
 		FBEA7D93590F0AF326568257 /* include_juce_gui_extra.mm */ /* include_juce_gui_extra.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_gui_extra.mm; path = ../../JuceLibraryCode/include_juce_gui_extra.mm; sourceTree = SOURCE_ROOT; };
 		FD52EA110028F19AEBE847B7 /* VST3 */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shredVerb.vst3; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -207,7 +224,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D430D5D2B6D7A3AAA2D4535F = {
+		E7AF0C1C74783FDA28EEED42 = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -231,6 +248,7 @@
 		121A1371CFFA84DE8524C925 /* JUCE Modules */ = {
 			isa = PBXGroup;
 			children = (
+				D8F2291C597AF816A2168869,
 				787E5D6DC2F705B274973594,
 				96A8A85F5C88A04A046BFE09,
 				90824330D37902F04661584F,
@@ -238,7 +256,9 @@
 				88D23504B62C6C865BCA2880,
 				5319C6A01230D7F32CDF9C0B,
 				BD5FF7196A0D93D3A781C6F9,
+				BACF85CF62E4CD0AC2FF51EA,
 				F35360BF0F0414A7613C2654,
+				A0D21CB3ED3F256A38692320,
 				EBC3BDD15A32ED5E01121D07,
 				C499E32AD07AF53EF107B33B,
 				5BB1C3E24481D93F8226A2B1,
@@ -250,6 +270,7 @@
 		3FE284FF87A250E6C726543D /* JUCE Library Code */ = {
 			isa = PBXGroup;
 			children = (
+				1EDDFABBAB6EDEA048CEEA4F,
 				D75F178C15DAD2E073B3DFF5,
 				8D1BFCD3BF495929745C9FCE,
 				E9E40084A592F665242F5974,
@@ -258,7 +279,7 @@
 				301B2337237B733D50DCE800,
 				79465E31E41E8FDE2B81B755,
 				E3A54A95A5A3EF9ACE9DD5CC,
-				733A5E351563FF4D253F2B0F,
+				C1B7EEB8D6B35606BED3F2DC,
 				7CFFD23003CA8CBBF50BC693,
 				06924D8D98A38F048CE5569B,
 				C5CAE81F5E8F94CA4EEFBB95,
@@ -267,13 +288,14 @@
 				12C983B7C9D59F9404789367,
 				B8BE9254566F53131E6A74FF,
 				5545BCF83A7A1EB2B6F8D34D,
+				55B3B05A63FEBBABF01E9785,
 				72645117DA087D01F28B5EA0,
+				86028238A47A46D7ED70DC64,
 				33E6DE221E30C4A5BD21B444,
 				24A15D9B1DB70EF5E6CFA007,
 				C5E465C8D2CA1F5732F01E25,
 				FBEA7D93590F0AF326568257,
 				382686B05570ED390FB51626,
-				B9C8ABB03DE4F4909DA0E83E,
 				8B2ED9F122B2BCFE7AFF5672,
 			);
 			name = "JUCE Library Code";
@@ -323,15 +345,16 @@
 		E81C9C5FC70F7E54174B9AF6 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				F9E71D7844A01D2D043E0771,
-				D1A321E0ABC1FD7732445C7B,
-				22248C3C855BFA2903BF4274,
-				07FB499C2A30609AAD8F7196,
+				EE19DFEC03368A47C5645646,
+				6A94FCDB52D6027F1D5CE667,
+				A024366AD1F17129BD578ABE,
+				962C86C94E102226799E42D5,
 				C3364DE9338B8EB893DA94FE,
 				670B3F13AB75C1A46F88AB5A,
 				E58CE5ADDDF2FFC9B5208DF5,
 				14A92CD0F4403B05151A313C,
 				1919133AA6534BDAA8C2B57D,
+				9D53A96DE2686485133FC324,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -342,9 +365,8 @@
 				FD52EA110028F19AEBE847B7,
 				341055ABECEDBF3FDA836916,
 				14BFF18964367695712440BA,
-				C201B3AC1183761D8ACE30E9,
+				656E53107ED087CD155BC3CA,
 				996B28563F947490DD092A8A,
-				E5EB4EA32B34B6E3455B7FA9,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -355,8 +377,7 @@
 				2043F2BE39A229989F1FFAB3,
 				F9C2A4D91E4F9781952251E9,
 				4F28A05BE7A1AEF54A2C423E,
-				5F7B310385CE00C402CA0535,
-				434E6CB3BAA03B959E373D9B,
+				1E1509424112D3147E4ED7BB,
 				47223C55290CCE880A7B8CE0,
 			);
 			name = Resources;
@@ -365,41 +386,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		20E91CB1F093C4973F311A3D /* shredVerb - LV2 Manifest Helper */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F8D6B9B8D5CA43B4010B9217;
-			buildPhases = (
-				BC8ADCE78995A6E5C58FFF38,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "shredVerb - LV2 Manifest Helper";
-			productName = shredVerb;
-			productReference = E5EB4EA32B34B6E3455B7FA9;
-			productType = "com.apple.product-type.tool";
-		};
-		219F21D2ACF068B4684B9298 /* shredVerb - LV2 Plugin */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4F2C8EB133A94E3F573774B5;
-			buildPhases = (
-				4AEA7FF98A672BA5FD806367,
-				A301601303EE09882F650EA8,
-				D430D5D2B6D7A3AAA2D4535F,
-				0325A66245B6C1738C8D9F21,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				BE1DB60BD143DEB490818B7B,
-				C8F1C2D7AE865BCB0BE4EBCF,
-			);
-			name = "shredVerb - LV2 Plugin";
-			productName = shredVerb;
-			productReference = C201B3AC1183761D8ACE30E9;
-			productType = "com.apple.product-type.tool";
-		};
 		26BE50B64C58A610B46B017F /* shredVerb - VST3 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FA0261388FB7E1F1A90EE04F;
@@ -470,6 +456,26 @@
 			productReference = 996B28563F947490DD092A8A;
 			productType = "com.apple.product-type.library.static";
 		};
+		CB426FA8EEDDE62F0EA99491 /* shredVerb - Standalone Plugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5D275A07A05DA78F914C9873;
+			buildPhases = (
+				D4445466A3AA52063FDFFF0D,
+				58F0DF413282B5115B0708DC,
+				E7AF0C1C74783FDA28EEED42,
+				BFCF31DC7D7E1A247F9DBD6B,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B5A1B5AA7ED6F7A0793BC14F,
+				E9D2FB28E6B346887636948E,
+			);
+			name = "shredVerb - Standalone Plugin";
+			productName = shredVerb;
+			productReference = 656E53107ED087CD155BC3CA;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -479,50 +485,6 @@
 				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = "nvssynthesis";
 				TargetAttributes = {
-					20E91CB1F093C4973F311A3D = {
-						SystemCapabilities = {
-							com.apple.ApplicationGroups.iOS = {
-								enabled = 0;
-							};
-							com.apple.HardenedRuntime = {
-								enabled = 0;
-							};
-							com.apple.InAppPurchase = {
-								enabled = 0;
-							};
-							com.apple.InterAppAudio = {
-								enabled = 0;
-							};
-							com.apple.Push = {
-								enabled = 0;
-							};
-							com.apple.Sandbox = {
-								enabled = 0;
-							};
-						};
-					};
-					219F21D2ACF068B4684B9298 = {
-						SystemCapabilities = {
-							com.apple.ApplicationGroups.iOS = {
-								enabled = 0;
-							};
-							com.apple.HardenedRuntime = {
-								enabled = 0;
-							};
-							com.apple.InAppPurchase = {
-								enabled = 0;
-							};
-							com.apple.InterAppAudio = {
-								enabled = 0;
-							};
-							com.apple.Push = {
-								enabled = 0;
-							};
-							com.apple.Sandbox = {
-								enabled = 0;
-							};
-						};
-					};
 					26BE50B64C58A610B46B017F = {
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -633,6 +595,28 @@
 							};
 						};
 					};
+					CB426FA8EEDDE62F0EA99491 = {
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 0;
+							};
+							com.apple.HardenedRuntime = {
+								enabled = 0;
+							};
+							com.apple.InAppPurchase = {
+								enabled = 0;
+							};
+							com.apple.InterAppAudio = {
+								enabled = 0;
+							};
+							com.apple.Push = {
+								enabled = 0;
+							};
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
+					};
 				};
 			};
 			buildConfigurationList = 821A684159D9E3A03590D518;
@@ -650,15 +634,14 @@
 				26BE50B64C58A610B46B017F,
 				6A6F4A9BA2D61A9405FADE9E,
 				5EC0A2F0198496FCE9CE49B9,
-				219F21D2ACF068B4684B9298,
+				CB426FA8EEDDE62F0EA99491,
 				89D0C85170D7667F4AADDEF5,
-				20E91CB1F093C4973F311A3D,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		4AEA7FF98A672BA5FD806367 = {
+		58CFD8B6716F979D32F0F43E = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -666,7 +649,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		58CFD8B6716F979D32F0F43E = {
+		D4445466A3AA52063FDFFF0D = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -703,21 +686,15 @@
 		};
 /* End PBXRezBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		0325A66245B6C1738C8D9F21 /* Generate manifest */ = {
-			isa = PBXShellScriptBuildPhase;
+/* Begin PBXSourcesBuildPhase section */
+		58F0DF413282B5115B0708DC = {
+			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43316D6269E2DA46351DE958,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			name = "Generate manifest";
-			alwaysOutOfDate = 1;
-			shellPath = /bin/sh;
-			shellScript = "set -e\n\"$CONFIGURATION_BUILD_DIR/../juce_lv2_helper\" \"$CONFIGURATION_BUILD_DIR/$PRODUCT_NAME\"\nif [ \"$CONFIGURATION\" = \"Debug\" ]; then\nmkdir -p \"$HOME/Library/Audio/Plug-Ins/LV2/\"\n/bin/ln -sfh \"$CONFIGURATION_BUILD_DIR\" \"$HOME/Library/Audio/Plug-Ins/LV2/\"\nfi\nif [ \"$CONFIGURATION\" = \"Release\" ]; then\nmkdir -p \"$HOME/Library/Audio/Plug-Ins/LV2/\"\n/bin/ln -sfh \"$CONFIGURATION_BUILD_DIR\" \"$HOME/Library/Audio/Plug-Ins/LV2/\"\nfi\n";
 		};
-/* End PBXShellScriptBuildPhase section */
-
-/* Begin PBXSourcesBuildPhase section */
 		6A8B9528678BB177C405B875 = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -741,6 +718,7 @@
 			files = (
 				FBC509CF34916645EB9F6F5D,
 				6C351C157F0BFE2088DDB761,
+				B7B76C47D28C2A89300AE6FF,
 				44CC1EF84CDB5274E17BFF6E,
 				DA819D39D604F4970C3B86FD,
 				85212D67292711EDF63F083C,
@@ -752,19 +730,13 @@
 				1E3B9F6810E763B48BBB566B,
 				314FA812428124EDBDE98441,
 				EC71F99828C525CBDE6114C8,
+				810EC0C9E3977CD8CF5A18E3,
 				9DC3D434F603509300017D07,
+				B07AFF3B23E899DCD7591B7F,
 				4176B2AA21160B653FF02E7B,
 				83D9013F207D8BF718588F15,
 				377952AD6E5185BEAF412FC4,
 				002A7FC037D9E2BE59212A50,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A301601303EE09882F650EA8 = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				758C5CFFC923701A518F5801,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -773,14 +745,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				080710BF336DC84118DEADBD,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BC8ADCE78995A6E5C58FFF38 = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				07C8501F9DC438DF41019240,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -799,25 +763,17 @@
 			isa = PBXTargetDependency;
 			target = 89D0C85170D7667F4AADDEF5;
 		};
-		5D0AEDA5E1085D66ADD8F2E6 = {
-			isa = PBXTargetDependency;
-			target = 219F21D2ACF068B4684B9298;
-		};
-		653E8B3B37FC5E8388427650 = {
-			isa = PBXTargetDependency;
-			target = 20E91CB1F093C4973F311A3D;
-		};
 		8F358F2B743D857A29B47117 = {
 			isa = PBXTargetDependency;
 			target = 89D0C85170D7667F4AADDEF5;
 		};
-		BE1DB60BD143DEB490818B7B = {
+		A70D0803CA9918D427D792C9 = {
 			isa = PBXTargetDependency;
-			target = 20E91CB1F093C4973F311A3D;
+			target = CB426FA8EEDDE62F0EA99491;
 		};
-		C8F1C2D7AE865BCB0BE4EBCF = {
+		B5A1B5AA7ED6F7A0793BC14F = {
 			isa = PBXTargetDependency;
-			target = 89D0C85170D7667F4AADDEF5;
+			target = 5EC0A2F0198496FCE9CE49B9;
 		};
 		D81E0C565DA09013F3B89708 = {
 			isa = PBXTargetDependency;
@@ -827,6 +783,10 @@
 			isa = PBXTargetDependency;
 			target = 5EC0A2F0198496FCE9CE49B9;
 		};
+		E9D2FB28E6B346887636948E = {
+			isa = PBXTargetDependency;
+			target = 89D0C85170D7667F4AADDEF5;
+		};
 		F135A6862AF2AB16BD52BFE5 = {
 			isa = PBXTargetDependency;
 			target = 89D0C85170D7667F4AADDEF5;
@@ -834,128 +794,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		1C9C4167FFABEEF1B0EC61E5 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_LINK_OBJC_RUNTIME = NO;
-				CODE_SIGN_IDENTITY = "";
-				COMBINE_HIDPI_IMAGES = YES;
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)";
-				COPY_PHASE_STRIP = NO;
-				EXCLUDED_ARCHS = "";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"_DEBUG=1",
-					"DEBUG=1",
-					"JUCE_DISPLAY_SPLASH_SCREEN=1",
-					"JUCE_USE_DARK_SPLASH_SCREEN=1",
-					"JUCE_PROJUCER_VERSION=0x70002",
-					"JUCE_MODULE_AVAILABLE_juce_audio_basics=1",
-					"JUCE_MODULE_AVAILABLE_juce_audio_devices=1",
-					"JUCE_MODULE_AVAILABLE_juce_audio_formats=1",
-					"JUCE_MODULE_AVAILABLE_juce_audio_plugin_client=1",
-					"JUCE_MODULE_AVAILABLE_juce_audio_processors=1",
-					"JUCE_MODULE_AVAILABLE_juce_audio_utils=1",
-					"JUCE_MODULE_AVAILABLE_juce_core=1",
-					"JUCE_MODULE_AVAILABLE_juce_data_structures=1",
-					"JUCE_MODULE_AVAILABLE_juce_events=1",
-					"JUCE_MODULE_AVAILABLE_juce_graphics=1",
-					"JUCE_MODULE_AVAILABLE_juce_gui_basics=1",
-					"JUCE_MODULE_AVAILABLE_juce_gui_extra=1",
-					"JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1",
-					"JUCE_VST3_CAN_REPLACE_VST2=0",
-					"JUCE_STRICT_REFCOUNTEDPOINTER=1",
-					"JucePlugin_Build_VST=0",
-					"JucePlugin_Build_VST3=0",
-					"JucePlugin_Build_AU=0",
-					"JucePlugin_Build_AUv3=0",
-					"JucePlugin_Build_AAX=0",
-					"JucePlugin_Build_Standalone=0",
-					"JucePlugin_Build_Unity=0",
-					"JucePlugin_Build_LV2=0",
-					"JucePlugin_Enable_IAA=0",
-					"JucePlugin_Enable_ARA=0",
-					"JucePlugin_Name=\\\"shredVerb\\\"",
-					"JucePlugin_Desc=\\\"effed\\ up\\ reverb\\\"",
-					"JucePlugin_Manufacturer=\\\"nvssynthesis\\\"",
-					"JucePlugin_ManufacturerWebsite=\\\"https://nvssynthesis.github.io/\\\"",
-					"JucePlugin_ManufacturerEmail=\\\"nicholas93solem@gmail.com\\\"",
-					"JucePlugin_ManufacturerCode=0x4e767373",
-					"JucePlugin_PluginCode=0x4e767373",
-					"JucePlugin_IsSynth=0",
-					"JucePlugin_WantsMidiInput=0",
-					"JucePlugin_ProducesMidiOutput=0",
-					"JucePlugin_IsMidiEffect=0",
-					"JucePlugin_EditorRequiresKeyboardFocus=0",
-					"JucePlugin_Version=1.0.0",
-					"JucePlugin_VersionCode=0x10000",
-					"JucePlugin_VersionString=\\\"1.0.0\\\"",
-					"JucePlugin_VSTUniqueID=JucePlugin_PluginCode",
-					"JucePlugin_VSTCategory=kPlugCategRoomFx",
-					"JucePlugin_Vst3Category=\\\"Fx|Delay|Distortion|Filter|Network|Reverb|Stereo\\\"",
-					"JucePlugin_AUMainType=\\'aufx\\'",
-					"JucePlugin_AUSubType=JucePlugin_PluginCode",
-					"JucePlugin_AUExportPrefix=shredVerbAU",
-					"JucePlugin_AUExportPrefixQuoted=\\\"shredVerbAU\\\"",
-					"JucePlugin_AUManufacturerCode=JucePlugin_ManufacturerCode",
-					"JucePlugin_CFBundleIdentifier=com.nvssynthesis.shredVerb",
-					"JucePlugin_AAXIdentifier=com.nvssynthesis.shredVerb",
-					"JucePlugin_AAXManufacturerCode=JucePlugin_ManufacturerCode",
-					"JucePlugin_AAXProductId=JucePlugin_PluginCode",
-					"JucePlugin_AAXCategory=8280",
-					"JucePlugin_AAXDisableBypass=0",
-					"JucePlugin_AAXDisableMultiMono=0",
-					"JucePlugin_IAAType=0x61757278",
-					"JucePlugin_IAASubType=JucePlugin_PluginCode",
-					"JucePlugin_IAAName=\\\"nvssynthesis:\\ shredVerb\\\"",
-					"JucePlugin_VSTNumMidiInputs=16",
-					"JucePlugin_VSTNumMidiOutputs=16",
-					"JucePlugin_ARAContentTypes=0",
-					"JucePlugin_ARATransformationFlags=0",
-					"JucePlugin_ARAFactoryID=\\\"com.nvssynthesis.shredVerb.factory\\\"",
-					"JucePlugin_ARADocumentArchiveID=\\\"com.nvssynthesis.shredVerb.aradocumentarchive.1.0.0\\\"",
-					"JucePlugin_ARACompatibleArchiveIDs=\\\"\\\"",
-					"JUCE_STANDALONE_APPLICATION=JucePlugin_Build_Standalone",
-					"JUCER_XCODE_MAC_F6D2F4CF=1",
-					"JUCE_APP_VERSION=1.0.0",
-					"JUCE_APP_VERSION_HEX=0x10000",
-				);
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
-					"$(SRCROOT)/../../JuceLibraryCode",
-					"/Applications/JUCE/modules",
-					"/Users/nicholassolem/development/gitstuff/nkvdu_libraries",
-					"/Applications/JUCE/modules/juce_audio_plugin_client",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = Info-LV2_Manifest_Helper.plist;
-				INFOPLIST_PREPROCESS = NO;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"/Users/nicholassolem/development/gitstuff/nkvdu_libraries\"",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2 /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/ /Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
-				OTHER_LDFLAGS = "-weak_framework Metal -weak_framework MetalKit";
-				PRODUCT_BUNDLE_IDENTIFIER = com.nvssynthesis.shredVerb;
-				PRODUCT_NAME = "juce_lv2_helper";
-				USE_HEADERMAP = NO;
-				VALID_ARCHS = "i386 x86_64 arm64 arm64e";
-			};
-			name = Debug;
-		};
 		1F4D7CCAFB2EA07D28878AA9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -985,6 +823,7 @@
 					"JUCE_DISPLAY_SPLASH_SCREEN=1",
 					"JUCE_USE_DARK_SPLASH_SCREEN=1",
 					"JUCE_PROJUCER_VERSION=0x70002",
+					"JUCE_MODULE_AVAILABLE_foleys_gui_magic=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_basics=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_devices=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_formats=1",
@@ -992,7 +831,9 @@
 					"JUCE_MODULE_AVAILABLE_juce_audio_processors=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_utils=1",
 					"JUCE_MODULE_AVAILABLE_juce_core=1",
+					"JUCE_MODULE_AVAILABLE_juce_cryptography=1",
 					"JUCE_MODULE_AVAILABLE_juce_data_structures=1",
+					"JUCE_MODULE_AVAILABLE_juce_dsp=1",
 					"JUCE_MODULE_AVAILABLE_juce_events=1",
 					"JUCE_MODULE_AVAILABLE_juce_graphics=1",
 					"JUCE_MODULE_AVAILABLE_juce_gui_basics=1",
@@ -1058,17 +899,11 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GENERATE_PKGINFO_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/",
 					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
 					"$(SRCROOT)/../../JuceLibraryCode",
+					"$(SRCROOT)/../../Modules",
 					"/Applications/JUCE/modules",
+					"/Users/nicholassolem/development/gitstuff/nvs_libraries",
 					"/Users/nicholassolem/development/gitstuff/nkvdu_libraries",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
 					"$(inherited)",
@@ -1078,12 +913,12 @@
 				INSTALL_PATH = "$(HOME)/Library/Audio/Plug-Ins/VST3/";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"/Users/nicholassolem/development/gitstuff/nkvdu_libraries\"",
+					"\"/Users/nicholassolem/development/gitstuff/nvs_libraries\"",
 				);
 				LIBRARY_STYLE = Bundle;
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2 /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/ /Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode $(SRCROOT)/../../Modules /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nvs_libraries /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
 				OTHER_LDFLAGS = "-bundle -lshredVerb -weak_framework Metal -weak_framework MetalKit";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nvssynthesis.shredVerb;
 				PRODUCT_NAME = "shredVerb";
@@ -1092,136 +927,6 @@
 				WRAPPER_EXTENSION = vst3;
 			};
 			name = Release;
-		};
-		570D068655E95ED33D46FB22 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_LINK_OBJC_RUNTIME = NO;
-				CODE_SIGN_IDENTITY = "";
-				COMBINE_HIDPI_IMAGES = YES;
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)/shredVerb.lv2";
-				COPY_PHASE_STRIP = NO;
-				DEPLOYMENT_LOCATION = YES;
-				DSTROOT = /;
-				EXCLUDED_ARCHS = "";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"_DEBUG=1",
-					"DEBUG=1",
-					"JUCE_DISPLAY_SPLASH_SCREEN=1",
-					"JUCE_USE_DARK_SPLASH_SCREEN=1",
-					"JUCE_PROJUCER_VERSION=0x70002",
-					"JUCE_MODULE_AVAILABLE_juce_audio_basics=1",
-					"JUCE_MODULE_AVAILABLE_juce_audio_devices=1",
-					"JUCE_MODULE_AVAILABLE_juce_audio_formats=1",
-					"JUCE_MODULE_AVAILABLE_juce_audio_plugin_client=1",
-					"JUCE_MODULE_AVAILABLE_juce_audio_processors=1",
-					"JUCE_MODULE_AVAILABLE_juce_audio_utils=1",
-					"JUCE_MODULE_AVAILABLE_juce_core=1",
-					"JUCE_MODULE_AVAILABLE_juce_data_structures=1",
-					"JUCE_MODULE_AVAILABLE_juce_events=1",
-					"JUCE_MODULE_AVAILABLE_juce_graphics=1",
-					"JUCE_MODULE_AVAILABLE_juce_gui_basics=1",
-					"JUCE_MODULE_AVAILABLE_juce_gui_extra=1",
-					"JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1",
-					"JUCE_VST3_CAN_REPLACE_VST2=0",
-					"JUCE_STRICT_REFCOUNTEDPOINTER=1",
-					"JucePlugin_Build_VST=0",
-					"JucePlugin_Build_VST3=0",
-					"JucePlugin_Build_AU=0",
-					"JucePlugin_Build_AUv3=0",
-					"JucePlugin_Build_AAX=0",
-					"JucePlugin_Build_Standalone=0",
-					"JucePlugin_Build_Unity=0",
-					"JucePlugin_Build_LV2=1",
-					"JucePlugin_Enable_IAA=0",
-					"JucePlugin_Enable_ARA=0",
-					"JucePlugin_Name=\\\"shredVerb\\\"",
-					"JucePlugin_Desc=\\\"effed\\ up\\ reverb\\\"",
-					"JucePlugin_Manufacturer=\\\"nvssynthesis\\\"",
-					"JucePlugin_ManufacturerWebsite=\\\"https://nvssynthesis.github.io/\\\"",
-					"JucePlugin_ManufacturerEmail=\\\"nicholas93solem@gmail.com\\\"",
-					"JucePlugin_ManufacturerCode=0x4e767373",
-					"JucePlugin_PluginCode=0x4e767373",
-					"JucePlugin_IsSynth=0",
-					"JucePlugin_WantsMidiInput=0",
-					"JucePlugin_ProducesMidiOutput=0",
-					"JucePlugin_IsMidiEffect=0",
-					"JucePlugin_EditorRequiresKeyboardFocus=0",
-					"JucePlugin_Version=1.0.0",
-					"JucePlugin_VersionCode=0x10000",
-					"JucePlugin_VersionString=\\\"1.0.0\\\"",
-					"JucePlugin_VSTUniqueID=JucePlugin_PluginCode",
-					"JucePlugin_VSTCategory=kPlugCategRoomFx",
-					"JucePlugin_Vst3Category=\\\"Fx|Delay|Distortion|Filter|Network|Reverb|Stereo\\\"",
-					"JucePlugin_AUMainType=\\'aufx\\'",
-					"JucePlugin_AUSubType=JucePlugin_PluginCode",
-					"JucePlugin_AUExportPrefix=shredVerbAU",
-					"JucePlugin_AUExportPrefixQuoted=\\\"shredVerbAU\\\"",
-					"JucePlugin_AUManufacturerCode=JucePlugin_ManufacturerCode",
-					"JucePlugin_CFBundleIdentifier=com.nvssynthesis.shredVerb",
-					"JucePlugin_AAXIdentifier=com.nvssynthesis.shredVerb",
-					"JucePlugin_AAXManufacturerCode=JucePlugin_ManufacturerCode",
-					"JucePlugin_AAXProductId=JucePlugin_PluginCode",
-					"JucePlugin_AAXCategory=8280",
-					"JucePlugin_AAXDisableBypass=0",
-					"JucePlugin_AAXDisableMultiMono=0",
-					"JucePlugin_IAAType=0x61757278",
-					"JucePlugin_IAASubType=JucePlugin_PluginCode",
-					"JucePlugin_IAAName=\\\"nvssynthesis:\\ shredVerb\\\"",
-					"JucePlugin_VSTNumMidiInputs=16",
-					"JucePlugin_VSTNumMidiOutputs=16",
-					"JucePlugin_ARAContentTypes=0",
-					"JucePlugin_ARATransformationFlags=0",
-					"JucePlugin_ARAFactoryID=\\\"com.nvssynthesis.shredVerb.factory\\\"",
-					"JucePlugin_ARADocumentArchiveID=\\\"com.nvssynthesis.shredVerb.aradocumentarchive.1.0.0\\\"",
-					"JucePlugin_ARACompatibleArchiveIDs=\\\"\\\"",
-					"JUCE_STANDALONE_APPLICATION=JucePlugin_Build_Standalone",
-					"JUCER_XCODE_MAC_F6D2F4CF=1",
-					"JUCE_APP_VERSION=1.0.0",
-					"JUCE_APP_VERSION_HEX=0x10000",
-				);
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GENERATE_PKGINFO_FILE = YES;
-				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
-					"$(SRCROOT)/../../JuceLibraryCode",
-					"/Applications/JUCE/modules",
-					"/Users/nicholassolem/development/gitstuff/nkvdu_libraries",
-					"/Applications/JUCE/modules/juce_audio_plugin_client",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = Info-LV2_Plugin.plist;
-				INFOPLIST_PREPROCESS = NO;
-				INSTALL_PATH = "$(HOME)/Library/Audio/Plug-Ins/LV2/";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"/Users/nicholassolem/development/gitstuff/nkvdu_libraries\"",
-					"\"$(PROJECT_DIR)/build/$(CONFIGURATION)\"",
-				);
-				LIBRARY_STYLE = Bundle;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2 /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/ /Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
-				OTHER_LDFLAGS = "-bundle -lshredVerb -weak_framework Metal -weak_framework MetalKit";
-				PRODUCT_BUNDLE_IDENTIFIER = com.nvssynthesis.shredVerb;
-				PRODUCT_NAME = "shredVerb";
-				SKIP_INSTALL = YES;
-				USE_HEADERMAP = NO;
-				VALID_ARCHS = "i386 x86_64 arm64 arm64e";
-				WRAPPER_EXTENSION = so;
-			};
-			name = Debug;
 		};
 		75530D9EDE0F47438A09070C /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1244,6 +949,7 @@
 					"JUCE_DISPLAY_SPLASH_SCREEN=1",
 					"JUCE_USE_DARK_SPLASH_SCREEN=1",
 					"JUCE_PROJUCER_VERSION=0x70002",
+					"JUCE_MODULE_AVAILABLE_foleys_gui_magic=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_basics=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_devices=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_formats=1",
@@ -1251,7 +957,9 @@
 					"JUCE_MODULE_AVAILABLE_juce_audio_processors=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_utils=1",
 					"JUCE_MODULE_AVAILABLE_juce_core=1",
+					"JUCE_MODULE_AVAILABLE_juce_cryptography=1",
 					"JUCE_MODULE_AVAILABLE_juce_data_structures=1",
+					"JUCE_MODULE_AVAILABLE_juce_dsp=1",
 					"JUCE_MODULE_AVAILABLE_juce_events=1",
 					"JUCE_MODULE_AVAILABLE_juce_graphics=1",
 					"JUCE_MODULE_AVAILABLE_juce_gui_basics=1",
@@ -1316,17 +1024,11 @@
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/",
 					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
 					"$(SRCROOT)/../../JuceLibraryCode",
+					"$(SRCROOT)/../../Modules",
 					"/Applications/JUCE/modules",
+					"/Users/nicholassolem/development/gitstuff/nvs_libraries",
 					"/Users/nicholassolem/development/gitstuff/nkvdu_libraries",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
 					"$(inherited)",
@@ -1335,10 +1037,10 @@
 				INFOPLIST_PREPROCESS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"/Users/nicholassolem/development/gitstuff/nkvdu_libraries\"",
+					"\"/Users/nicholassolem/development/gitstuff/nvs_libraries\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2 /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/ /Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode $(SRCROOT)/../../Modules /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nvs_libraries /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
 				OTHER_LDFLAGS = "-lshredVerb -weak_framework Metal -weak_framework MetalKit";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nvssynthesis.shredVerb.shredVerbAUv3;
 				PRODUCT_NAME = "shredVerb";
@@ -1368,6 +1070,7 @@
 					"JUCE_DISPLAY_SPLASH_SCREEN=1",
 					"JUCE_USE_DARK_SPLASH_SCREEN=1",
 					"JUCE_PROJUCER_VERSION=0x70002",
+					"JUCE_MODULE_AVAILABLE_foleys_gui_magic=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_basics=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_devices=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_formats=1",
@@ -1375,7 +1078,9 @@
 					"JUCE_MODULE_AVAILABLE_juce_audio_processors=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_utils=1",
 					"JUCE_MODULE_AVAILABLE_juce_core=1",
+					"JUCE_MODULE_AVAILABLE_juce_cryptography=1",
 					"JUCE_MODULE_AVAILABLE_juce_data_structures=1",
+					"JUCE_MODULE_AVAILABLE_juce_dsp=1",
 					"JUCE_MODULE_AVAILABLE_juce_events=1",
 					"JUCE_MODULE_AVAILABLE_juce_graphics=1",
 					"JUCE_MODULE_AVAILABLE_juce_gui_basics=1",
@@ -1440,17 +1145,11 @@
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/",
 					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
 					"$(SRCROOT)/../../JuceLibraryCode",
+					"$(SRCROOT)/../../Modules",
 					"/Applications/JUCE/modules",
+					"/Users/nicholassolem/development/gitstuff/nvs_libraries",
 					"/Users/nicholassolem/development/gitstuff/nkvdu_libraries",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
 					"$(inherited)",
@@ -1459,11 +1158,11 @@
 				INFOPLIST_PREPROCESS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"/Users/nicholassolem/development/gitstuff/nkvdu_libraries\"",
+					"\"/Users/nicholassolem/development/gitstuff/nvs_libraries\"",
 				);
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2 /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/ /Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode $(SRCROOT)/../../Modules /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nvs_libraries /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
 				OTHER_LDFLAGS = "-lshredVerb -weak_framework Metal -weak_framework MetalKit";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nvssynthesis.shredVerb.shredVerbAUv3;
 				PRODUCT_NAME = "shredVerb";
@@ -1472,7 +1171,7 @@
 			};
 			name = Release;
 		};
-		835A69B0DE0D2DB6A1786DC3 /* Release */ = {
+		87F83B2EA1C54667A70D40E8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -1480,10 +1179,8 @@
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)/shredVerb.lv2";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)";
 				DEAD_CODE_STRIPPING = YES;
-				DEPLOYMENT_LOCATION = YES;
-				DSTROOT = /;
 				EXCLUDED_ARCHS = "";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_OPTIMIZATION_LEVEL = 3;
@@ -1493,6 +1190,7 @@
 					"JUCE_DISPLAY_SPLASH_SCREEN=1",
 					"JUCE_USE_DARK_SPLASH_SCREEN=1",
 					"JUCE_PROJUCER_VERSION=0x70002",
+					"JUCE_MODULE_AVAILABLE_foleys_gui_magic=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_basics=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_devices=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_formats=1",
@@ -1500,7 +1198,9 @@
 					"JUCE_MODULE_AVAILABLE_juce_audio_processors=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_utils=1",
 					"JUCE_MODULE_AVAILABLE_juce_core=1",
+					"JUCE_MODULE_AVAILABLE_juce_cryptography=1",
 					"JUCE_MODULE_AVAILABLE_juce_data_structures=1",
+					"JUCE_MODULE_AVAILABLE_juce_dsp=1",
 					"JUCE_MODULE_AVAILABLE_juce_events=1",
 					"JUCE_MODULE_AVAILABLE_juce_graphics=1",
 					"JUCE_MODULE_AVAILABLE_juce_gui_basics=1",
@@ -1513,9 +1213,9 @@
 					"JucePlugin_Build_AU=0",
 					"JucePlugin_Build_AUv3=0",
 					"JucePlugin_Build_AAX=0",
-					"JucePlugin_Build_Standalone=0",
+					"JucePlugin_Build_Standalone=1",
 					"JucePlugin_Build_Unity=0",
-					"JucePlugin_Build_LV2=1",
+					"JucePlugin_Build_LV2=0",
 					"JucePlugin_Enable_IAA=0",
 					"JucePlugin_Enable_ARA=0",
 					"JucePlugin_Name=\\\"shredVerb\\\"",
@@ -1564,42 +1264,30 @@
 					"JUCE_APP_VERSION_HEX=0x10000",
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GENERATE_PKGINFO_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/",
 					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
 					"$(SRCROOT)/../../JuceLibraryCode",
+					"$(SRCROOT)/../../Modules",
 					"/Applications/JUCE/modules",
+					"/Users/nicholassolem/development/gitstuff/nvs_libraries",
 					"/Users/nicholassolem/development/gitstuff/nkvdu_libraries",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = Info-LV2_Plugin.plist;
+				INFOPLIST_FILE = Info-Standalone_Plugin.plist;
 				INFOPLIST_PREPROCESS = NO;
-				INSTALL_PATH = "$(HOME)/Library/Audio/Plug-Ins/LV2/";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"/Users/nicholassolem/development/gitstuff/nkvdu_libraries\"",
-					"\"$(PROJECT_DIR)/build/$(CONFIGURATION)\"",
+					"\"/Users/nicholassolem/development/gitstuff/nvs_libraries\"",
 				);
-				LIBRARY_STYLE = Bundle;
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2 /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/ /Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
-				OTHER_LDFLAGS = "-bundle -lshredVerb -weak_framework Metal -weak_framework MetalKit";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode $(SRCROOT)/../../Modules /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nvs_libraries /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
+				OTHER_LDFLAGS = "-lshredVerb -weak_framework Metal -weak_framework MetalKit";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nvssynthesis.shredVerb;
 				PRODUCT_NAME = "shredVerb";
-				SKIP_INSTALL = YES;
 				USE_HEADERMAP = NO;
 				VALID_ARCHS = "i386 x86_64 arm64 arm64e";
-				WRAPPER_EXTENSION = so;
 			};
 			name = Release;
 		};
@@ -1680,6 +1368,7 @@
 					"JUCE_DISPLAY_SPLASH_SCREEN=1",
 					"JUCE_USE_DARK_SPLASH_SCREEN=1",
 					"JUCE_PROJUCER_VERSION=0x70002",
+					"JUCE_MODULE_AVAILABLE_foleys_gui_magic=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_basics=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_devices=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_formats=1",
@@ -1687,7 +1376,9 @@
 					"JUCE_MODULE_AVAILABLE_juce_audio_processors=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_utils=1",
 					"JUCE_MODULE_AVAILABLE_juce_core=1",
+					"JUCE_MODULE_AVAILABLE_juce_cryptography=1",
 					"JUCE_MODULE_AVAILABLE_juce_data_structures=1",
+					"JUCE_MODULE_AVAILABLE_juce_dsp=1",
 					"JUCE_MODULE_AVAILABLE_juce_events=1",
 					"JUCE_MODULE_AVAILABLE_juce_graphics=1",
 					"JUCE_MODULE_AVAILABLE_juce_gui_basics=1",
@@ -1753,17 +1444,11 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GENERATE_PKGINFO_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/",
 					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
 					"$(SRCROOT)/../../JuceLibraryCode",
+					"$(SRCROOT)/../../Modules",
 					"/Applications/JUCE/modules",
+					"/Users/nicholassolem/development/gitstuff/nvs_libraries",
 					"/Users/nicholassolem/development/gitstuff/nkvdu_libraries",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
 					"$(inherited)",
@@ -1773,12 +1458,12 @@
 				INSTALL_PATH = "$(HOME)/Library/Audio/Plug-Ins/Components/";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"/Users/nicholassolem/development/gitstuff/nkvdu_libraries\"",
+					"\"/Users/nicholassolem/development/gitstuff/nvs_libraries\"",
 				);
 				LIBRARY_STYLE = Bundle;
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2 /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/ /Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode $(SRCROOT)/../../Modules /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nvs_libraries /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
 				OTHER_LDFLAGS = "-bundle -lshredVerb -weak_framework Metal -weak_framework MetalKit";
 				OTHER_REZFLAGS = "-d ppc_$ppc -d i386_$i386 -d ppc64_$ppc64 -d x86_64_$x86_64 -d arm64_$arm64 -I /System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Headers -I \"$(DEVELOPER_DIR)/Extras/CoreAudio/AudioUnits/AUPublic/AUBase\" -I \"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AudioUnit.framework/Headers\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nvssynthesis.shredVerb;
@@ -1810,6 +1495,7 @@
 					"JUCE_DISPLAY_SPLASH_SCREEN=1",
 					"JUCE_USE_DARK_SPLASH_SCREEN=1",
 					"JUCE_PROJUCER_VERSION=0x70002",
+					"JUCE_MODULE_AVAILABLE_foleys_gui_magic=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_basics=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_devices=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_formats=1",
@@ -1817,7 +1503,9 @@
 					"JUCE_MODULE_AVAILABLE_juce_audio_processors=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_utils=1",
 					"JUCE_MODULE_AVAILABLE_juce_core=1",
+					"JUCE_MODULE_AVAILABLE_juce_cryptography=1",
 					"JUCE_MODULE_AVAILABLE_juce_data_structures=1",
+					"JUCE_MODULE_AVAILABLE_juce_dsp=1",
 					"JUCE_MODULE_AVAILABLE_juce_events=1",
 					"JUCE_MODULE_AVAILABLE_juce_graphics=1",
 					"JUCE_MODULE_AVAILABLE_juce_gui_basics=1",
@@ -1883,17 +1571,11 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GENERATE_PKGINFO_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/",
 					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
 					"$(SRCROOT)/../../JuceLibraryCode",
+					"$(SRCROOT)/../../Modules",
 					"/Applications/JUCE/modules",
+					"/Users/nicholassolem/development/gitstuff/nvs_libraries",
 					"/Users/nicholassolem/development/gitstuff/nkvdu_libraries",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
 					"$(inherited)",
@@ -1903,11 +1585,11 @@
 				INSTALL_PATH = "$(HOME)/Library/Audio/Plug-Ins/VST3/";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"/Users/nicholassolem/development/gitstuff/nkvdu_libraries\"",
+					"\"/Users/nicholassolem/development/gitstuff/nvs_libraries\"",
 				);
 				LIBRARY_STYLE = Bundle;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2 /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/ /Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode $(SRCROOT)/../../Modules /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nvs_libraries /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
 				OTHER_LDFLAGS = "-bundle -lshredVerb -weak_framework Metal -weak_framework MetalKit";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nvssynthesis.shredVerb;
 				PRODUCT_NAME = "shredVerb";
@@ -1916,129 +1598,6 @@
 				WRAPPER_EXTENSION = vst3;
 			};
 			name = Debug;
-		};
-		C4789C22DCD3BE535F11F3A8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_LINK_OBJC_RUNTIME = NO;
-				CODE_SIGN_IDENTITY = "";
-				COMBINE_HIDPI_IMAGES = YES;
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)";
-				DEAD_CODE_STRIPPING = YES;
-				EXCLUDED_ARCHS = "";
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"_NDEBUG=1",
-					"NDEBUG=1",
-					"JUCE_DISPLAY_SPLASH_SCREEN=1",
-					"JUCE_USE_DARK_SPLASH_SCREEN=1",
-					"JUCE_PROJUCER_VERSION=0x70002",
-					"JUCE_MODULE_AVAILABLE_juce_audio_basics=1",
-					"JUCE_MODULE_AVAILABLE_juce_audio_devices=1",
-					"JUCE_MODULE_AVAILABLE_juce_audio_formats=1",
-					"JUCE_MODULE_AVAILABLE_juce_audio_plugin_client=1",
-					"JUCE_MODULE_AVAILABLE_juce_audio_processors=1",
-					"JUCE_MODULE_AVAILABLE_juce_audio_utils=1",
-					"JUCE_MODULE_AVAILABLE_juce_core=1",
-					"JUCE_MODULE_AVAILABLE_juce_data_structures=1",
-					"JUCE_MODULE_AVAILABLE_juce_events=1",
-					"JUCE_MODULE_AVAILABLE_juce_graphics=1",
-					"JUCE_MODULE_AVAILABLE_juce_gui_basics=1",
-					"JUCE_MODULE_AVAILABLE_juce_gui_extra=1",
-					"JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1",
-					"JUCE_VST3_CAN_REPLACE_VST2=0",
-					"JUCE_STRICT_REFCOUNTEDPOINTER=1",
-					"JucePlugin_Build_VST=0",
-					"JucePlugin_Build_VST3=0",
-					"JucePlugin_Build_AU=0",
-					"JucePlugin_Build_AUv3=0",
-					"JucePlugin_Build_AAX=0",
-					"JucePlugin_Build_Standalone=0",
-					"JucePlugin_Build_Unity=0",
-					"JucePlugin_Build_LV2=0",
-					"JucePlugin_Enable_IAA=0",
-					"JucePlugin_Enable_ARA=0",
-					"JucePlugin_Name=\\\"shredVerb\\\"",
-					"JucePlugin_Desc=\\\"effed\\ up\\ reverb\\\"",
-					"JucePlugin_Manufacturer=\\\"nvssynthesis\\\"",
-					"JucePlugin_ManufacturerWebsite=\\\"https://nvssynthesis.github.io/\\\"",
-					"JucePlugin_ManufacturerEmail=\\\"nicholas93solem@gmail.com\\\"",
-					"JucePlugin_ManufacturerCode=0x4e767373",
-					"JucePlugin_PluginCode=0x4e767373",
-					"JucePlugin_IsSynth=0",
-					"JucePlugin_WantsMidiInput=0",
-					"JucePlugin_ProducesMidiOutput=0",
-					"JucePlugin_IsMidiEffect=0",
-					"JucePlugin_EditorRequiresKeyboardFocus=0",
-					"JucePlugin_Version=1.0.0",
-					"JucePlugin_VersionCode=0x10000",
-					"JucePlugin_VersionString=\\\"1.0.0\\\"",
-					"JucePlugin_VSTUniqueID=JucePlugin_PluginCode",
-					"JucePlugin_VSTCategory=kPlugCategRoomFx",
-					"JucePlugin_Vst3Category=\\\"Fx|Delay|Distortion|Filter|Network|Reverb|Stereo\\\"",
-					"JucePlugin_AUMainType=\\'aufx\\'",
-					"JucePlugin_AUSubType=JucePlugin_PluginCode",
-					"JucePlugin_AUExportPrefix=shredVerbAU",
-					"JucePlugin_AUExportPrefixQuoted=\\\"shredVerbAU\\\"",
-					"JucePlugin_AUManufacturerCode=JucePlugin_ManufacturerCode",
-					"JucePlugin_CFBundleIdentifier=com.nvssynthesis.shredVerb",
-					"JucePlugin_AAXIdentifier=com.nvssynthesis.shredVerb",
-					"JucePlugin_AAXManufacturerCode=JucePlugin_ManufacturerCode",
-					"JucePlugin_AAXProductId=JucePlugin_PluginCode",
-					"JucePlugin_AAXCategory=8280",
-					"JucePlugin_AAXDisableBypass=0",
-					"JucePlugin_AAXDisableMultiMono=0",
-					"JucePlugin_IAAType=0x61757278",
-					"JucePlugin_IAASubType=JucePlugin_PluginCode",
-					"JucePlugin_IAAName=\\\"nvssynthesis:\\ shredVerb\\\"",
-					"JucePlugin_VSTNumMidiInputs=16",
-					"JucePlugin_VSTNumMidiOutputs=16",
-					"JucePlugin_ARAContentTypes=0",
-					"JucePlugin_ARATransformationFlags=0",
-					"JucePlugin_ARAFactoryID=\\\"com.nvssynthesis.shredVerb.factory\\\"",
-					"JucePlugin_ARADocumentArchiveID=\\\"com.nvssynthesis.shredVerb.aradocumentarchive.1.0.0\\\"",
-					"JucePlugin_ARACompatibleArchiveIDs=\\\"\\\"",
-					"JUCE_STANDALONE_APPLICATION=JucePlugin_Build_Standalone",
-					"JUCER_XCODE_MAC_F6D2F4CF=1",
-					"JUCE_APP_VERSION=1.0.0",
-					"JUCE_APP_VERSION_HEX=0x10000",
-				);
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
-					"$(SRCROOT)/../../JuceLibraryCode",
-					"/Applications/JUCE/modules",
-					"/Users/nicholassolem/development/gitstuff/nkvdu_libraries",
-					"/Applications/JUCE/modules/juce_audio_plugin_client",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = Info-LV2_Manifest_Helper.plist;
-				INFOPLIST_PREPROCESS = NO;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"/Users/nicholassolem/development/gitstuff/nkvdu_libraries\"",
-				);
-				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2 /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/ /Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
-				OTHER_LDFLAGS = "-weak_framework Metal -weak_framework MetalKit";
-				PRODUCT_BUNDLE_IDENTIFIER = com.nvssynthesis.shredVerb;
-				PRODUCT_NAME = "juce_lv2_helper";
-				USE_HEADERMAP = NO;
-				VALID_ARCHS = "i386 x86_64 arm64 arm64e";
-			};
-			name = Release;
 		};
 		C519CE873EF0F478C5E98018 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2061,6 +1620,7 @@
 					"JUCE_DISPLAY_SPLASH_SCREEN=1",
 					"JUCE_USE_DARK_SPLASH_SCREEN=1",
 					"JUCE_PROJUCER_VERSION=0x70002",
+					"JUCE_MODULE_AVAILABLE_foleys_gui_magic=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_basics=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_devices=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_formats=1",
@@ -2068,7 +1628,9 @@
 					"JUCE_MODULE_AVAILABLE_juce_audio_processors=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_utils=1",
 					"JUCE_MODULE_AVAILABLE_juce_core=1",
+					"JUCE_MODULE_AVAILABLE_juce_cryptography=1",
 					"JUCE_MODULE_AVAILABLE_juce_data_structures=1",
+					"JUCE_MODULE_AVAILABLE_juce_dsp=1",
 					"JUCE_MODULE_AVAILABLE_juce_events=1",
 					"JUCE_MODULE_AVAILABLE_juce_graphics=1",
 					"JUCE_MODULE_AVAILABLE_juce_gui_basics=1",
@@ -2134,17 +1696,11 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GENERATE_PKGINFO_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/",
 					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
 					"$(SRCROOT)/../../JuceLibraryCode",
+					"$(SRCROOT)/../../Modules",
 					"/Applications/JUCE/modules",
+					"/Users/nicholassolem/development/gitstuff/nvs_libraries",
 					"/Users/nicholassolem/development/gitstuff/nkvdu_libraries",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
 					"$(inherited)",
@@ -2154,11 +1710,11 @@
 				INSTALL_PATH = "$(HOME)/Library/Audio/Plug-Ins/Components/";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"/Users/nicholassolem/development/gitstuff/nkvdu_libraries\"",
+					"\"/Users/nicholassolem/development/gitstuff/nvs_libraries\"",
 				);
 				LIBRARY_STYLE = Bundle;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2 /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/ /Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode $(SRCROOT)/../../Modules /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nvs_libraries /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
 				OTHER_LDFLAGS = "-bundle -lshredVerb -weak_framework Metal -weak_framework MetalKit";
 				OTHER_REZFLAGS = "-d ppc_$ppc -d i386_$i386 -d ppc64_$ppc64 -d x86_64_$x86_64 -d arm64_$arm64 -I /System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Headers -I \"$(DEVELOPER_DIR)/Extras/CoreAudio/AudioUnits/AUPublic/AUBase\" -I \"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AudioUnit.framework/Headers\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nvssynthesis.shredVerb;
@@ -2237,6 +1793,7 @@
 					"JUCE_DISPLAY_SPLASH_SCREEN=1",
 					"JUCE_USE_DARK_SPLASH_SCREEN=1",
 					"JUCE_PROJUCER_VERSION=0x70002",
+					"JUCE_MODULE_AVAILABLE_foleys_gui_magic=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_basics=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_devices=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_formats=1",
@@ -2244,7 +1801,9 @@
 					"JUCE_MODULE_AVAILABLE_juce_audio_processors=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_utils=1",
 					"JUCE_MODULE_AVAILABLE_juce_core=1",
+					"JUCE_MODULE_AVAILABLE_juce_cryptography=1",
 					"JUCE_MODULE_AVAILABLE_juce_data_structures=1",
+					"JUCE_MODULE_AVAILABLE_juce_dsp=1",
 					"JUCE_MODULE_AVAILABLE_juce_events=1",
 					"JUCE_MODULE_AVAILABLE_juce_graphics=1",
 					"JUCE_MODULE_AVAILABLE_juce_gui_basics=1",
@@ -2257,9 +1816,9 @@
 					"JucePlugin_Build_AU=1",
 					"JucePlugin_Build_AUv3=1",
 					"JucePlugin_Build_AAX=0",
-					"JucePlugin_Build_Standalone=0",
+					"JucePlugin_Build_Standalone=1",
 					"JucePlugin_Build_Unity=0",
-					"JucePlugin_Build_LV2=1",
+					"JucePlugin_Build_LV2=0",
 					"JucePlugin_Enable_IAA=0",
 					"JucePlugin_Enable_ARA=0",
 					"JucePlugin_Name=\\\"shredVerb\\\"",
@@ -2310,17 +1869,11 @@
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/",
 					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
 					"$(SRCROOT)/../../JuceLibraryCode",
+					"$(SRCROOT)/../../Modules",
 					"/Applications/JUCE/modules",
+					"/Users/nicholassolem/development/gitstuff/nvs_libraries",
 					"/Users/nicholassolem/development/gitstuff/nkvdu_libraries",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
 					"$(inherited)",
@@ -2328,11 +1881,11 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"/Users/nicholassolem/development/gitstuff/nkvdu_libraries\"",
+					"\"/Users/nicholassolem/development/gitstuff/nvs_libraries\"",
 				);
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2 /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/ /Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode $(SRCROOT)/../../Modules /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nvs_libraries /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
 				OTHER_LDFLAGS = "-weak_framework Metal -weak_framework MetalKit";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nvssynthesis.shredVerb;
 				PRODUCT_NAME = "shredVerb";
@@ -2361,6 +1914,7 @@
 					"JUCE_DISPLAY_SPLASH_SCREEN=1",
 					"JUCE_USE_DARK_SPLASH_SCREEN=1",
 					"JUCE_PROJUCER_VERSION=0x70002",
+					"JUCE_MODULE_AVAILABLE_foleys_gui_magic=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_basics=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_devices=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_formats=1",
@@ -2368,7 +1922,9 @@
 					"JUCE_MODULE_AVAILABLE_juce_audio_processors=1",
 					"JUCE_MODULE_AVAILABLE_juce_audio_utils=1",
 					"JUCE_MODULE_AVAILABLE_juce_core=1",
+					"JUCE_MODULE_AVAILABLE_juce_cryptography=1",
 					"JUCE_MODULE_AVAILABLE_juce_data_structures=1",
+					"JUCE_MODULE_AVAILABLE_juce_dsp=1",
 					"JUCE_MODULE_AVAILABLE_juce_events=1",
 					"JUCE_MODULE_AVAILABLE_juce_graphics=1",
 					"JUCE_MODULE_AVAILABLE_juce_gui_basics=1",
@@ -2381,9 +1937,9 @@
 					"JucePlugin_Build_AU=1",
 					"JucePlugin_Build_AUv3=1",
 					"JucePlugin_Build_AAX=0",
-					"JucePlugin_Build_Standalone=0",
+					"JucePlugin_Build_Standalone=1",
 					"JucePlugin_Build_Unity=0",
-					"JucePlugin_Build_LV2=1",
+					"JucePlugin_Build_LV2=0",
 					"JucePlugin_Enable_IAA=0",
 					"JucePlugin_Enable_ARA=0",
 					"JucePlugin_Name=\\\"shredVerb\\\"",
@@ -2434,17 +1990,11 @@
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2",
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/",
 					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
 					"$(SRCROOT)/../../JuceLibraryCode",
+					"$(SRCROOT)/../../Modules",
 					"/Applications/JUCE/modules",
+					"/Users/nicholassolem/development/gitstuff/nvs_libraries",
 					"/Users/nicholassolem/development/gitstuff/nkvdu_libraries",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
 					"$(inherited)",
@@ -2452,14 +2002,133 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"/Users/nicholassolem/development/gitstuff/nkvdu_libraries\"",
+					"\"/Users/nicholassolem/development/gitstuff/nvs_libraries\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lilv /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sratom /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord/src /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/sord /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/serd /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/lv2 /Applications/JUCE/modules/juce_audio_processors/format_types/LV2_SDK/ /Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode $(SRCROOT)/../../Modules /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nvs_libraries /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
 				OTHER_LDFLAGS = "-weak_framework Metal -weak_framework MetalKit";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nvssynthesis.shredVerb;
 				PRODUCT_NAME = "shredVerb";
 				SKIP_INSTALL = YES;
+				USE_HEADERMAP = NO;
+				VALID_ARCHS = "i386 x86_64 arm64 arm64e";
+			};
+			name = Debug;
+		};
+		F4DC806E99B53C7BC194CC74 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_LINK_OBJC_RUNTIME = NO;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)";
+				COPY_PHASE_STRIP = NO;
+				EXCLUDED_ARCHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_DEBUG=1",
+					"DEBUG=1",
+					"JUCE_DISPLAY_SPLASH_SCREEN=1",
+					"JUCE_USE_DARK_SPLASH_SCREEN=1",
+					"JUCE_PROJUCER_VERSION=0x70002",
+					"JUCE_MODULE_AVAILABLE_foleys_gui_magic=1",
+					"JUCE_MODULE_AVAILABLE_juce_audio_basics=1",
+					"JUCE_MODULE_AVAILABLE_juce_audio_devices=1",
+					"JUCE_MODULE_AVAILABLE_juce_audio_formats=1",
+					"JUCE_MODULE_AVAILABLE_juce_audio_plugin_client=1",
+					"JUCE_MODULE_AVAILABLE_juce_audio_processors=1",
+					"JUCE_MODULE_AVAILABLE_juce_audio_utils=1",
+					"JUCE_MODULE_AVAILABLE_juce_core=1",
+					"JUCE_MODULE_AVAILABLE_juce_cryptography=1",
+					"JUCE_MODULE_AVAILABLE_juce_data_structures=1",
+					"JUCE_MODULE_AVAILABLE_juce_dsp=1",
+					"JUCE_MODULE_AVAILABLE_juce_events=1",
+					"JUCE_MODULE_AVAILABLE_juce_graphics=1",
+					"JUCE_MODULE_AVAILABLE_juce_gui_basics=1",
+					"JUCE_MODULE_AVAILABLE_juce_gui_extra=1",
+					"JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1",
+					"JUCE_VST3_CAN_REPLACE_VST2=0",
+					"JUCE_STRICT_REFCOUNTEDPOINTER=1",
+					"JucePlugin_Build_VST=0",
+					"JucePlugin_Build_VST3=0",
+					"JucePlugin_Build_AU=0",
+					"JucePlugin_Build_AUv3=0",
+					"JucePlugin_Build_AAX=0",
+					"JucePlugin_Build_Standalone=1",
+					"JucePlugin_Build_Unity=0",
+					"JucePlugin_Build_LV2=0",
+					"JucePlugin_Enable_IAA=0",
+					"JucePlugin_Enable_ARA=0",
+					"JucePlugin_Name=\\\"shredVerb\\\"",
+					"JucePlugin_Desc=\\\"effed\\ up\\ reverb\\\"",
+					"JucePlugin_Manufacturer=\\\"nvssynthesis\\\"",
+					"JucePlugin_ManufacturerWebsite=\\\"https://nvssynthesis.github.io/\\\"",
+					"JucePlugin_ManufacturerEmail=\\\"nicholas93solem@gmail.com\\\"",
+					"JucePlugin_ManufacturerCode=0x4e767373",
+					"JucePlugin_PluginCode=0x4e767373",
+					"JucePlugin_IsSynth=0",
+					"JucePlugin_WantsMidiInput=0",
+					"JucePlugin_ProducesMidiOutput=0",
+					"JucePlugin_IsMidiEffect=0",
+					"JucePlugin_EditorRequiresKeyboardFocus=0",
+					"JucePlugin_Version=1.0.0",
+					"JucePlugin_VersionCode=0x10000",
+					"JucePlugin_VersionString=\\\"1.0.0\\\"",
+					"JucePlugin_VSTUniqueID=JucePlugin_PluginCode",
+					"JucePlugin_VSTCategory=kPlugCategRoomFx",
+					"JucePlugin_Vst3Category=\\\"Fx|Delay|Distortion|Filter|Network|Reverb|Stereo\\\"",
+					"JucePlugin_AUMainType=\\'aufx\\'",
+					"JucePlugin_AUSubType=JucePlugin_PluginCode",
+					"JucePlugin_AUExportPrefix=shredVerbAU",
+					"JucePlugin_AUExportPrefixQuoted=\\\"shredVerbAU\\\"",
+					"JucePlugin_AUManufacturerCode=JucePlugin_ManufacturerCode",
+					"JucePlugin_CFBundleIdentifier=com.nvssynthesis.shredVerb",
+					"JucePlugin_AAXIdentifier=com.nvssynthesis.shredVerb",
+					"JucePlugin_AAXManufacturerCode=JucePlugin_ManufacturerCode",
+					"JucePlugin_AAXProductId=JucePlugin_PluginCode",
+					"JucePlugin_AAXCategory=8280",
+					"JucePlugin_AAXDisableBypass=0",
+					"JucePlugin_AAXDisableMultiMono=0",
+					"JucePlugin_IAAType=0x61757278",
+					"JucePlugin_IAASubType=JucePlugin_PluginCode",
+					"JucePlugin_IAAName=\\\"nvssynthesis:\\ shredVerb\\\"",
+					"JucePlugin_VSTNumMidiInputs=16",
+					"JucePlugin_VSTNumMidiOutputs=16",
+					"JucePlugin_ARAContentTypes=0",
+					"JucePlugin_ARATransformationFlags=0",
+					"JucePlugin_ARAFactoryID=\\\"com.nvssynthesis.shredVerb.factory\\\"",
+					"JucePlugin_ARADocumentArchiveID=\\\"com.nvssynthesis.shredVerb.aradocumentarchive.1.0.0\\\"",
+					"JucePlugin_ARACompatibleArchiveIDs=\\\"\\\"",
+					"JUCE_STANDALONE_APPLICATION=JucePlugin_Build_Standalone",
+					"JUCER_XCODE_MAC_F6D2F4CF=1",
+					"JUCE_APP_VERSION=1.0.0",
+					"JUCE_APP_VERSION_HEX=0x10000",
+				);
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				HEADER_SEARCH_PATHS = (
+					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
+					"$(SRCROOT)/../../JuceLibraryCode",
+					"$(SRCROOT)/../../Modules",
+					"/Applications/JUCE/modules",
+					"/Users/nicholassolem/development/gitstuff/nvs_libraries",
+					"/Users/nicholassolem/development/gitstuff/nkvdu_libraries",
+					"/Applications/JUCE/modules/juce_audio_plugin_client",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = Info-Standalone_Plugin.plist;
+				INFOPLIST_PREPROCESS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"/Users/nicholassolem/development/gitstuff/nvs_libraries\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_HEADER_SEARCH_PATHS = "/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK $(SRCROOT)/../../JuceLibraryCode $(SRCROOT)/../../Modules /Applications/JUCE/modules /Users/nicholassolem/development/gitstuff/nvs_libraries /Users/nicholassolem/development/gitstuff/nkvdu_libraries /Applications/JUCE/modules/juce_audio_plugin_client";
+				OTHER_LDFLAGS = "-lshredVerb -weak_framework Metal -weak_framework MetalKit";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nvssynthesis.shredVerb;
+				PRODUCT_NAME = "shredVerb";
 				USE_HEADERMAP = NO;
 				VALID_ARCHS = "i386 x86_64 arm64 arm64e";
 			};
@@ -2477,20 +2146,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		4F2C8EB133A94E3F573774B5 = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				570D068655E95ED33D46FB22,
-				835A69B0DE0D2DB6A1786DC3,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
 		529259A7FBEACF6467158B49 = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C519CE873EF0F478C5E98018,
 				B553E2C884D4CD91E214436F,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5D275A07A05DA78F914C9873 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F4DC806E99B53C7BC194CC74,
+				87F83B2EA1C54667A70D40E8,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -2518,15 +2187,6 @@
 			buildConfigurations = (
 				75530D9EDE0F47438A09070C,
 				7BA64147D9A7CCC4258AA442,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		F8D6B9B8D5CA43B4010B9217 = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1C9C4167FFABEEF1B0EC61E5,
-				C4789C22DCD3BE535F11F3A8,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

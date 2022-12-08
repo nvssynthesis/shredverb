@@ -7,12 +7,13 @@
 */
 
 #include "PluginProcessor.h"
+#if DEF_EDITOR
 #include "PluginEditor.h"
-
+#endif
 //==============================================================================
 ShredVerbAudioProcessor::ShredVerbAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
+     :  foleys::MagicProcessor (juce::AudioProcessor::BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
@@ -20,9 +21,50 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
-        paramVT(*this, nullptr, juce::Identifier ("APVTSshredverb"),createParams())
+/*AudioProcessor (BusesProperties()
+                     #if ! JucePlugin_IsMidiEffect
+                      #if ! JucePlugin_IsSynth
+                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
+                      #endif
+                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
+                     #endif
+                       ),*/
+        paramVT(*this, nullptr, juce::Identifier ("APVTSshredverb"), createParams()),
+        magicState(*this)
 #endif
 {
+    FOLEYS_SET_SOURCE_PATH (__FILE__);
+    /*auto file = juce::File::getSpecialLocation (juce::File::currentApplicationFile)
+        .getChildFile ("Contents")
+        .getChildFile ("Resources")
+        .getChildFile ("magic.xml");
+
+    if (file.existsAsFile())
+        magicState.setGuiValueTree (file);
+    else{
+//        paramVT = magicState.createGuiValueTree();
+//        magicState.setGuiValueTree (BinaryData::magic_xml, BinaryData::magic_xmlSize);
+    }*/
+//    presetList = magicState.createAndAddObject<PresetListBox>("presets");
+    /*presetList->onSelectionChanged = [&](int number)
+    {
+        loadPresetInternal (number);
+    };
+    magicState.addTrigger ("save-preset", [this]
+    {
+        savePresetInternal();
+    });
+    */
+    auto nOut = getTotalNumOutputChannels();
+    auto nIn = getTotalNumInputChannels();
+    
+    magicState.setApplicationSettingsFile (juce::File::getSpecialLocation (juce::File::userApplicationDataDirectory)
+                                           .getChildFile (ProjectInfo::companyName)
+                                           .getChildFile (ProjectInfo::projectName + juce::String (".settings")));
+
+    magicState.setPlayheadUpdateFrequency (30);
+
+
     // pointers are copied to items declared in object so they don't go out of scope
     driveParam    = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::drive));
     predelayParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::predelay));
@@ -56,8 +98,7 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()
     //ALLPASS_PARAM
     
     // need array of delay pointers with parameterized constructors, dynamically allocated
-    auto nOut = getTotalNumOutputChannels();
-    auto nIn = getTotalNumInputChannels();
+
     
     
      X = new float[D_IJ];
@@ -67,17 +108,25 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()
      apd = new nvs_delays::allpass_delay[D_IJ];
     
      int n;
-     for (n = 0; n < D_IJ; n++) {
+    
+    int accum1 = 1;
+    int accum2 = 2;
+    for (n = 0; n < D_IJ; n++) {
          X[n] = 0.f;
          Y[n] = 0.f;
          //G[n] = new float[D_IJ];
              // may want much shorter delay lines
-         D_times[n] = 600.f * rando.nextFloat();
-         D[n] = *new nvs_delays::delay(32768, 44100.f);
-         D[n].setDelayTimeMS(D_times[n]);
-         D[n].setInterpolation(nvs_delays::delay::interp::floor);
-         apd[n].setDelayTimeMS(D_times[n]);
-         apd[n].setInterpolation(nvs_delays::delay::interp::floor);
+//         D_times[n] = 600.f * rando.nextFloat();
+        int tmp = (accum1 + accum2);
+        D_times[n] = 600.f * tmp;
+        accum1 = accum2;
+        accum2 = tmp;
+        std::cout << accum2 <<std::endl;
+        D[n] = *new nvs_delays::delay(32768, 44100.f);
+        D[n].setDelayTimeMS(D_times[n]);
+        D[n].setInterpolation(nvs_delays::delay::interp::floor);
+        apd[n].setDelayTimeMS(D_times[n]);
+        apd[n].setInterpolation(nvs_delays::delay::interp::floor);
      }
 
     tvap = new nvs_filters::tvap<float>[D_IJ + nIn];   //
@@ -87,7 +136,7 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()
     //
     lp6dB = new nvs_filters::onePole<float>[2 * (nIn + nOut)]; //input and every matrix out
 }
-
+//#if DEF_EDITOR
 ShredVerbAudioProcessor::~ShredVerbAudioProcessor()
 {
     //delete[] apd;
@@ -96,7 +145,8 @@ ShredVerbAudioProcessor::~ShredVerbAudioProcessor()
     delete[] D;
     delete[] tvap;
 }
-
+//#endif
+#if DEF_EDITOR
 //==============================================================================
 const juce::String ShredVerbAudioProcessor::getName() const
 {
@@ -129,12 +179,12 @@ bool ShredVerbAudioProcessor::isMidiEffect() const
     return false;
    #endif
 }
-
+#endif
 double ShredVerbAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
-
+#if DEF_EDITOR
 int ShredVerbAudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
@@ -158,7 +208,7 @@ const juce::String ShredVerbAudioProcessor::getProgramName (int index)
 void ShredVerbAudioProcessor::changeProgramName (int index, const juce::String& newName)
 {
 }
-
+#endif
 //==============================================================================
 void ShredVerbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
@@ -176,15 +226,22 @@ void ShredVerbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
         tvap[n].updateResonance(100.f * float(n + 1), 1.f);
     }
     //feed forward pair
-    tvap[4].clear();
-    tvap[4].setSampleRate(sampleRate);
-    tvap[4].updateCutoff(4000.f, 1.f);
-    tvap[4].updateResonance(2000.f, 1.f);
-    tvap[5].clear();
-    tvap[5].setSampleRate(sampleRate);
-    tvap[5].updateCutoff(4000.f, 1.f);
-    tvap[5].updateResonance(2000.f, 1.f);
-    
+    if (nIn > 0){
+        tvap[4].clear();
+        tvap[4].setSampleRate(sampleRate);
+        tvap[4].updateCutoff(4000.f, 1.f);
+        tvap[4].updateResonance(2000.f, 1.f);
+        if (nIn == 2){
+            tvap[5].clear();
+            tvap[5].setSampleRate(sampleRate);
+            tvap[5].updateCutoff(4000.f, 1.f);
+            tvap[5].updateResonance(2000.f, 1.f);
+        }
+    }
+    else{
+        std::cerr << "NUM INPUT CHANS == 0" << std::endl;
+    }
+
     for (int n = 0; n < (nIn + nOut); n++)
     {
     //        apd[n].setSampleRate((float)sampleRate);
@@ -430,52 +487,97 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
         *(outBuffR + samp) = finalOutR * 0.999;
     }
 }
-
+#if DEF_EDITOR
 //==============================================================================
 bool ShredVerbAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
-
 juce::AudioProcessorEditor* ShredVerbAudioProcessor::createEditor()
 {
-    return new ShredVerbAudioProcessorEditor (*this, paramVT);
+    return new foleys::MagicPluginEditor(magicState);
+//    return new ShredVerbAudioProcessorEditor (*this, paramVT);
 }
-
 //==============================================================================
 void ShredVerbAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+        auto state = paramVT.copyState();
+        std::unique_ptr<juce::XmlElement> xml (state.createXml());
+        copyXmlToBinary (*xml, destData);
 }
 
+
+#endif
 void ShredVerbAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
-}
+    /*std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
 
+    if (xmlState.get() != nullptr)
+        if (xmlState->hasTagName (paramVT.state.getType()))
+            paramVT.replaceState (juce::ValueTree::fromXml (*xmlState));*/
+}
 juce::AudioProcessorValueTreeState::ParameterLayout ShredVerbAudioProcessor::createParams()
 {
     const unsigned int versionHint = 1;
-    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+//    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+    juce::AudioProcessorValueTreeState::ParameterLayout params;
 
+
+    
     for (int i = 0; i < ps.numParams; ++i ){
         param_stuff::params_e ii = (param_stuff::params_e)(i);
 
         juce::String parameterID_str = ps.paramIDs.at(ii);
         juce::String parameterName = ps.paramNames.at(ii);
-        juce::NormalisableRange<float> normRange(ps.paramRanges.at(ii)[0],
+        juce::NormalisableRange<float> normRange;
+        if ((parameterID_str.compare(ps.paramIDs.at(param_stuff::params_e::tvap0_f_pi)) &&
+            parameterID_str.compare(ps.paramIDs.at(param_stuff::params_e::tvap0_f_b)) &&
+            parameterID_str.compare(ps.paramIDs.at(param_stuff::params_e::tvap1_f_pi)) &&
+            parameterID_str.compare(ps.paramIDs.at(param_stuff::params_e::tvap1_f_b)) &&
+            parameterID_str.compare(ps.paramIDs.at(param_stuff::params_e::tvap2_f_pi)) &&
+            parameterID_str.compare(ps.paramIDs.at(param_stuff::params_e::tvap2_f_b)) &&
+            parameterID_str.compare(ps.paramIDs.at(param_stuff::params_e::tvap3_f_pi)) &&
+            parameterID_str.compare(ps.paramIDs.at(param_stuff::params_e::tvap3_f_b))
+              ))
+        {
+            normRange = juce::NormalisableRange<float> (ps.paramRanges.at(ii)[0],
                                                  ps.paramRanges.at(ii)[1],
                                                  0.0001f);
+        } else {
+            normRange = juce::NormalisableRange<float> {0.23f, 22000.0f,
+                [](float start, float end, float normalised)
+                {
+                    return start + (std::pow (2.0f, normalised * 10.0f) - 1.0f) * (end - start) / 1023.0f;
+                },
+                [](float start, float end, float value)
+                {
+                    return (std::log (((value - start) * 1023.0f / (end - start)) + 1.0f) / std::log ( 2.0f)) / 10.0f;
+                },
+                [](float start, float end, float value)
+                {
+                    if (value > 3000.0f)
+                        return juce::jlimit (start, end, 100.0f * juce::roundToInt (value / 100.0f));
+
+                    if (value > 1000.0f)
+                        return juce::jlimit (start, end, 10.0f * juce::roundToInt (value / 10.0f));
+
+                    return juce::jlimit (start, end, float (juce::roundToInt (value)));
+                }};
+        }
         float defaultVal = ps.paramDefaults.at(ii);
         
-        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
+//        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
+        params.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
     }
-    
-    return { params.begin(), params.end() };
+    return params;
+//    return { params.begin(), params.end() };
 }
+
 
 //==============================================================================
 // This creates new instances of the plugin..
@@ -483,100 +585,3 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new ShredVerbAudioProcessor();
 }
-
-/*
- old way
-
- 
- parameterID_str = "size";      // parameterID
- parameterName = "Spatial Size";     // parameter name
- normRange.start = 0.f;
- normRange.end = 1.f;
- defaultVal = 0.2f;
- params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
-
- parameterID_str = "lop";      // parameterID
- parameterName = "LP Freq";     // parameter name
- normRange.start = 200.0f;
- normRange.end = 20000.0f;
- defaultVal = 12000.f;
- params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
-
- parameterID_str = "dryWet";      // parameterID
- parameterName = "Dry/Wet";     // parameter name
- normRange.start = 0.f;
- normRange.end = 1.f;
- defaultVal = 0.f;
- params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
-
- parameterID_str = "tvap_0";      // parameterID
- parameterName = "TVAP 0";     // parameter name
- normRange.start = 20.f;
- normRange.end = 20000.f;
- defaultVal = 200.f;
- params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
-
- parameterID_str = "tvap_1";      // parameterID
- parameterName = "TVAP 1";     // parameter name
- normRange.start = 20.f;
- normRange.end = 20000.f;
- defaultVal = 2000.f;
- params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
-
- parameterID_str = "tvap_2";      // parameterID
- parameterName = "TVAP 2";     // parameter name
- normRange.start = 20.f;
- normRange.end = 20000.f;
- defaultVal = 500.f;
- params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
-
- parameterID_str = "tvap_3";      // parameterID
- parameterName = "TVAP 3";     // parameter name
- normRange.start = 20.f;
- normRange.end = 20000.f;
- defaultVal = 9000.f;
- params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
-
- parameterID_str = "dist1iner";      // parameterID
- parameterName = "Distortion 1 Inner";     // parameter name
- normRange.start = 0.f;
- normRange.end = 1.f;
- defaultVal = 0.f;
- params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
-
- parameterID_str = "dist1outr";      // parameterID
- parameterName = "Distortion 1 Outer";     // parameter name
- normRange.start = 0.f;
- normRange.end = 1.f;
- defaultVal = 0.f;
- params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
-
- parameterID_str = "dist2iner";      // parameterID
- parameterName = "Distortion 2 Inner";     // parameter name
- normRange.start = 0.f;
- normRange.end = 1.f;
- defaultVal = 0.f;
- params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
-
- parameterID_str = "dist2outr";      // parameterID
- parameterName = "Distortion 2 Outer";     // parameter name
- normRange.start = 0.f;
- normRange.end = 1.f;
- defaultVal = 0.f;
- params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
-
- parameterID_str = "interp";      // parameterID
- parameterName = "Interpolation Type";     // parameter name
- normRange.start = 0.f;
- normRange.end = 1.f;
- defaultVal = 0.f;
- params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
-
- parameterID_str = "randomizzze";      // parameterID
- parameterName = "Randomize";     // parameter name
- normRange.start = 0.f;
- normRange.end = 1.f;
- defaultVal = 0.f;
- params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
- 
- */

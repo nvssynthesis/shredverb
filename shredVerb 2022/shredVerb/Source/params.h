@@ -15,12 +15,14 @@ struct param_stuff{
     enum class params_e{
         drive,
         predelay,
-        decay,
         size,
         lowpass,
-
-        drywet,
-
+        
+        dist1_inner,
+        dist1_outer,
+        dist2_inner,
+        dist2_outer,
+        
         tvap0_f_pi,
         tvap0_f_b,
         tvap1_f_pi,
@@ -30,19 +32,15 @@ struct param_stuff{
         tvap2_f_b,
         tvap3_f_pi,
         tvap3_f_b,
-        
-        dist1_inner,
-        dist1_outer,
-        dist2_inner,
-        dist2_outer,
-        
-        interp_type,
-        randomize,
 
+        decay,
+        drywet,
         output_gain,
         
-        count
+        count,
         
+        interp_type,
+        randomize
     };
 
     inline static const std::map<params_e, std::string> paramIDs =

@@ -5,11 +5,13 @@
 
   ==============================================================================
 */
+#if DEF_EDITOR
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#define WIDTH 800
-#define HEIGHT 800
+
+#define WIDTH 500
+#define HEIGHT 300
 #define NPARAMS_PER_ROW 4
 
 /*
@@ -21,37 +23,15 @@
 //==============================================================================
 ShredVerbAudioProcessorEditor::ShredVerbAudioProcessorEditor (ShredVerbAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
     //: AudioProcessorEditor (&p), audioProcessor (p)
-    : AudioProcessorEditor (&p), processor (p), valueTreeState(vts)
+    : AudioProcessorEditor (&p), processor (p), valueTreeState(vts), labelFont(HEIGHT / 25)
 {
-/*
- params_e{
- drive,
- predelay,
- decay,
- size,
- lowpass,
- drywet,
- tvap0_f_pi,
- tvap0_f_b,
- tvap1_f_pi,
- tvap1_f_b,
- tvap2_f_pi,
- tvap2_f_b,
- tvap3_f_pi,
- tvap3_f_b,
- dist1_inner,
- dist1_outer,
- dist2_inner,
- dist2_outer,
- interp_type,
- randomize,
- output_gain
- }*/
     param_stuff *tps = processor.getParamStuff();
     
     juce::Colour thumbColour = juce::Colours::darkviolet;
     juce::Colour fillColour = juce::Colours::dimgrey;
     
+    labelFont.setTypefaceName("Luminari");
+
     for (int i = 0; i < param_stuff::numParams; ++i){
         addAndMakeVisible(&(tps->paramSliders[i]));
         tps->paramSliders[i].addListener(this);
@@ -67,39 +47,13 @@ ShredVerbAudioProcessorEditor::ShredVerbAudioProcessorEditor (ShredVerbAudioProc
         
         tps->paramSliders[i].setName(param_stuff::paramNames.at(ii));
         
-        juce::String paramID_str = param_stuff::paramIDs.at(ii);
-        std::cout << paramID_str << std::endl;
-//        this->ownedSliderAttachmentPtrs.add(std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(valueTreeState, paramID_str, tps->paramSliders[i]));
-        tps->paramSliderAttachmentPtrs[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(valueTreeState, paramID_str, tps->paramSliders[i]);
+        tps->paramSliderAttachmentPtrs[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(valueTreeState, param_stuff::paramIDs.at(ii), tps->paramSliders[i]);
         
         tps->paramLabels[i].setText(param_stuff::paramNames.at(ii), juce::dontSendNotification);
+        tps->paramLabels[i].setFont(labelFont);
         addAndMakeVisible(tps->paramLabels[i]);
     }
-    /*
-    drive_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::drive), tps->paramSliders[int(param_stuff::params_e::drive)]);
-    predelay_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::predelay), tps->paramSliders[int(param_stuff::params_e::predelay)]);
-    size_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::size), tps->paramSliders[int(param_stuff::params_e::size)]);
-    lowpass_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::lowpass), tps->paramSliders[int(param_stuff::params_e::lowpass)]);
-    
-    tvap0_f_pi_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::tvap0_f_pi), tps->paramSliders[int(param_stuff::params_e::tvap0_f_pi)]);
-    tvap0_f_b_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::tvap0_f_b), tps->paramSliders[int(param_stuff::params_e::tvap0_f_b)]);
-    tvap1_f_pi_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::tvap1_f_pi), tps->paramSliders[int(param_stuff::params_e::tvap1_f_pi)]);
-    tvap1_f_b_sap  = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::tvap1_f_b), tps->paramSliders[int(param_stuff::params_e::tvap1_f_b)]);
-    
-    tvap2_f_pi_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::tvap2_f_pi), tps->paramSliders[int(param_stuff::params_e::tvap2_f_pi)]);
-    tvap2_f_b_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::tvap2_f_b), tps->paramSliders[int(param_stuff::params_e::tvap2_f_b)]);
-    tvap3_f_pi_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::tvap3_f_pi), tps->paramSliders[int(param_stuff::params_e::tvap3_f_pi)]);
-    tvap3_f_b_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::tvap3_f_b), tps->paramSliders[int(param_stuff::params_e::tvap3_f_b)]);
-    
-    dist1_inner_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::dist1_inner), tps->paramSliders[int(param_stuff::params_e::dist1_inner)]);
-    dist1_outer_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::dist1_outer), tps->paramSliders[int(param_stuff::params_e::dist1_outer)]);
-    dist2_inner_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::dist2_inner), tps->paramSliders[int(param_stuff::params_e::dist2_inner)]);
-    dist2_outer_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::dist2_outer), tps->paramSliders[int(param_stuff::params_e::dist2_outer)]);
-    
-    decay_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::decay), tps->paramSliders[int(param_stuff::params_e::decay)]);
-    output_gain_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::output_gain), tps->paramSliders[int(param_stuff::params_e::output_gain)]);
-    drywet_sap = new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, param_stuff::paramIDs.at(param_stuff::params_e::drywet), tps->paramSliders[int(param_stuff::params_e::drywet)]);
-    */
+   
     
 //    addAndMakeVisible(&interpComboBox);
 //    interpComboBox.addListener(this); juce::AudioProcessorValueTreeState::ComboBoxAttachment(valueTreeState, "interp", interpComboBox);
@@ -119,36 +73,9 @@ ShredVerbAudioProcessorEditor::ShredVerbAudioProcessorEditor (ShredVerbAudioProc
 ShredVerbAudioProcessorEditor::~ShredVerbAudioProcessorEditor()
 {
     param_stuff *tps = processor.getParamStuff();
-/*
-    delete drive_sap;
-    delete predelay_sap;
-    delete size_sap;
-    delete lowpass_sap;
-    
-    delete tvap0_f_pi_sap;
-    delete tvap0_f_b_sap;
-    delete tvap1_f_pi_sap;
-    delete tvap1_f_b_sap;
-    
-    delete tvap2_f_pi_sap;
-    delete tvap2_f_b_sap;
-    delete tvap3_f_pi_sap;
-    delete tvap3_f_b_sap;
-    
-    delete dist1_inner_sap;
-    delete dist1_outer_sap;
-    delete dist2_inner_sap;
-    delete dist2_outer_sap;
-    
-    delete decay_sap;
-    delete output_gain_sap;
-    delete drywet_sap;
- */
-    /*
     for (int i = 0; i < param_stuff::numParams; ++i){
-        delete tps->paramSliderAttachmentPtrs[i];
-    }*/
-    
+        tps->paramSliders[i].removeListener(this);
+    }
     //delete interpComboBoxAttachment;
 //    delete randomizeButtonAttachment;
 }
@@ -167,18 +94,18 @@ void ShredVerbAudioProcessorEditor::paint (juce::Graphics& g)
 
 void ShredVerbAudioProcessorEditor::resized()
 {
-    int row_Y = 50;
-    int knobWidth = 100;
-    int knobHeight = 100;
+    int row_Y = 10;
+    int knobWidth = ((WIDTH / NPARAMS_PER_ROW) * 7) / 11;
+    int knobHeight = knobWidth;
     int unit[NPARAMS_PER_ROW];
     int offset;
     int textWidth, textHeight;
-    textWidth = 60;
-    textHeight = 30;
+    textWidth = (knobWidth * 2) / 3;
+    textHeight = knobHeight / 5;
     for (int n = 0; n < NPARAMS_PER_ROW; n++) {
         unit[n] = (WIDTH/NPARAMS_PER_ROW) * n;
     }
-    offset = int((double)unit[1] * 0.25);
+    offset = int((double)unit[1] * 0.05);
 
     int label_Y = row_Y + 100;
     int label_X_ofst = offset + 30;
@@ -186,17 +113,20 @@ void ShredVerbAudioProcessorEditor::resized()
     param_stuff *tps = processor.getParamStuff();
 
     const int nRows = (param_stuff::numParams / NPARAMS_PER_ROW);
+    
     for (int i = 0; i < param_stuff::numParams; ++i){
         bool isReadOnly = true;
         if ((i > 0) && ((i % NPARAMS_PER_ROW) == 0)){
-            row_Y += HEIGHT / nRows;
-            label_Y = row_Y + 100;
+            int heightwiseUnit = HEIGHT / nRows;
+            row_Y += heightwiseUnit;
+            label_Y = row_Y + (heightwiseUnit / 15);
         }
 
         tps->paramSliders[i].setTextBoxStyle(juce::Slider::TextBoxBelow, isReadOnly, textWidth, textHeight);
         tps->paramSliders[i].setBounds(unit[i % NPARAMS_PER_ROW] + offset, row_Y, knobWidth, knobHeight);
         
         tps->paramLabels[i].setBounds(unit[i % NPARAMS_PER_ROW] + label_X_ofst, label_Y, 180, 19);
+//        tps->paramLabels[i].setBounds(<#int x#>, <#int y#>, <#int width#>, <#int height#>)
 //        tps->paramLabels[i].setCentrePosition(unit[i % NPARAMS_PER_ROW] + label_X_ofst, label_Y);
 //        tps->paramLabels[i].set
         
@@ -205,6 +135,7 @@ void ShredVerbAudioProcessorEditor::resized()
         std::cout << "label_Y " << label_Y << std::endl;
     }
 }
+#endif
 
 /*
  old way
