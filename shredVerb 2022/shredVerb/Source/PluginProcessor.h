@@ -22,7 +22,8 @@
 //==============================================================================
 /**
 */
-class ShredVerbAudioProcessor  :  public foleys::MagicProcessor
+class ShredVerbAudioProcessor  :  public foleys::MagicProcessor,
+                                    private juce::AudioProcessorValueTreeState::Listener
 //public juce::AudioProcessor
 {
 public:
@@ -38,6 +39,7 @@ public:
    #ifndef JucePlugin_PreferredChannelConfigurations
     bool isBusesLayoutSupported (const juce::AudioProcessor::BusesLayout& layouts) const override;
    #endif
+    void parameterChanged (const juce::String& param, float value) override;
 
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 
@@ -77,6 +79,7 @@ public:
         {0.f, 1.f, -1.f, 0.f}
     };
     
+    nvs_delays::delay *preD = NULL;
     nvs_delays::delay *D = NULL;
     nvs_delays::allpass_delay *apd = NULL;
     float D_times[D_IJ];
@@ -90,14 +93,39 @@ public:
     //    nvs_delays::delay *predel = NULL;
     nvs_filters::onePole<float> *lp6dB = NULL;
     
+    nvs_filters::butterworth2p<double> *butter = NULL;
+    
     param_stuff *getParamStuff(){
         return &ps;
     }
     
 private:
+    float minDelTimeMS, maxDelTimeMS;
+    
+    static const unsigned int versionHint = 1;
+    static constexpr float intervalVal = 0.01f;
+    
+    static std::string getID(param_stuff::params_e idx){    return param_stuff::paramIDs.at(idx);       }
+    static std::string getName(param_stuff::params_e idx){  return param_stuff::paramNames.at(idx);     }
+    static float getMin(param_stuff::params_e idx){         return param_stuff::paramRanges.at(idx)[0]; }
+    static float getMax(param_stuff::params_e idx){         return param_stuff::paramRanges.at(idx)[1]; }
+    static float getDef(param_stuff::params_e idx){         return param_stuff::paramDefaults.at(idx);  }
+    
+    static std::unique_ptr<juce::AudioParameterFloat> getUniqueParam(param_stuff::params_e idx){
+        return std::make_unique<juce::AudioParameterFloat>(juce::ParameterID (getID(idx), versionHint), getName(idx), juce::NormalisableRange<float> (getMin(idx), getMax(idx), intervalVal), getDef(idx));
+    }
+
     juce::AudioProcessorValueTreeState paramVT;
     param_stuff ps;
 
+    void addReverbParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
+    void addDistorionParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
+    void addAllpassParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
+    
+    void addModulationParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
+
+    void addOutputParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     juce::AudioProcessorValueTreeState::ParameterLayout createParams();
     
     PresetListBox*  presetList   = nullptr;
@@ -129,9 +157,10 @@ private:
     
     std::atomic<float>* interpParam = nullptr;
     std::atomic<float>* randomizeParam = nullptr;
+    
     juce::Random rando;
     
-    foleys::MagicProcessorState magicState ;
+//    foleys::MagicProcessorState magicState ;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ShredVerbAudioProcessor)
 };

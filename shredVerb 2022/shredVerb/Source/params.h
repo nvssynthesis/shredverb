@@ -17,9 +17,10 @@ struct param_stuff{
         predelay,
         size,
         lowpass,
-        
-        dist1_inner,
+        decay,
+
         dist1_outer,
+        dist1_inner,
         dist2_inner,
         dist2_outer,
         
@@ -33,7 +34,6 @@ struct param_stuff{
         tvap3_f_pi,
         tvap3_f_b,
 
-        decay,
         drywet,
         output_gain,
         
@@ -76,14 +76,14 @@ struct param_stuff{
         {params_e::size, "Spatial Size"},
         {params_e::lowpass, "Lowpass Cutoff"},
         {params_e::drywet, "Dry/Wet"},
-        {params_e::tvap0_f_pi, "Allpass Base Frequency 0"},
-        {params_e::tvap0_f_b, "Allpass Bandwidth 0"},
-        {params_e::tvap1_f_pi, "Allpass Base Frequency 1"},
-        {params_e::tvap1_f_b, "Allpass Bandwidth 1"},
-        {params_e::tvap2_f_pi, "Allpass Base Frequency 2"},
-        {params_e::tvap2_f_b, "Allpass Bandwidth 2"},
-        {params_e::tvap3_f_pi, "Allpass Base Frequency 3"},
-        {params_e::tvap3_f_b, "Allpass Bandwidth 3"},
+        {params_e::tvap0_f_pi, "Base Frequency 0"},
+        {params_e::tvap0_f_b, "Bandwidth 0"},
+        {params_e::tvap1_f_pi, "Base Frequency 1"},
+        {params_e::tvap1_f_b, "Bandwidth 1"},
+        {params_e::tvap2_f_pi, "Base Frequency 2"},
+        {params_e::tvap2_f_b, "Bandwidth 2"},
+        {params_e::tvap3_f_pi, "Base Frequency 3"},
+        {params_e::tvap3_f_b, "Bandwidth 3"},
         {params_e::dist1_inner, "Inner Distortion 1"},
         {params_e::dist1_outer, "Outer Distortion 1"},
         {params_e::dist2_inner, "Inner Distortion 2"},
@@ -92,9 +92,9 @@ struct param_stuff{
         {params_e::randomize, "Randomize"},
         {params_e::output_gain, "Output Gain"}
     };
-    inline static const float f_pi_min = 5.f;
+    inline static const float f_pi_min = 0.23f;
     inline static const float f_pi_max = 22000.f;
-    inline static const float f_b_min = 5.f;
+    inline static const float f_b_min = 0.23f;
     inline static const float f_b_max = 10000.f;
     
     inline static const std::map<params_e, std::array<float, 2>> paramRanges =
@@ -102,8 +102,8 @@ struct param_stuff{
         {params_e::drive,       {-24.f, 24.f}},
         {params_e::predelay,    {0.f, 1000.f}},
         {params_e::decay,       {0.f, 0.7071067}},
-        {params_e::size,        {0.f, 1.f}},
-        {params_e::lowpass,     {20.f, 22000.f}},
+        {params_e::size,        {0.001f, 1.f}},
+        {params_e::lowpass,     {20.f, 20000.f}},
         {params_e::drywet,      {0.f, 1.f}},
         {params_e::tvap0_f_pi,  {f_pi_min, f_pi_max}},
         {params_e::tvap0_f_b,   {f_b_min, f_b_max}},

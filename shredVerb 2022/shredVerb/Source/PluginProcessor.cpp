@@ -12,40 +12,32 @@
 #endif
 //==============================================================================
 ShredVerbAudioProcessor::ShredVerbAudioProcessor()
-#ifndef JucePlugin_PreferredChannelConfigurations
+//#ifndef JucePlugin_PreferredChannelConfigurations
      :  foleys::MagicProcessor (juce::AudioProcessor::BusesProperties()
-                     #if ! JucePlugin_IsMidiEffect
-                      #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                      #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-                     #endif
                        ),
-/*AudioProcessor (BusesProperties()
-                     #if ! JucePlugin_IsMidiEffect
-                      #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                      #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-                     #endif
-                       ),*/
-        paramVT(*this, nullptr, juce::Identifier ("APVTSshredverb"), createParams()),
-        magicState(*this)
-#endif
+        paramVT(*this, nullptr, juce::Identifier ("APVTSshredverb"), createParameterLayout())
+//,       magicState(*this)
+//#endif
 {
     FOLEYS_SET_SOURCE_PATH (__FILE__);
     /*auto file = juce::File::getSpecialLocation (juce::File::currentApplicationFile)
         .getChildFile ("Contents")
         .getChildFile ("Resources")
         .getChildFile ("magic.xml");
+     */
+//    juce::File file("/Users/nicholassolem/Documents/GitHub/shredverb/shredVerb 2022/shredVerb/Builds/MacOSX/build/Debug/0th_iter.1");
 
-    if (file.existsAsFile())
-        magicState.setGuiValueTree (file);
-    else{
-//        paramVT = magicState.createGuiValueTree();
-//        magicState.setGuiValueTree (BinaryData::magic_xml, BinaryData::magic_xmlSize);
-    }*/
-//    presetList = magicState.createAndAddObject<PresetListBox>("presets");
+//    if (file.existsAsFile())
+//        magicState.setGuiValueTree (file);
+//    else{
+////        paramVT = magicState.createGuiValueTree();
+////        magicState.setGuiValueTree (BinaryData::magic_xml, BinaryData::magic_xmlSize);
+//    }
+    magicState.setGuiValueTree (BinaryData::DIRECT_EDIT_2_0_xml, BinaryData::DIRECT_EDIT_2_0_xmlSize);
+
+    presetList = magicState.createAndAddObject<PresetListBox>("presets");
     /*presetList->onSelectionChanged = [&](int number)
     {
         loadPresetInternal (number);
@@ -58,11 +50,11 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()
     auto nOut = getTotalNumOutputChannels();
     auto nIn = getTotalNumInputChannels();
     
-    magicState.setApplicationSettingsFile (juce::File::getSpecialLocation (juce::File::userApplicationDataDirectory)
-                                           .getChildFile (ProjectInfo::companyName)
-                                           .getChildFile (ProjectInfo::projectName + juce::String (".settings")));
-
-    magicState.setPlayheadUpdateFrequency (30);
+//    magicState.setApplicationSettingsFile (juce::File::getSpecialLocation (juce::File::userApplicationDataDirectory)
+//                                           .getChildFile (ProjectInfo::companyName)
+//                                           .getChildFile (ProjectInfo::projectName + juce::String (".settings")));
+//
+//    magicState.setPlayheadUpdateFrequency (30);
 
 
     // pointers are copied to items declared in object so they don't go out of scope
@@ -101,13 +93,18 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()
 
     
     
-     X = new float[D_IJ];
-     Y = new float[D_IJ];
+    X = new float[D_IJ];
+    Y = new float[D_IJ];
      
-     D = new nvs_delays::delay[D_IJ];
-     apd = new nvs_delays::allpass_delay[D_IJ];
+    preD = new nvs_delays::delay[nIn];
+    for (int n = 0; n < nIn; n++){
+        preD[n] = *new nvs_delays::delay(32768, 44100.f);
+    }
     
-     int n;
+    D = new nvs_delays::delay[D_IJ];
+    apd = new nvs_delays::allpass_delay[D_IJ];
+
+    int n;
     
     int accum1 = 1;
     int accum2 = 2;
@@ -116,13 +113,14 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()
          Y[n] = 0.f;
          //G[n] = new float[D_IJ];
              // may want much shorter delay lines
-//         D_times[n] = 600.f * rando.nextFloat();
-        int tmp = (accum1 + accum2);
-        D_times[n] = 600.f * tmp;
-        accum1 = accum2;
-        accum2 = tmp;
-        std::cout << accum2 <<std::endl;
-        D[n] = *new nvs_delays::delay(32768, 44100.f);
+        float tmp = 600.f * rando.nextFloat();
+        D_times[n] = tmp;
+//        int tmp = (accum1 + accum2);
+//        D_times[n] = 600.f * tmp;
+//        accum1 = accum2;
+//        accum2 = tmp;
+//        std::cout << accum2 <<std::endl;
+        D[n] = *new nvs_delays::delay(65536, 44100.f);
         D[n].setDelayTimeMS(D_times[n]);
         D[n].setInterpolation(nvs_delays::delay::interp::floor);
         apd[n].setDelayTimeMS(D_times[n]);
@@ -135,6 +133,7 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()
     //    predel = new nvs_delays::delay[nIn];
     //
     lp6dB = new nvs_filters::onePole<float>[2 * (nIn + nOut)]; //input and every matrix out
+    butter = new nvs_filters::butterworth2p<double>[8];
 }
 //#if DEF_EDITOR
 ShredVerbAudioProcessor::~ShredVerbAudioProcessor()
@@ -143,6 +142,7 @@ ShredVerbAudioProcessor::~ShredVerbAudioProcessor()
     delete[] X;
     delete[] Y;
     delete[] D;
+    delete[] preD;
     delete[] tvap;
 }
 //#endif
@@ -212,12 +212,14 @@ void ShredVerbAudioProcessor::changeProgramName (int index, const juce::String& 
 //==============================================================================
 void ShredVerbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    
-     // Use this method as the place to do any pre-playback
-     // initialisation that you need..
     auto nIn = getTotalNumInputChannels();
     auto nOut = getTotalNumOutputChannels();
+    
+    maxDelTimeMS = float((D[0].getDelaySize() - 10) * 1000) / (float)sampleRate; // no more than buffer length - 10
+    minDelTimeMS = float(3 * 1000) / (float)sampleRate; // no less than 3 samples
 
+    std::cout << "min del time: " << minDelTimeMS << "\nmax del time: " << maxDelTimeMS << std::endl;
+    
     for (int n = 0; n < D_IJ; n++)
     {
         tvap[n].clear();
@@ -231,11 +233,13 @@ void ShredVerbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
         tvap[4].setSampleRate(sampleRate);
         tvap[4].updateCutoff(4000.f, 1.f);
         tvap[4].updateResonance(2000.f, 1.f);
+        preD[0].setSampleRate(sampleRate);
         if (nIn == 2){
             tvap[5].clear();
             tvap[5].setSampleRate(sampleRate);
             tvap[5].updateCutoff(4000.f, 1.f);
             tvap[5].updateResonance(2000.f, 1.f);
+            preD[1].setSampleRate(sampleRate);
         }
     }
     else{
@@ -249,6 +253,10 @@ void ShredVerbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     //        apd[n].setDelayTimeMS(11.1f + float(n)*2.f);
             lp6dB[n].setSampleRate((float)sampleRate);
             lp6dB[n].updateCutoff(12000.f, 1.f);
+    }
+    for (int n = 0; n < D_IJ * 2; n++){
+        butter[n].setSampleRate(sampleRate);
+        butter[n].updateCutoff(18000.0, 1.0);
     }
     for (int i = 0; i < D_IJ; i++)  {
         D[i].setSampleRate((float)sampleRate);
@@ -293,6 +301,8 @@ bool ShredVerbAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 }
 #endif
 
+void ShredVerbAudioProcessor::parameterChanged (const juce::String& param, float value){}
+
 void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
@@ -316,6 +326,7 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     //auto _g = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::decay));
     float _drive = *driveParam;
     float _predel = *predelayParam;
+//    std::cout << _predel << std::endl;
     
     float _g = *fbParam;
     float _size = *sizeParam;
@@ -367,11 +378,18 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 //    _ap_dist2[0] = *dist2inerParam * -1;
 //    _ap_dist2[1] = *dist2outrParam * -1;
     //=============================================================================
+    float current_preDtime[nIn];
+    for (int i = 0; i < nIn; i++) {
+        current_preDtime[i] = nvs_memoryless::clamp_low<float>(_predel, minDelTimeMS);
+        current_preDtime[i] = nvs_memoryless::clamp_high<float>(_predel, maxDelTimeMS);
+    }
     float current_Dtime[D_IJ];
     for (int i = 0; i < D_IJ; i++) {
         current_Dtime[i] = D_times[i];
         current_Dtime[i] *= _size;
-        current_Dtime[i] += 0.1f;
+//        current_Dtime[i] += 0.1f;
+        current_Dtime[i] = nvs_memoryless::clamp_low<float>(current_Dtime[i], minDelTimeMS);
+        current_Dtime[i] = nvs_memoryless::clamp_high<float>(current_Dtime[i], maxDelTimeMS);
         // add LFO mod here
         
 //        D[i].updateDelayTimeMS(current_Dtime, _oneOverBlockSize);
@@ -381,9 +399,15 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     for (int n = 0; n < (nIn + nOut); n++)  {
         lp6dB[n].updateCutoff(_lop, _oneOverBlockSize);
     }
+//    for (int n = 0; n < D_IJ*2; n++){
+//        butter[n].updateCutoff((double)_lop, _oneOverBlockSize);
+//    }
     
     for (int samp = 0; samp < numSamps; samp++)
     {
+        for (int i = 0; i < nIn; i++){
+            preD[i].updateDelayTimeMS(current_preDtime[i], (float)_oneOverBlockSize);
+        }
         for (int i = 0; i < D_IJ; i++) {
             D[i].updateDelayTimeMS(current_Dtime[i], (float)_oneOverBlockSize);
             apd[i].updateDelayTimeMS(current_Dtime[i], (float)_oneOverBlockSize);
@@ -391,17 +415,26 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
             tvap[i].update_f_pi(_ap_fpi[i], (float)_oneOverBlockSize);
             tvap[i].update_f_b(_ap_fb[i], (float)_oneOverBlockSize);
         }
-        
+
         
         float leftSamp = *(inBuffL + samp);
-        float rightSamp = *(inBuffR + samp);
+        float rightSamp = leftSamp;// *(inBuffR + samp);
         
         float inDrive = juce::Decibels::decibelsToGain<float>(_drive);
         float outDrive = 1.f / inDrive;
         
+        float preDelSamp[nIn];
+        
+        if (nIn > 0){   // could be optimized to avoid branch
+            preDelSamp[0]  = preD[0].tick_cubic(leftSamp);
+            if (nIn == 2){
+                preDelSamp[1] = preD[1].tick_cubic(rightSamp);
+            }
+        }
+        
         X[0] = 0.f;
-        X[1] = leftSamp * inDrive;//tvap[4].filter_fbmod(leftSamp, 0.f, 0.f);
-        X[2] = rightSamp * inDrive;//tvap[5].filter_fbmod(rightSamp, 0.f, 0.f);
+        X[1] = preDelSamp[0] * inDrive;//tvap[4].filter_fbmod(leftSamp, 0.f, 0.f);
+        X[2] = preDelSamp[1] * inDrive;//tvap[5].filter_fbmod(rightSamp, 0.f, 0.f);
         X[3] = 0.f;
         
 
@@ -425,19 +458,27 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                 tmp[i] += G[i][j] * Y[j] * (_g);
             }
             tmp[i] += X[i];
-            tmp[0] = lp6dB[0].tpt_lp(tmp[0], _lop);
-            tmp[1] = lp6dB[1].tpt_lp(tmp[1], _lop);
-            tmp[2] = lp6dB[2].tpt_lp(tmp[2], _lop);
-            tmp[3] = lp6dB[3].tpt_lp(tmp[3], _lop);
-            tmp[0] = lp6dB[4].tpt_lp(tmp[0], _lop);
-            tmp[1] = lp6dB[5].tpt_lp(tmp[1], _lop);
-            tmp[2] = lp6dB[6].tpt_lp(tmp[2], _lop);
-            tmp[3] = lp6dB[7].tpt_lp(tmp[3], _lop);
+            tmp[0] = butter[0].filter(tmp[0], _lop);
+            tmp[1] = butter[1].filter(tmp[1], _lop);
+            tmp[2] = butter[2].filter(tmp[2], _lop);
+            tmp[3] = butter[3].filter(tmp[3], _lop);
+//            tmp[0] = butter[4].filter(tmp[0]);
+//            tmp[1] = butter[5].filter(tmp[1]);
+//            tmp[2] = butter[6].filter(tmp[2]);
+//            tmp[3] = butter[7].filter(tmp[3]);
+//            tmp[0] = lp6dB[0].tpt_lp(tmp[0], _lop);
+//            tmp[1] = lp6dB[1].tpt_lp(tmp[1], _lop);
+//            tmp[2] = lp6dB[2].tpt_lp(tmp[2], _lop);
+//            tmp[3] = lp6dB[3].tpt_lp(tmp[3], _lop);
+//            tmp[0] = lp6dB[4].tpt_lp(tmp[0], _lop);
+//            tmp[1] = lp6dB[5].tpt_lp(tmp[1], _lop);
+//            tmp[2] = lp6dB[6].tpt_lp(tmp[2], _lop);
+//            tmp[3] = lp6dB[7].tpt_lp(tmp[3], _lop);
         }
-/* L?*/tmp[0] = tvap[0].filter_fbmod(tmp[0], inner_f_pi[0], inner_f_b[0]);
+/* L?*/ tmp[0] = tvap[0].filter_fbmod(tmp[0], inner_f_pi[0], inner_f_b[0]);
 /*LEFT for sure*/tmp[1] = tvap[1].filter_fbmod(tmp[1], outer_f_pi[0], outer_f_b[0]);
 /*RGHT for sure*/tmp[2] = tvap[2].filter_fbmod(tmp[2], outer_f_pi[1], outer_f_b[1]);
-/* R?*/tmp[3] = tvap[3].filter_fbmod(tmp[3], inner_f_pi[1], inner_f_b[1]);
+/* R?*/ tmp[3] = tvap[3].filter_fbmod(tmp[3], inner_f_pi[1], inner_f_b[1]);
         
         // can just have 1 tmp line and 1 Y line in for loop
         
@@ -463,13 +504,13 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 //        }
 // ideally this should work if function pointer works
 //        Y[0] = D[0][0].tick(tmp[0]) + D[0][1].tick(tmp[1])
-//        + D[0][2].tick(tmp[2]) + D[0][3].tick(tmp[3]);
+//             + D[0][2].tick(tmp[2]) + D[0][3].tick(tmp[3]);
 //        Y[1] = D[1][0].tick(tmp[0]) + D[1][1].tick(tmp[1])
-//        + D[1][2].tick(tmp[2]) + D[1][3].tick(tmp[3]);
+//             + D[1][2].tick(tmp[2]) + D[1][3].tick(tmp[3]);
 //        Y[2] = D[2][0].tick(tmp[0]) + D[2][1].tick(tmp[1])
-//        + D[2][2].tick(tmp[2]) + D[2][3].tick(tmp[3]);
+//             + D[2][2].tick(tmp[2]) + D[2][3].tick(tmp[3]);
 //        Y[3] = D[3][0].tick(tmp[0]) + D[3][1].tick(tmp[1])
-//        + D[3][2].tick(tmp[2]) + D[3][3].tick(tmp[3]);
+//             + D[3][2].tick(tmp[2]) + D[3][3].tick(tmp[3]);
 
         float outGain = juce::Decibels::decibelsToGain<float>(_outputGain);
 
@@ -478,6 +519,12 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
         
         wetL *= outGain * outDrive;
         wetR *= outGain * outDrive;
+
+//        wetL = butter[0].filter(wetL);
+//        wetR = butter[1].filter(wetR);
+        
+//        wetL = nvs_memoryless::clamp1<float>(wetL);
+//        wetR = nvs_memoryless::clamp1<float>(wetR);
 
         float finalOutL = wetL * _dryWet + leftSamp * (1 - _dryWet) ;
         float finalOutR = wetR * _dryWet + rightSamp * (1 - _dryWet) ;
@@ -520,6 +567,115 @@ void ShredVerbAudioProcessor::setStateInformation (const void* data, int sizeInB
     if (xmlState.get() != nullptr)
         if (xmlState->hasTagName (paramVT.state.getType()))
             paramVT.replaceState (juce::ValueTree::fromXml (*xmlState));*/
+}
+void ShredVerbAudioProcessor::addReverbParameters (juce::AudioProcessorValueTreeState::ParameterLayout& layout){
+//    auto getID = [](param_stuff::params_e idx){return param_stuff::paramIDs.at(idx);};
+//    auto getName = [](param_stuff::params_e idx){return param_stuff::paramNames.at(idx);};
+//    auto getMin = [](param_stuff::params_e idx){return param_stuff::paramRanges.at(idx)[0];};
+//    auto getMax = [](param_stuff::params_e idx){return param_stuff::paramRanges.at(idx)[1];};
+//    auto getDef = [](param_stuff::params_e idx){return param_stuff::paramDefaults.at(idx);};
+//    const float intervalVal = 0.01f;
+//    auto getUniqueParam = [&](param_stuff::params_e idx){
+//        return std::make_unique<juce::AudioParameterFloat>(juce::ParameterID (getID(idx), versionHint), getName(idx), juce::NormalisableRange<float> (getMin(idx), getMax(idx), intervalVal), getDef(idx)); };
+    auto drive  = getUniqueParam(param_stuff::params_e::drive);
+    auto predel  = getUniqueParam(param_stuff::params_e::predelay);
+    auto size = getUniqueParam(param_stuff::params_e::size);
+    auto decay = getUniqueParam(param_stuff::params_e::decay);
+    auto lowpass = getUniqueParam(param_stuff::params_e::lowpass);
+    auto group = std::make_unique<juce::AudioProcessorParameterGroup>("qualia", "QUALIA", "|",
+                                                                      std::move (drive),
+                                                                      std::move (predel),
+                                                                      std::move (size),
+                                                                      std::move (decay),
+                                                                      std::move (lowpass));
+    layout.add (std::move (group));
+}
+void ShredVerbAudioProcessor::addAllpassParameters (juce::AudioProcessorValueTreeState::ParameterLayout& layout){
+    auto getRange = [&](param_stuff::params_e idx){return juce::NormalisableRange<float>(getMin(idx), getMax(idx),
+        [](float start, float end, float normalised)
+        {
+            return start + (std::pow (2.0f, normalised * 10.0f) - 1.0f) * (end - start) / 1023.0f;
+        },
+        [](float start, float end, float value)
+        {
+            return (std::log (((value - start) * 1023.0f / (end - start)) + 1.0f) / std::log ( 2.0f)) / 10.0f;
+        },
+        [](float start, float end, float value)
+        {
+            if (value > 3000.0f)
+                return juce::jlimit (start, end, 100.0f * juce::roundToInt (value / 100.0f));
+
+            if (value > 1000.0f)
+                return juce::jlimit (start, end, 10.0f * juce::roundToInt (value / 10.0f));
+
+            return juce::jlimit (start, end, float (juce::roundToInt (value)));
+    });};
+    
+    auto get_param = [&](param_stuff::params_e idx){
+        return std::make_unique<juce::AudioParameterFloat>(
+                                juce::ParameterID (getID(idx), versionHint),
+                                getName(idx),
+                                getRange(idx),
+                                getDef(idx),
+                                param_stuff::paramNames.at(idx),
+                                juce::AudioProcessorParameter::genericParameter,
+                                [](float value, int) { return juce::String (value, 2); },
+                                [](const juce::String& text) { return text.getFloatValue(); } );
+    };
+
+    auto ap0f = get_param(param_stuff::params_e::tvap0_f_pi);
+    auto ap0b = get_param(param_stuff::params_e::tvap0_f_b);
+    auto ap1f = get_param(param_stuff::params_e::tvap1_f_pi);
+    auto ap1b = get_param(param_stuff::params_e::tvap1_f_b);
+    auto ap2f = get_param(param_stuff::params_e::tvap2_f_pi);
+    auto ap2b = get_param(param_stuff::params_e::tvap2_f_b);
+    auto ap3f = get_param(param_stuff::params_e::tvap3_f_pi);
+    auto ap3b = get_param(param_stuff::params_e::tvap3_f_b);
+
+    auto group = std::make_unique<juce::AudioProcessorParameterGroup>("allpass", "ALLPASS", "|",
+                                                                      std::move (ap0f),
+                                                                      std::move (ap0b),
+                                                                      std::move (ap1f),
+                                                                      std::move (ap1b),
+                                                                      std::move (ap2f),
+                                                                      std::move (ap2b),
+                                                                      std::move (ap3f),
+                                                                      std::move (ap3b));
+    layout.add (std::move (group));
+}
+void ShredVerbAudioProcessor::addDistorionParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout){
+    auto inner1 = getUniqueParam(param_stuff::params_e::dist1_inner);
+    auto outer1 = getUniqueParam(param_stuff::params_e::dist1_outer);
+    auto inner2 = getUniqueParam(param_stuff::params_e::dist2_inner);
+    auto outer2 = getUniqueParam(param_stuff::params_e::dist2_outer);
+
+    auto group = std::make_unique<juce::AudioProcessorParameterGroup>("shred", "SHRED", "|",
+                                                                      std::move (inner1),
+                                                                      std::move (outer1),
+                                                                      std::move (inner2),
+                                                                      std::move (outer2));
+    layout.add (std::move (group));
+}
+void ShredVerbAudioProcessor::addModulationParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout){
+    
+}
+void ShredVerbAudioProcessor::addOutputParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout){
+    auto drywet = getUniqueParam(param_stuff::params_e::drywet);
+    auto output = getUniqueParam(param_stuff::params_e::output_gain);
+
+    auto group = std::make_unique<juce::AudioProcessorParameterGroup>("output", "OUTPUT", "|",
+                                                                      std::move (drywet),
+                                                                      std::move (output));
+    layout.add (std::move (group));
+}
+juce::AudioProcessorValueTreeState::ParameterLayout ShredVerbAudioProcessor::createParameterLayout()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+    ShredVerbAudioProcessor::addReverbParameters (layout);
+    ShredVerbAudioProcessor::addAllpassParameters (layout);
+    ShredVerbAudioProcessor::addDistorionParameters (layout);
+    ShredVerbAudioProcessor::addOutputParameters (layout);
+    return layout;
 }
 juce::AudioProcessorValueTreeState::ParameterLayout ShredVerbAudioProcessor::createParams()
 {
