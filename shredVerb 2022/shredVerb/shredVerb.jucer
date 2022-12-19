@@ -32,19 +32,24 @@
       <FILE id="ftaSr0" name="PresetListBox.h" compile="0" resource="0" file="Source/PresetListBox.h"/>
     </GROUP>
     <GROUP id="{17F96A0E-7C5C-E590-39B0-FC0D70462767}" name="Resources">
+      <FILE id="yOBbwi" name="DEFAULT v4.1.xml" compile="0" resource="1"
+            file="Resources/DEFAULT v4.1.xml"/>
+      <FILE id="uY5Xnm" name="DEFAULT v2.42.xml" compile="0" resource="1"
+            file="Resources/DEFAULT v2.42.xml"/>
       <FILE id="znLLqt" name="DIRECT EDIT 2.0.xml" compile="0" resource="1"
             file="Resources/DIRECT EDIT 2.0.xml"/>
+      <FILE id="YJLBcg" name="DEFAULT v4.xml" compile="0" resource="1" file="Resources/DEFAULT v4.xml"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" microphonePermissionNeeded="1" appSandbox="1"
-               iosDevelopmentTeamID="4Y9FY25YPT" hardenedRuntime="1">
+               hardenedRuntime="1">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug" targetName="shredVerb" libraryPath="/Users/nicholassolem/development/gitstuff/nvs_libraries"
                        userNotes="The reverb that shreds."/>
         <CONFIGURATION isDebug="0" name="Release" targetName="shredVerb" libraryPath="/Users/nicholassolem/development/gitstuff/nvs_libraries"
-                       userNotes="The reverb that shreds."/>
+                       userNotes="The reverb that shreds." defines="FOLEYS_SHOW_GUI_EDITOR_PALLETTE=0"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="../../../../../Applications/JUCE/modules"/>

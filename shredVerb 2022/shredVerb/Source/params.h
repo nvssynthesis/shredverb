@@ -13,12 +13,18 @@
 
 struct param_stuff{
     enum class params_e{
-        drive,
         predelay,
         size,
+        highpass,
         lowpass,
         decay,
+        
+        time0,
+        time1,
+        time2,
+        time3,
 
+        drive,
         dist1_outer,
         dist1_inner,
         dist2_inner,
@@ -49,6 +55,7 @@ struct param_stuff{
         {params_e::predelay, "predelay"},
         {params_e::decay, "decay"},
         {params_e::size, "size"},
+        {params_e::highpass, "hip"},
         {params_e::lowpass, "lop"},
         {params_e::drywet, "dryWet"},
         {params_e::tvap0_f_pi, "tvap0 freq"},
@@ -66,7 +73,10 @@ struct param_stuff{
         {params_e::interp_type, "interpolation type"},
         {params_e::randomize, "randomizzze"},
         {params_e::output_gain, "output gain"},
-
+        {params_e::time0, "delay time 0"},
+        {params_e::time1, "delay time 1"},
+        {params_e::time2, "delay time 2"},
+        {params_e::time3, "delay time 3"}
     };
     inline static const std::map<params_e, std::string> paramNames =
     {
@@ -75,6 +85,7 @@ struct param_stuff{
         {params_e::decay, "Decay"},
         {params_e::size, "Spatial Size"},
         {params_e::lowpass, "Lowpass Cutoff"},
+        {params_e::highpass, "Highpass Cutoff"},
         {params_e::drywet, "Dry/Wet"},
         {params_e::tvap0_f_pi, "Base Frequency 0"},
         {params_e::tvap0_f_b, "Bandwidth 0"},
@@ -90,7 +101,11 @@ struct param_stuff{
         {params_e::dist2_outer, "Outer Distortion 2"},
         {params_e::interp_type, "Interpolation Type"},
         {params_e::randomize, "Randomize"},
-        {params_e::output_gain, "Output Gain"}
+        {params_e::output_gain, "Output Gain"},
+        {params_e::time0, "Delay 0"},
+        {params_e::time1, "Delay 1"},
+        {params_e::time2, "Delay 2"},
+        {params_e::time3, "Delay 3"}
     };
     inline static const float f_pi_min = 0.23f;
     inline static const float f_pi_max = 22000.f;
@@ -104,6 +119,7 @@ struct param_stuff{
         {params_e::decay,       {0.f, 0.7071067}},
         {params_e::size,        {0.001f, 1.f}},
         {params_e::lowpass,     {20.f, 20000.f}},
+        {params_e::highpass,    {20.f, 20000.f}},
         {params_e::drywet,      {0.f, 1.f}},
         {params_e::tvap0_f_pi,  {f_pi_min, f_pi_max}},
         {params_e::tvap0_f_b,   {f_b_min, f_b_max}},
@@ -119,15 +135,20 @@ struct param_stuff{
         {params_e::dist2_outer, {0.f,1.f}},
         {params_e::interp_type, {0.f,1.f}},
         {params_e::randomize,   {0.f,1.f}},
-        {params_e::output_gain, {-69.f, 24.f}}
+        {params_e::output_gain, {-69.f, 24.f}},
+        {params_e::time0,       {0.0001f, 1.f}},
+        {params_e::time1,       {0.0001f, 1.f}},
+        {params_e::time2,       {0.0001f, 1.f}},
+        {params_e::time3,       {0.0001f, 1.f}}
     };
     inline static const std::map<params_e, float> paramDefaults =
     {
         {params_e::drive,       0.f},
         {params_e::predelay,    0.f},
-        {params_e::decay,       0.1f},
+        {params_e::decay,       0.5f},
         {params_e::size,        0.5f},
-        {params_e::lowpass,     18000.f},
+        {params_e::lowpass,     12000.f},
+        {params_e::highpass,    20.f},
         {params_e::drywet,      1.f},
         {params_e::tvap0_f_pi,  200.f},
         {params_e::tvap0_f_b,   500.f},
@@ -143,7 +164,11 @@ struct param_stuff{
         {params_e::dist2_outer, 0.f},
         {params_e::interp_type, 0.f},
         {params_e::randomize,   0.f},
-        {params_e::output_gain, 0.f}
+        {params_e::output_gain, 0.f},
+        {params_e::time0,       0.2315797811f},
+        {params_e::time1,       0.3f},
+        {params_e::time2,       0.4f},
+        {params_e::time3,       0.2f},
     };
 
     inline static const std::map<params_e, float> paramSkewFactorFromMidpoints =
@@ -153,6 +178,7 @@ struct param_stuff{
         {params_e::decay,       0.5f},
         {params_e::size,        0.5f},
         {params_e::lowpass,     1000.f},
+        {params_e::highpass,    1000.f},
         {params_e::drywet,      0.5f},
         {params_e::tvap0_f_pi,  1000.f},
         {params_e::tvap0_f_b,   1000.f},
@@ -168,8 +194,11 @@ struct param_stuff{
         {params_e::dist2_outer, 0.3f},
         {params_e::interp_type, 0.3f},
         {params_e::randomize,   0.5f},
-        {params_e::output_gain, 0.f}
-        
+        {params_e::output_gain, 0.f},
+        {params_e::time0,       0.5f},
+        {params_e::time1,       0.5f},
+        {params_e::time2,       0.5f},
+        {params_e::time3,       0.5f}
     };
     inline static const std::map<params_e, int> paramNumDecimalPlacesToDisplay =
     {
@@ -178,6 +207,7 @@ struct param_stuff{
         {params_e::decay,       3},
         {params_e::size,        3},
         {params_e::lowpass,     1},
+        {params_e::highpass,    1},
         {params_e::drywet,      3},
         {params_e::tvap0_f_pi,  1},
         {params_e::tvap0_f_b,   1},
@@ -193,7 +223,11 @@ struct param_stuff{
         {params_e::dist2_outer, 3},
         {params_e::interp_type, 3},
         {params_e::randomize,   2},
-        {params_e::output_gain, 2}
+        {params_e::output_gain, 2},
+        {params_e::time0,       2},
+        {params_e::time1,       2},
+        {params_e::time2,       2},
+        {params_e::time3,       2}
     };
     // to be defined/initialized in PluginEditor constructor
     static const size_t numParams = (size_t)(params_e::count);

@@ -82,7 +82,7 @@ public:
     nvs_delays::delay *preD = NULL;
     nvs_delays::delay *D = NULL;
     nvs_delays::allpass_delay *apd = NULL;
-    float D_times[D_IJ];
+    float D_times_ranged[D_IJ];
 
     float *X = NULL;
     float *Y = NULL;
@@ -100,6 +100,7 @@ public:
     }
     
 private:
+    const float timeScaling = 500.f;    // multiplier for the [0..1) delay times, PRE-size parameter
     float minDelTimeMS, maxDelTimeMS;
     
     static const unsigned int versionHint = 1;
@@ -119,6 +120,7 @@ private:
     param_stuff ps;
 
     void addReverbParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
+    void addDelayParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
     void addDistorionParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
     void addAllpassParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
     
@@ -136,6 +138,7 @@ private:
     std::atomic<float>* fbParam  = nullptr;
     std::atomic<float>* sizeParam = nullptr;
     std::atomic<float>* lopParam = nullptr;
+    std::atomic<float>* hipParam = nullptr;
     std::atomic<float>* dryWetParam = nullptr;
 
     std::atomic<float>* allpassFrequencyPiParam0 = nullptr;
@@ -153,6 +156,11 @@ private:
     std::atomic<float>* dist2inerParam = nullptr;//metaparams for direct to L-R tvap outputs, controls f_b_mod
     std::atomic<float>* dist2outrParam = nullptr;//metaparams for indirect to L-R tvap outputs, controls f_b_mod
     
+    std::atomic<float>* time0Param = nullptr;
+    std::atomic<float>* time1Param = nullptr;
+    std::atomic<float>* time2Param = nullptr;
+    std::atomic<float>* time3Param = nullptr;
+
     std::atomic<float>* outputGainParam = nullptr;
     
     std::atomic<float>* interpParam = nullptr;
