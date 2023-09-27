@@ -375,17 +375,17 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     auto dist2Iner = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist2_inner));
     auto dist2Outr = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist2_outer));
     
-    nvs_memoryless::metaparamA(float(*dist1Iner), inner_f_pi);
-    nvs_memoryless::metaparamA(float(*dist1Outr), outer_f_pi);
-    nvs_memoryless::metaparamA(float(*dist2Iner), inner_f_b);
-    nvs_memoryless::metaparamA(float(*dist2Outr), outer_f_b);
-//    nvs_memoryless::metaparamA(float(*dist2Iner), f_pi_m);
-//    nvs_memoryless::metaparamA(float(*dist2Outr), metap[1]);
+    nvs::memoryless::metaparamA(float(*dist1Iner), inner_f_pi);
+    nvs::memoryless::metaparamA(float(*dist1Outr), outer_f_pi);
+    nvs::memoryless::metaparamA(float(*dist2Iner), inner_f_b);
+    nvs::memoryless::metaparamA(float(*dist2Outr), outer_f_b);
+//    nvs::memoryless::metaparamA(float(*dist2Iner), f_pi_m);
+//    nvs::memoryless::metaparamA(float(*dist2Outr), metap[1]);
 
-//    nvs_memoryless::metaparamA(metap[0][0], m[0]);
-//    nvs_memoryless::metaparamA(metap[0][1], m[2]);
-//    nvs_memoryless::metaparamA(metap[1][0], m[1]);
-//    nvs_memoryless::metaparamA(metap[1][1], m[3]);
+//    nvs::memoryless::metaparamA(metap[0][0], m[0]);
+//    nvs::memoryless::metaparamA(metap[0][1], m[2]);
+//    nvs::memoryless::metaparamA(metap[1][0], m[1]);
+//    nvs::memoryless::metaparamA(metap[1][1], m[3]);
 
     
 //_ap_dist1[1] = *dist1outrParam;
@@ -395,8 +395,8 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     //=============================================================================
     float current_preDtime[nIn];
     for (int i = 0; i < nIn; i++) {
-        current_preDtime[i] = nvs_memoryless::clamp_low<float>(_predel, minDelTimeMS);
-        current_preDtime[i] = nvs_memoryless::clamp_high<float>(_predel, maxDelTimeMS);
+        current_preDtime[i] = nvs::memoryless::clamp_low<float>(_predel, minDelTimeMS);
+        current_preDtime[i] = nvs::memoryless::clamp_high<float>(_predel, maxDelTimeMS);
     }
     for (int i = 0; i < D_IJ; i++) {
         D_times_ranged[i] = (*times[i]);
@@ -405,8 +405,8 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     for (int i = 0; i < D_IJ; i++) {
         current_Dtime[i] = D_times_ranged[i];
         current_Dtime[i] *= _size;
-//        current_Dtime[i] = nvs_memoryless::clamp_low<float>(current_Dtime[i], minDelTimeMS);
-//        current_Dtime[i] = nvs_memoryless::clamp_high<float>(current_Dtime[i], maxDelTimeMS);
+//        current_Dtime[i] = nvs::memoryless::clamp_low<float>(current_Dtime[i], minDelTimeMS);
+//        current_Dtime[i] = nvs::memoryless::clamp_high<float>(current_Dtime[i], maxDelTimeMS);
         
         // add LFO mod here
         
@@ -427,8 +427,8 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
             preD[i].updateDelayTimeMS(current_preDtime[i], (float)_oneOverBlockSize);
         }
         for (int i = 0; i < D_IJ; i++) {
-            D[i].updateDelayTimeMS(nvs_memoryless::clamp(current_Dtime[i] * timeScaling, minDelTimeMS, maxDelTimeMS), (float)_oneOverBlockSize);
-            apd[i].updateDelayTimeMS(nvs_memoryless::clamp(current_Dtime[i] * timeScaling, minDelTimeMS, maxDelTimeMS), (float)_oneOverBlockSize);
+            D[i].updateDelayTimeMS(nvs::memoryless::clamp(current_Dtime[i] * timeScaling, minDelTimeMS, maxDelTimeMS), (float)_oneOverBlockSize);
+            apd[i].updateDelayTimeMS(nvs::memoryless::clamp(current_Dtime[i] * timeScaling, minDelTimeMS, maxDelTimeMS), (float)_oneOverBlockSize);
             
             tvap[i].update_f_pi(_ap_fpi[i], (float)_oneOverBlockSize);
             tvap[i].update_f_b(_ap_fb[i], (float)_oneOverBlockSize);
@@ -545,8 +545,8 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 //        wetL = butter[0].filter(wetL);
 //        wetR = butter[1].filter(wetR);
         
-//        wetL = nvs_memoryless::clamp1<float>(wetL);
-//        wetR = nvs_memoryless::clamp1<float>(wetR);
+//        wetL = nvs::memoryless::clamp1<float>(wetL);
+//        wetR = nvs::memoryless::clamp1<float>(wetR);
 
         float finalOutL = wetL * _dryWet + leftSamp * (1 - _dryWet) ;
         float finalOutR = wetR * _dryWet + rightSamp * (1 - _dryWet) ;
