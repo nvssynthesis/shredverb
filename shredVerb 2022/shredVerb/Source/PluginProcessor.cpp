@@ -10,6 +10,8 @@
 #if DEF_EDITOR
 #include "PluginEditor.h"
 #endif
+
+#define PROTECT_OUTPUT 1
 //==============================================================================
 ShredVerbAudioProcessor::ShredVerbAudioProcessor()
 //#ifndef JucePlugin_PreferredChannelConfigurations
@@ -134,25 +136,17 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()
         apd[n].setInterpolation(nvs_delays::delay::interp::floor);
      }
 
-    tvap = new nvs::filters::tvap<float>[D_IJ + nIn];   //
-    //tvap = new nvs::filters::tvap[nIn * 4];  // run in series
-    
-    //    predel = new nvs_delays::delay[nIn];
-    //
-    lp6dB = new nvs::filters::onePole<float>[2 * (nIn + nOut)]; //input and every matrix out
-    butter = new nvs::filters::butterworth2p<double>[8];
+	for (auto &hp : hp6dB){
+		hp.setMode(nvs::filters::mode_e::HP);
+	}
 }
-//#if DEF_EDITOR
 ShredVerbAudioProcessor::~ShredVerbAudioProcessor()
 {
-    //delete[] apd;
     delete[] X;
     delete[] Y;
     delete[] D;
     delete[] preD;
-    delete[] tvap;
 }
-//#endif
 #if DEF_EDITOR
 //==============================================================================
 const juce::String ShredVerbAudioProcessor::getName() const
@@ -237,18 +231,8 @@ void ShredVerbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     }
     //feed forward pair
     if (nIn > 0){
-        tvap[4].clear();
-        tvap[4].setSampleRate(sampleRate);
-		tvap[4].setBlockSize(samplesPerBlock);
-        tvap[4].setCutoff(4000.f);
-        tvap[4].setResonance(2000.f);
         preD[0].setSampleRate(sampleRate);
         if (nIn == 2){
-            tvap[5].clear();
-            tvap[5].setSampleRate(sampleRate);
-			tvap[5].setBlockSize(samplesPerBlock);
-            tvap[5].setCutoff(4000.f);
-            tvap[5].setResonance(2000.f);
             preD[1].setSampleRate(sampleRate);
         }
     }
@@ -258,29 +242,19 @@ void ShredVerbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
     for (int n = 0; n < (nIn + nOut); n++)
     {
-//        apd[n].setSampleRate((float)sampleRate);
-//        apd[n].update_g(0.5f, 1);
-//        apd[n].setDelayTimeMS(11.1f + float(n)*2.f);
-		lp6dB[n].setSampleRate((float)sampleRate);
-		lp6dB[n].setBlockSize(samplesPerBlock);
-		lp6dB[n].setCutoff(12000.f);
+		hp6dB[n].setSampleRate((float)sampleRate);
+		hp6dB[n].setBlockSize(samplesPerBlock);
+		hp6dB[n].setCutoff(80.f);
     }
-    for (int n = 0; n < D_IJ * 2; n++){
-        butter[n].setSampleRate(sampleRate);
-		butter[n].setBlockSize(samplesPerBlock);
-        butter[n].setCutoff(18000.0);
+    for (int n = 0; n < D_IJ; n++){
+        butters[n].setSampleRate(sampleRate);
+		butters[n].setBlockSize(samplesPerBlock);
+        butters[n].setCutoff(18000.0);
     }
     for (int i = 0; i < D_IJ; i++)  {
         D[i].setSampleRate((float)sampleRate);
         apd[i].setSampleRate((float)sampleRate);
     }
-//     for (int n = 0; n < nOut; n++)
-//     {
-//     //        apd[n].clear();
-//     //        apd[n].setSampleRate((float)sampleRate);
-//     //        apd[n].setDelayTimeMS(100.f);
-//     }
-     
 }
 
 void ShredVerbAudioProcessor::releaseResources()
@@ -322,7 +296,7 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     auto const nOut = getTotalNumOutputChannels();
     int const numSamps = buffer.getNumSamples();
 	
-	[[deprecated]]
+	[[deprecated]]	// any function using this param during processBlock should be deprecated
     double const _oneOverBlockSize = 1 / (double)numSamps;
 	for (auto i = nIn; i < nOut; ++i){
 		buffer.clear (i, 0, numSamps);
@@ -343,8 +317,8 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     float const _predel = *predelayParam;
     
     float const _g = *fbParam;
-    float  _size = *sizeParam;
-    _size *= _size;
+    float _size = *sizeParam;
+    _size *= _size;		// breaking const is a sign that the param itself should be shaped
     float const _hip = *hipParam;
     float const _lop = *lopParam;
 	
@@ -358,32 +332,29 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 		&time2,
 		&time3
 	};
-
-
 	
-    float _dryWet = dryWetParam->load();
-    float _outputGain = outputGainParam->load();
+    float const _dryWet = dryWetParam->load();
+    float const _outputGain = outputGainParam->load();
 
-    float _ap_fpi[4];
-    _ap_fpi[0] = *allpassFrequencyPiParam0;
-    _ap_fpi[1] = *allpassFrequencyPiParam1;
-    _ap_fpi[2] = *allpassFrequencyPiParam2;
-    _ap_fpi[3] = *allpassFrequencyPiParam3;
-
-    float _ap_fb[4];
-    _ap_fb[0] = *allpassBandwidthParam0;
-    _ap_fb[1] = *allpassBandwidthParam1;
-    _ap_fb[2] = *allpassBandwidthParam2;
-    _ap_fb[3] = *allpassBandwidthParam3;
-
+	std::array<float, 4> _ap_f_pi {
+		*allpassFrequencyPiParam0,
+		*allpassFrequencyPiParam1,
+		*allpassFrequencyPiParam2,
+		*allpassFrequencyPiParam3
+	};
+	
+	std::array<float, 4> _ap_fb {
+		*allpassBandwidthParam0,
+		*allpassBandwidthParam1,
+		*allpassBandwidthParam2,
+		*allpassBandwidthParam3
+	};
+	
+	/* these cannot be std::arrays until i redo  nvs::memoryless::metaparamA */
     float inner_f_pi[2], outer_f_pi[2];
     float inner_f_b[2], outer_f_b[2];
-    
-
-    //float m[4][2];   // # of tvaps × # of outputs per lowest metaparam layer cell
 
     // ACTUALLY RESHAPE FROM 2 METAPARAMS INTO 4 PARAMS:
-    // dist1iner goes to
     auto dist1Iner = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist1_inner));
     auto dist1Outr = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist1_outer));
     auto dist2Iner = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist2_inner));
@@ -397,19 +368,27 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     //=============================================================================
     float current_preDtime[nIn];
     for (int i = 0; i < nIn; i++) {
-        current_preDtime[i] = nvs::memoryless::clamp_low<float>(_predel, minDelTimeMS);
-        current_preDtime[i] = nvs::memoryless::clamp_high<float>(_predel, maxDelTimeMS);
+		current_preDtime[i] = nvs::memoryless::clamp(_predel, minDelTimeMS, maxDelTimeMS);
     }
+	
+	// yes these are not an efficient way to update all this stuff... will fix later
     for (int i = 0; i < D_IJ; i++) {
         D_times_ranged[i] = *(times[i]);
     }
-    float current_Dtime[D_IJ];
+	
+    std::array<float, D_IJ> current_Dtime;
     for (int i = 0; i < D_IJ; i++) {
         current_Dtime[i] = D_times_ranged[i];
         current_Dtime[i] *= _size;
     }
+	
+	for (int i = 0; i < D_IJ; ++i){
+		tvap[i].setCutoffTarget(_ap_f_pi[i]);
+		tvap[i].setResonanceTarget(_ap_fb[i]);
+	}
+	
     for (int n = 0; n < (nIn + nOut); n++)  {
-        lp6dB[n].setCutoffTarget(_lop);
+        hp6dB[n].setCutoffTarget(_lop);
     }
     
     for (int samp = 0; samp < numSamps; samp++)
@@ -418,13 +397,14 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
             preD[i].updateDelayTimeMS(current_preDtime[i], (float)_oneOverBlockSize);
         }
         for (int i = 0; i < D_IJ; i++) {
-            D[i].updateDelayTimeMS(nvs::memoryless::clamp(current_Dtime[i] * timeScaling, minDelTimeMS, maxDelTimeMS), (float)_oneOverBlockSize);
-            apd[i].updateDelayTimeMS(nvs::memoryless::clamp(current_Dtime[i] * timeScaling, minDelTimeMS, maxDelTimeMS), (float)_oneOverBlockSize);
+            D[i].updateDelayTimeMS(nvs::memoryless::clamp
+				   (current_Dtime[i] * timeScaling, minDelTimeMS, maxDelTimeMS), (float)_oneOverBlockSize);
+            apd[i].updateDelayTimeMS(nvs::memoryless::clamp
+					(current_Dtime[i] * timeScaling, minDelTimeMS, maxDelTimeMS), (float)_oneOverBlockSize);
             
-            tvap[i].update_f_pi(_ap_fpi[i], (float)_oneOverBlockSize);
-            tvap[i].update_f_b(_ap_fb[i], (float)_oneOverBlockSize);
+            tvap[i].update_f_pi();
+            tvap[i].update_f_b();
         }
-
         
         float leftSamp = *(inBuffL + samp);
         float rightSamp = *(inBuffR + samp);
@@ -442,56 +422,40 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
         }
         
         X[0] = 0.f;
-        X[1] = preDelSamp[0] * inDrive;//tvap[4].filter_fbmod(leftSamp, 0.f, 0.f);
-        X[2] = preDelSamp[1] * inDrive;//tvap[5].filter_fbmod(rightSamp, 0.f, 0.f);
+        X[1] = preDelSamp[0] * inDrive;
+        X[2] = preDelSamp[1] * inDrive;
         X[3] = 0.f;
-        
 
-        
-        float tmp[4] = {0.f, 0.f, 0.f, 0.f};
+        float tmp[4] {0.f, 0.f, 0.f, 0.f};
         
 //        Y[0] = tvap[0].filter_fbmod(Y[0], _ap_dist1, _ap_dist2);
 //        Y[1] = tvap[1].filter_fbmod(Y[1], _ap_dist1, _ap_dist2);
 //        Y[2] = tvap[2].filter_fbmod(Y[2], _ap_dist1, _ap_dist2);
 //        Y[3] = tvap[3].filter_fbmod(Y[3], _ap_dist1, _ap_dist2);
         
-//        Y[0] = lp6dB->tpt_lp(Y[0], _lop);
-//        Y[1] = lp6dB->tpt_lp(Y[1], _lop);
-//        Y[2] = lp6dB->tpt_lp(Y[2], _lop);
-//        Y[3] = lp6dB->tpt_lp(Y[3], _lop);
-        for (int i = 0; i < D_IJ; i++)
-        {
+        for (int i = 0; i < D_IJ; i++) {
             int j;
-            for (j = 0; j < D_IJ; j++)
-            {
+            for (j = 0; j < D_IJ; j++) {
                 tmp[i] += G[i][j] * Y[j] * (_g);
             }
             tmp[i] += X[i];
-            tmp[0] = butter[0].filter(tmp[0], _lop);
-            tmp[1] = butter[1].filter(tmp[1], _lop);
-            tmp[2] = butter[2].filter(tmp[2], _lop);
-            tmp[3] = butter[3].filter(tmp[3], _lop);
-//            tmp[0] = butter[4].filter(tmp[0]);
-//            tmp[1] = butter[5].filter(tmp[1]);
-//            tmp[2] = butter[6].filter(tmp[2]);
-//            tmp[3] = butter[7].filter(tmp[3]);
-            tmp[0] = lp6dB[0].tpt_hp(tmp[0], _hip);
-            tmp[1] = lp6dB[1].tpt_hp(tmp[1], _hip);
-            tmp[2] = lp6dB[2].tpt_hp(tmp[2], _hip);
-            tmp[3] = lp6dB[3].tpt_hp(tmp[3], _hip);
-//            tmp[0] = lp6dB[0].tpt_lp(tmp[0], _lop);
-//            tmp[1] = lp6dB[1].tpt_lp(tmp[1], _lop);
-//            tmp[2] = lp6dB[2].tpt_lp(tmp[2], _lop);
-//            tmp[3] = lp6dB[3].tpt_lp(tmp[3], _lop);
-//            tmp[0] = lp6dB[4].tpt_lp(tmp[0], _lop);
-//            tmp[1] = lp6dB[5].tpt_lp(tmp[1], _lop);
-//            tmp[2] = lp6dB[6].tpt_lp(tmp[2], _lop);
-//            tmp[3] = lp6dB[7].tpt_lp(tmp[3], _lop);
+			for (int j = 0; j < D_IJ; ++j){
+				tmp[0] = butters[0](tmp[0], _lop);
+				tmp[1] = butters[1](tmp[1], _lop);
+				tmp[2] = butters[2](tmp[2], _lop);
+				tmp[3] = butters[3](tmp[3], _lop);
+			}
+			for (int j = 0; j < D_IJ; ++j){
+				tmp[0] = hp6dB[0](tmp[0], _hip);
+				tmp[1] = hp6dB[1](tmp[1], _hip);
+				tmp[2] = hp6dB[2](tmp[2], _hip);
+				tmp[3] = hp6dB[3](tmp[3], _hip);
+			}
         }
-/* L?*/ tmp[0] = tvap[0].filter_fbmod(tmp[0], inner_f_pi[0], inner_f_b[0]);
-/*LEFT for sure*/tmp[1] = tvap[1].filter_fbmod(tmp[1], outer_f_pi[0], outer_f_b[0]);
-/*RGHT for sure*/tmp[2] = tvap[2].filter_fbmod(tmp[2], outer_f_pi[1], outer_f_b[1]);
-/* R?*/ tmp[3] = tvap[3].filter_fbmod(tmp[3], inner_f_pi[1], inner_f_b[1]);
+/*L	INTERNAL*/ tmp[0] = tvap[0].filter_fbmod(tmp[0], inner_f_pi[0], inner_f_b[0]);
+/*L DIRECT*/ tmp[1] = tvap[1].filter_fbmod(tmp[1], outer_f_pi[0], outer_f_b[0]);
+/*R DIRECT*/ tmp[2] = tvap[2].filter_fbmod(tmp[2], outer_f_pi[1], outer_f_b[1]);
+/*R INTERNAL*/ tmp[3] = tvap[3].filter_fbmod(tmp[3], inner_f_pi[1], inner_f_b[1]);
         
         // can just have 1 tmp line and 1 Y line in for loop
         
@@ -533,12 +497,10 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
         wetL *= outGain * outDrive;
         wetR *= outGain * outDrive;
 
-//        wetL = butter[0].filter(wetL);
-//        wetR = butter[1].filter(wetR);
-        
-//        wetL = nvs::memoryless::clamp1<float>(wetL);
-//        wetR = nvs::memoryless::clamp1<float>(wetR);
-
+#if PROTECT_OUTPUT
+        wetL = nvs::memoryless::clamp1<float>(wetL);
+        wetR = nvs::memoryless::clamp1<float>(wetR);
+#endif
         float finalOutL = wetL * _dryWet + leftSamp * (1 - _dryWet) ;
         float finalOutR = wetR * _dryWet + rightSamp * (1 - _dryWet) ;
 

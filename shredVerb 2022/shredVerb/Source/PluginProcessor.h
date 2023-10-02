@@ -79,22 +79,18 @@ public:
         {1.f, 0.f, 0.f, -1.f},
         {0.f, 1.f, -1.f, 0.f}
     };
-    
+	float *X = NULL;
+	float *Y = NULL;
+	
     nvs_delays::delay *preD = NULL;
     nvs_delays::delay *D = NULL;
     nvs_delays::allpass_delay *apd = NULL;
     float D_times_ranged[D_IJ];
 
-    float *X = NULL;
-    float *Y = NULL;
-     
-    //float **G = NULL;    // gain matrix
+    std::array<nvs::filters::tvap<float>, D_IJ> tvap;
+    std::array<nvs::filters::onePole<float>, D_IJ> hp6dB;
     
-    nvs::filters::tvap<float> *tvap = NULL;
-    //    nvs_delays::delay *predel = NULL;
-    nvs::filters::onePole<float> *lp6dB = nullptr;
-    
-    nvs::filters::butterworth2p<double> *butter = NULL;
+    std::array<nvs::filters::butterworth2p<double>, D_IJ> butters;
     
     param_stuff *getParamStuff(){
         return &ps;
@@ -104,8 +100,8 @@ private:
     const float timeScaling = 500.f;    // multiplier for the [0..1) delay times, PRE-size parameter
     float minDelTimeMS, maxDelTimeMS;
     
-    static const unsigned int versionHint = 1;
-    static constexpr float intervalVal = 0.01f;
+    static constexpr unsigned int versionHint = 1;
+	static constexpr float intervalVal = 0.01f;
     
     static std::string getID(param_stuff::params_e idx){    return param_stuff::paramIDs.at(idx);       }
     static std::string getName(param_stuff::params_e idx){  return param_stuff::paramNames.at(idx);     }
@@ -113,8 +109,15 @@ private:
     static float getMax(param_stuff::params_e idx){         return param_stuff::paramRanges.at(idx)[1]; }
     static float getDef(param_stuff::params_e idx){         return param_stuff::paramDefaults.at(idx);  }
     
-    static std::unique_ptr<juce::AudioParameterFloat> getUniqueParam(param_stuff::params_e idx){
-        return std::make_unique<juce::AudioParameterFloat>(juce::ParameterID (getID(idx), versionHint), getName(idx), juce::NormalisableRange<float> (getMin(idx), getMax(idx), intervalVal), getDef(idx));
+    static std::unique_ptr<juce::AudioParameterFloat>
+	getUniqueParam(param_stuff::params_e idx) {
+        return std::make_unique<juce::AudioParameterFloat>
+									(
+									   juce::ParameterID(getID(idx), versionHint),
+									   getName(idx),
+									   juce::NormalisableRange<float> (getMin(idx), getMax(idx), intervalVal),
+									   getDef(idx)
+									 );
     }
 
     juce::AudioProcessorValueTreeState paramVT;
