@@ -17,6 +17,7 @@
 #include "params.h"
 #include "PresetListBox.h"
 #include <string>
+#include <array>
 #define D_IJ 4
 
 //==============================================================================
@@ -89,11 +90,11 @@ public:
      
     //float **G = NULL;    // gain matrix
     
-    nvs_filters::tvap<float> *tvap = NULL;
+    nvs::filters::tvap<float> *tvap = NULL;
     //    nvs_delays::delay *predel = NULL;
-    nvs_filters::onePole<float> *lp6dB = NULL;
+    nvs::filters::onePole<float> *lp6dB = nullptr;
     
-    nvs_filters::butterworth2p<double> *butter = NULL;
+    nvs::filters::butterworth2p<double> *butter = NULL;
     
     param_stuff *getParamStuff(){
         return &ps;

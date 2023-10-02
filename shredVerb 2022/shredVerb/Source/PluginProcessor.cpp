@@ -134,13 +134,13 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()
         apd[n].setInterpolation(nvs_delays::delay::interp::floor);
      }
 
-    tvap = new nvs_filters::tvap<float>[D_IJ + nIn];   //
-    //tvap = new nvs_filters::tvap[nIn * 4];  // run in series
+    tvap = new nvs::filters::tvap<float>[D_IJ + nIn];   //
+    //tvap = new nvs::filters::tvap[nIn * 4];  // run in series
     
     //    predel = new nvs_delays::delay[nIn];
     //
-    lp6dB = new nvs_filters::onePole<float>[2 * (nIn + nOut)]; //input and every matrix out
-    butter = new nvs_filters::butterworth2p<double>[8];
+    lp6dB = new nvs::filters::onePole<float>[2 * (nIn + nOut)]; //input and every matrix out
+    butter = new nvs::filters::butterworth2p<double>[8];
 }
 //#if DEF_EDITOR
 ShredVerbAudioProcessor::~ShredVerbAudioProcessor()
@@ -231,21 +231,24 @@ void ShredVerbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     {
         tvap[n].clear();
         tvap[n].setSampleRate(sampleRate);
-        tvap[n].updateCutoff(1000.f * float(n + 1), 1.f);
-        tvap[n].updateResonance(100.f * float(n + 1), 1.f);
+		tvap[n].setBlockSize(samplesPerBlock);
+        tvap[n].setCutoff(1000.f * float(n + 1));
+        tvap[n].setResonance(100.f * float(n + 1));
     }
     //feed forward pair
     if (nIn > 0){
         tvap[4].clear();
         tvap[4].setSampleRate(sampleRate);
-        tvap[4].updateCutoff(4000.f, 1.f);
-        tvap[4].updateResonance(2000.f, 1.f);
+		tvap[4].setBlockSize(samplesPerBlock);
+        tvap[4].setCutoff(4000.f);
+        tvap[4].setResonance(2000.f);
         preD[0].setSampleRate(sampleRate);
         if (nIn == 2){
             tvap[5].clear();
             tvap[5].setSampleRate(sampleRate);
-            tvap[5].updateCutoff(4000.f, 1.f);
-            tvap[5].updateResonance(2000.f, 1.f);
+			tvap[5].setBlockSize(samplesPerBlock);
+            tvap[5].setCutoff(4000.f);
+            tvap[5].setResonance(2000.f);
             preD[1].setSampleRate(sampleRate);
         }
     }
@@ -255,15 +258,17 @@ void ShredVerbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
     for (int n = 0; n < (nIn + nOut); n++)
     {
-    //        apd[n].setSampleRate((float)sampleRate);
-    //        apd[n].update_g(0.5f, 1);
-    //        apd[n].setDelayTimeMS(11.1f + float(n)*2.f);
-            lp6dB[n].setSampleRate((float)sampleRate);
-            lp6dB[n].updateCutoff(12000.f, 1.f);
+//        apd[n].setSampleRate((float)sampleRate);
+//        apd[n].update_g(0.5f, 1);
+//        apd[n].setDelayTimeMS(11.1f + float(n)*2.f);
+		lp6dB[n].setSampleRate((float)sampleRate);
+		lp6dB[n].setBlockSize(samplesPerBlock);
+		lp6dB[n].setCutoff(12000.f);
     }
     for (int n = 0; n < D_IJ * 2; n++){
         butter[n].setSampleRate(sampleRate);
-        butter[n].updateCutoff(18000.0, 1.0);
+		butter[n].setBlockSize(samplesPerBlock);
+        butter[n].setCutoff(18000.0);
     }
     for (int i = 0; i < D_IJ; i++)  {
         D[i].setSampleRate((float)sampleRate);
@@ -313,40 +318,49 @@ void ShredVerbAudioProcessor::parameterChanged (const juce::String& param, float
 void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
-    auto nIn  = getTotalNumInputChannels();
-    auto nOut = getTotalNumOutputChannels();
-    int numSamps = buffer.getNumSamples();
-    double _oneOverBlockSize = 1 / (double)numSamps;
-    for (auto i = nIn; i < nOut; ++i)
-        buffer.clear (i, 0, numSamps);
-    
-    auto* inBuffL = buffer.getReadPointer(0);
-    auto* inBuffR = inBuffL;
-    if (getTotalNumInputChannels() > 1)
-        inBuffR = buffer.getReadPointer(1);
-    
-    auto* outBuffL = buffer.getWritePointer(0);
+    auto const nIn  = getTotalNumInputChannels();
+    auto const nOut = getTotalNumOutputChannels();
+    int const numSamps = buffer.getNumSamples();
+	
+	[[deprecated]]
+    double const _oneOverBlockSize = 1 / (double)numSamps;
+	for (auto i = nIn; i < nOut; ++i){
+		buffer.clear (i, 0, numSamps);
+	}
+	
+    auto const* const inBuffL = buffer.getReadPointer(0);
+    auto const* inBuffR = inBuffL;
+	if (getTotalNumInputChannels() > 1){
+		inBuffR = buffer.getReadPointer(1);
+	}
+	
+    auto* const outBuffL = buffer.getWritePointer(0);
     auto* outBuffR = outBuffL;
     if (getTotalNumOutputChannels() > 1)
         outBuffR = buffer.getWritePointer(1);
     
-    //auto _g = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::decay));
-    float _drive = *driveParam;
-    float _predel = *predelayParam;
-//    std::cout << _predel << std::endl;
+    float const _drive = *driveParam;
+    float const _predel = *predelayParam;
     
-    float _g = *fbParam;
-    float _size = *sizeParam;
+    float const _g = *fbParam;
+    float  _size = *sizeParam;
     _size *= _size;
-    float _hip = *hipParam;
-    float _lop = *lopParam;
+    float const _hip = *hipParam;
+    float const _lop = *lopParam;
+	
+	float  time0 = *time0Param;
+	float  time1 = *time1Param;
+	float  time2 = *time2Param;
+	float  time3 = *time3Param;
+    std::array<float const *, 4> const times {
+		&time0,
+		&time1,
+		&time2,
+		&time3
+	};
 
-    float time0 = *time0Param;
-    float time1 = *time1Param;
-    float time2 = *time2Param;
-    float time3 = *time3Param;
-    float *times[4] = {&time0, &time1, &time2, &time3};
 
+	
     float _dryWet = dryWetParam->load();
     float _outputGain = outputGainParam->load();
 
@@ -379,19 +393,7 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     nvs::memoryless::metaparamA(float(*dist1Outr), outer_f_pi);
     nvs::memoryless::metaparamA(float(*dist2Iner), inner_f_b);
     nvs::memoryless::metaparamA(float(*dist2Outr), outer_f_b);
-//    nvs::memoryless::metaparamA(float(*dist2Iner), f_pi_m);
-//    nvs::memoryless::metaparamA(float(*dist2Outr), metap[1]);
-
-//    nvs::memoryless::metaparamA(metap[0][0], m[0]);
-//    nvs::memoryless::metaparamA(metap[0][1], m[2]);
-//    nvs::memoryless::metaparamA(metap[1][0], m[1]);
-//    nvs::memoryless::metaparamA(metap[1][1], m[3]);
-
     
-//_ap_dist1[1] = *dist1outrParam;
-//    float _ap_dist2[4];
-//    _ap_dist2[0] = *dist2inerParam * -1;
-//    _ap_dist2[1] = *dist2outrParam * -1;
     //=============================================================================
     float current_preDtime[nIn];
     for (int i = 0; i < nIn; i++) {
@@ -399,27 +401,16 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
         current_preDtime[i] = nvs::memoryless::clamp_high<float>(_predel, maxDelTimeMS);
     }
     for (int i = 0; i < D_IJ; i++) {
-        D_times_ranged[i] = (*times[i]);
+        D_times_ranged[i] = *(times[i]);
     }
     float current_Dtime[D_IJ];
     for (int i = 0; i < D_IJ; i++) {
         current_Dtime[i] = D_times_ranged[i];
         current_Dtime[i] *= _size;
-//        current_Dtime[i] = nvs::memoryless::clamp_low<float>(current_Dtime[i], minDelTimeMS);
-//        current_Dtime[i] = nvs::memoryless::clamp_high<float>(current_Dtime[i], maxDelTimeMS);
-        
-        // add LFO mod here
-        
-//        D[i].updateDelayTimeMS(current_Dtime, _oneOverBlockSize);
-//        apd[i].updateDelayTimeMS(current_Dtime, _oneOverBlockSize);
-        //apd[i].update_g(_ap_g, (float)_oneOverBlockSize);
     }
     for (int n = 0; n < (nIn + nOut); n++)  {
-        lp6dB[n].updateCutoff(_lop, _oneOverBlockSize);
+        lp6dB[n].setCutoffTarget(_lop);
     }
-//    for (int n = 0; n < D_IJ*2; n++){
-//        butter[n].updateCutoff((double)_lop, _oneOverBlockSize);
-//    }
     
     for (int samp = 0; samp < numSamps; samp++)
     {
