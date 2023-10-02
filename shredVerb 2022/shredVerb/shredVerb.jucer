@@ -20,8 +20,6 @@
             file="../../../nvs_libraries/nvs_libraries/include/nvs_memoryless.h"/>
       <FILE id="Y53Zig" name="nvs_filters.cpp" compile="1" resource="0" file="../../../nvs_libraries/nvs_libraries/src/nvs_filters.cpp"/>
       <FILE id="Y9ScPM" name="nvs_LFO.cpp" compile="1" resource="0" file="../../../nvs_libraries/nvs_libraries/src/nvs_LFO.cpp"/>
-      <FILE id="hPC9Dy" name="nvs_memoryless.cpp" compile="1" resource="0"
-            file="../../../nvs_libraries/nvs_libraries/src/nvs_memoryless.cpp"/>
       <FILE id="pDh9QS" name="params.h" compile="0" resource="0" file="Source/params.h"/>
       <FILE id="OMlUdc" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>

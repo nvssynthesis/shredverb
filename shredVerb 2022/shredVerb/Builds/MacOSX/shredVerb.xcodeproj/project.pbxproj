@@ -58,7 +58,6 @@
 		A52628625209F0A03F179E32 /* include_juce_audio_plugin_client_VST3.cpp */ = {isa = PBXBuildFile; fileRef = C5CAE81F5E8F94CA4EEFBB95; };
 		B07AFF3B23E899DCD7591B7F /* include_juce_dsp.mm */ = {isa = PBXBuildFile; fileRef = 86028238A47A46D7ED70DC64; };
 		B51D698FE7A56522211418D6 /* CoreAudioKit.framework */ = {isa = PBXBuildFile; fileRef = 41540552503A6C81082AF601; };
-		B5FBA4EF1DBB7A78D1E57426 /* nvs_memoryless.cpp */ = {isa = PBXBuildFile; fileRef = 621B81213CDAA15486131C90; };
 		B7B76C47D28C2A89300AE6FF /* include_foleys_gui_magic.cpp */ = {isa = PBXBuildFile; fileRef = 1EDDFABBAB6EDEA048CEEA4F; };
 		BE356F1865407CACEDB9172D /* Accelerate.framework */ = {isa = PBXBuildFile; fileRef = 8230AF7DFD4F221DD0FC05C9; };
 		C0C24C99CABBAFD0F7062218 /* AudioToolbox.framework */ = {isa = PBXBuildFile; fileRef = 338ED08C20EC201D7F6B58F4; };
@@ -126,7 +125,6 @@
 		55B3B05A63FEBBABF01E9785 /* include_juce_cryptography.mm */ /* include_juce_cryptography.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_cryptography.mm; path = ../../JuceLibraryCode/include_juce_cryptography.mm; sourceTree = SOURCE_ROOT; };
 		5BB1C3E24481D93F8226A2B1 /* juce_gui_basics */ /* juce_gui_basics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_gui_basics; path = /Applications/JUCE/modules/juce_gui_basics; sourceTree = "<absolute>"; };
 		5D3003E95DE45AF18771C010 /* nvs_LFO.h */ /* nvs_LFO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nvs_LFO.h; path = ../../../../../nvs_libraries/nvs_libraries/include/nvs_LFO.h; sourceTree = SOURCE_ROOT; };
-		621B81213CDAA15486131C90 /* nvs_memoryless.cpp */ /* nvs_memoryless.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = nvs_memoryless.cpp; path = ../../../../../nvs_libraries/nvs_libraries/src/nvs_memoryless.cpp; sourceTree = SOURCE_ROOT; };
 		656E53107ED087CD155BC3CA /* Standalone Plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shredVerb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		65D62BA9AAC55E1AA06897F8 /* AudioUnit.framework */ /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		670B3F13AB75C1A46F88AB5A /* PluginProcessor.cpp */ /* PluginProcessor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PluginProcessor.cpp; path = ../../Source/PluginProcessor.cpp; sourceTree = SOURCE_ROOT; };
@@ -380,7 +378,6 @@
 				3DA7C1253D845B61FB4BA825,
 				4996E845D5F1C3509A38C2CA,
 				416EBB61EA74158BC2BCB22B,
-				621B81213CDAA15486131C90,
 				C3364DE9338B8EB893DA94FE,
 				670B3F13AB75C1A46F88AB5A,
 				E58CE5ADDDF2FFC9B5208DF5,
@@ -738,7 +735,6 @@
 			files = (
 				81E8A885739EB8B0EAD3B718,
 				F9820CBF313DB7AF6D56969E,
-				B5FBA4EF1DBB7A78D1E57426,
 				FBC509CF34916645EB9F6F5D,
 				6C351C157F0BFE2088DDB761,
 				8F4B89C8CD7E4381A94BFDD0,
