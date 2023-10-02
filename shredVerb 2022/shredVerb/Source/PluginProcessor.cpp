@@ -13,15 +13,15 @@
 
 #define PROTECT_OUTPUT 1
 //==============================================================================
-ShredVerbAudioProcessor::ShredVerbAudioProcessor()
+ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
 //#ifndef JucePlugin_PreferredChannelConfigurations
-     :  foleys::MagicProcessor (juce::AudioProcessor::BusesProperties()
+	foleys::MagicProcessor (juce::AudioProcessor::BusesProperties()
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                        ),
+//#endif
         paramVT(*this, nullptr, juce::Identifier ("APVTSshredverb"), createParameterLayout())
 //,       magicState(*this)
-//#endif
 {
     FOLEYS_SET_SOURCE_PATH (__FILE__);
     /*auto file = juce::File::getSpecialLocation (juce::File::currentApplicationFile)
