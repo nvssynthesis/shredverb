@@ -9,7 +9,10 @@
 #include "PluginProcessor.h"
 #if DEF_EDITOR
 #include "PluginEditor.h"
+#else
+//#include "PresetPanel.h"
 #endif
+
 
 #define PROTECT_OUTPUT 1
 //==============================================================================
@@ -24,33 +27,12 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
 //,       magicState(*this)
 {
     FOLEYS_SET_SOURCE_PATH (__FILE__);
-    /*auto file = juce::File::getSpecialLocation (juce::File::currentApplicationFile)
-        .getChildFile ("Contents")
-        .getChildFile ("Resources")
-        .getChildFile ("magic.xml");
-     */
-//    juce::File file("/Users/nicholassolem/Documents/GitHub/shredverb/shredVerb 2022/shredVerb/Builds/MacOSX/build/Debug/0th_iter.1");
 
-//    if (file.existsAsFile())
-//        magicState.setGuiValueTree (file);
-//    else{
-////        paramVT = magicState.createGuiValueTree();
-////        magicState.setGuiValueTree (BinaryData::magic_xml, BinaryData::magic_xmlSize);
-//    }
     
+	// set GUI
     // this is how i was loading default, but docs actually say to do this as return... in createEditor
     magicState.setGuiValueTree (BinaryData::DEFAULT_v4_1_xml, BinaryData::DEFAULT_v4_1_xmlSize);
 
-    presetList = magicState.createAndAddObject<PresetListBox>("presets");
-    /*presetList->onSelectionChanged = [&](int number)
-    {
-        loadPresetInternal (number);
-    };
-    magicState.addTrigger ("save-preset", [this]
-    {
-        savePresetInternal();
-    });
-    */
     auto nOut = getTotalNumOutputChannels();
     auto nIn = getTotalNumInputChannels();
     std::cout << "num in: " << nIn << std::endl;
@@ -58,7 +40,6 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
 //                                           .getChildFile (ProjectInfo::companyName)
 //                                           .getChildFile (ProjectInfo::projectName + juce::String (".settings")));
 //
-//    magicState.setPlayheadUpdateFrequency (30);
 
 
     // pointers are copied to items declared in object so they don't go out of scope
@@ -147,33 +128,62 @@ ShredVerbAudioProcessor::~ShredVerbAudioProcessor()
     delete[] D;
     delete[] preD;
 }
-#if DEF_EDITOR
-//==============================================================================
-const juce::String ShredVerbAudioProcessor::getName() const
-{
-    return JucePlugin_Name;
+void ShredVerbAudioProcessor::initialiseBuilder(foleys::MagicGUIBuilder& builder) {
+	builder.registerJUCEFactories();
+	builder.registerJUCELookAndFeels();
+	presetList = builder.getMagicState().createAndAddObject<PresetListBox>("Presets");
+	presetList->onSelectionChanged = [&](int number)
+	{
+		std::cout << "load?\n";
+//		loadPresetInternal (number);
+	};
+	builder.getMagicState().addTrigger ("save-preset", [this]
+	{
+		std::cout << "save?\n";
+		savePresetInternal();
+	});
 }
 
-bool ShredVerbAudioProcessor::acceptsMidi() const
+void ShredVerbAudioProcessor::savePresetInternal()
 {
+	presetNode = magicState.getSettings().getOrCreateChildWithName ("presets", nullptr);
+
+	juce::ValueTree preset { "Preset" };
+	preset.setProperty ("name", "Preset " + juce::String (presetNode.getNumChildren() + 1), nullptr);
+
+	foleys::ParameterManager manager (*this);
+	manager.saveParameterValues (preset);
+
+	presetNode.appendChild (preset, nullptr);
+}
+//
+//void ShredVerbAudioProcessor::loadPresetInternal(int index)
+//{
+//	presetNode = magicState.getSettings().getOrCreateChildWithName ("presets", nullptr);
+//	auto preset = presetNode.getChild (index);
+//
+//	foleys::ParameterManager manager (*this);
+//	manager.loadParameterValues (preset);
+//}
+
+#if DEF_EDITOR
+//==============================================================================
+const juce::String ShredVerbAudioProcessor::getName() const{return JucePlugin_Name;}
+bool ShredVerbAudioProcessor::acceptsMidi() const {
    #if JucePlugin_WantsMidiInput
     return true;
    #else
     return false;
    #endif
 }
-
-bool ShredVerbAudioProcessor::producesMidi() const
-{
+bool ShredVerbAudioProcessor::producesMidi() const {
    #if JucePlugin_ProducesMidiOutput
     return true;
    #else
     return false;
    #endif
 }
-
-bool ShredVerbAudioProcessor::isMidiEffect() const
-{
+bool ShredVerbAudioProcessor::isMidiEffect() const {
    #if JucePlugin_IsMidiEffect
     return true;
    #else
@@ -537,11 +547,13 @@ void ShredVerbAudioProcessor::setStateInformation (const void* data, int sizeInB
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
-    /*std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+#if WORKING_ON_PRESETS
+	std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
 
     if (xmlState.get() != nullptr)
         if (xmlState->hasTagName (paramVT.state.getType()))
-            paramVT.replaceState (juce::ValueTree::fromXml (*xmlState));*/
+            paramVT.replaceState (juce::ValueTree::fromXml (*xmlState));
+#endif
 }
 void ShredVerbAudioProcessor::addReverbParameters (juce::AudioProcessorValueTreeState::ParameterLayout& layout){
     auto predel  = getUniqueParam(param_stuff::params_e::predelay);

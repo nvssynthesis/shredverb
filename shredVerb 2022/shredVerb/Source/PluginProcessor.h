@@ -70,8 +70,11 @@ public:
 #endif
     void setStateInformation (const void* data, int sizeInBytes) override;//
     //==============================================================================
+	
+	void initialiseBuilder(foleys::MagicGUIBuilder& builder) override;
+	void savePresetInternal();
     
-    // explore code of rev2~ and rev3~
+	// explore code of rev2~ and rev3~
     
     float G[D_IJ][D_IJ] = {
         {0.f, 1.f, 1.f, 0.f},
@@ -119,6 +122,8 @@ private:
 									   getDef(idx)
 									 );
     }
+
+	juce::ValueTree  presetNode;
 
     juce::AudioProcessorValueTreeState paramVT;
     param_stuff ps;
