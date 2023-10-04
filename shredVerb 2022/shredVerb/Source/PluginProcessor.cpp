@@ -10,9 +10,18 @@
 #if DEF_EDITOR
 #include "PluginEditor.h"
 #else
-//#include "PresetPanel.h"
 #endif
 
+/**
+ TODO:
+	-whatever happened to the 4 delays being allpass delays, with the little 'g' knobs in the middle?
+	-replace one pole highpass with butterworth highpass
+	-improve effect of altering various inner/outer distortions
+	-perhaps add SVF bandpass filter as INPUT stage to the TVAP modulation inputs
+		**-overcomplicate UI? should its f_c and q be tied to that of TVAP?
+	-tvaps should be controlled by XYpad instead of 2 knobs?
+	-maybe double each of the TVAPs in series to amplify their phasial effect
+ */
 
 #define PROTECT_OUTPUT 1
 //==============================================================================
@@ -24,23 +33,12 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
                        ),
 //#endif
         paramVT(*this, nullptr, juce::Identifier ("APVTSshredverb"), createParameterLayout())
-//,       magicState(*this)
 {
     FOLEYS_SET_SOURCE_PATH (__FILE__);
 
-    
 	// set GUI
     // this is how i was loading default, but docs actually say to do this as return... in createEditor
     magicState.setGuiValueTree (BinaryData::DEFAULT_v4_1_xml, BinaryData::DEFAULT_v4_1_xmlSize);
-
-    auto nOut = getTotalNumOutputChannels();
-    auto nIn = getTotalNumInputChannels();
-    std::cout << "num in: " << nIn << std::endl;
-//    magicState.setApplicationSettingsFile (juce::File::getSpecialLocation (juce::File::userApplicationDataDirectory)
-//                                           .getChildFile (ProjectInfo::companyName)
-//                                           .getChildFile (ProjectInfo::projectName + juce::String (".settings")));
-//
-
 
     // pointers are copied to items declared in object so they don't go out of scope
     driveParam    = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::drive));
@@ -50,8 +48,7 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
     sizeParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::size));
     lopParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::lowpass));
     hipParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::highpass));
-    juce::String js = param_stuff::paramIDs.at(param_stuff::params_e::drywet);
-    dryWetParam = paramVT.getRawParameterValue (js);
+    dryWetParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::drywet));
 
     allpassFrequencyPiParam0 = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::tvap0_f_pi));
     allpassFrequencyPiParam1 = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::tvap1_f_pi));
@@ -74,74 +71,55 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
     time3Param = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::time3));
 
     outputGainParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::output_gain));
-
     interpParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::interp_type));
-    
     randomizeParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::randomize));
-    //ALLPASS_PARAM
-    
-    // need array of delay pointers with parameterized constructors, dynamically allocated
+		
+	for (auto &pd : preDelays){
+		pd.setInterpolation(nvs::delays::interp_e::floor);
+		pd.setDelayTimeMS(param_stuff::paramDefaults.at(param_stuff::params_e::predelay));
+	}
+	
+	D_times_ranged[0] = param_stuff::paramDefaults.at(param_stuff::params_e::time0);
+	D_times_ranged[1] = param_stuff::paramDefaults.at(param_stuff::params_e::time1);
+	D_times_ranged[2] = param_stuff::paramDefaults.at(param_stuff::params_e::time2);
+	D_times_ranged[3] = param_stuff::paramDefaults.at(param_stuff::params_e::time3);
 
-    X = new float[D_IJ];
-    Y = new float[D_IJ];
-     
-    preD = new nvs_delays::delay[nIn];
-    for (int n = 0; n < nIn; n++){
-        preD[n] = *new nvs_delays::delay(32768, 44100.f);
-    }
-    
-    D = new nvs_delays::delay[D_IJ];
-    apd = new nvs_delays::allpass_delay[D_IJ];
-
-    int n;
-    
-    D_times_ranged[0] = param_stuff::paramDefaults.at(param_stuff::params_e::time0);
-    D_times_ranged[1] = param_stuff::paramDefaults.at(param_stuff::params_e::time1);
-    D_times_ranged[2] = param_stuff::paramDefaults.at(param_stuff::params_e::time2);
-    D_times_ranged[3] = param_stuff::paramDefaults.at(param_stuff::params_e::time3);
-
-    for (n = 0; n < D_IJ; n++) {
-         X[n] = 0.f;
-         Y[n] = 0.f;
-         //G[n] = new float[D_IJ];
-             // may want much shorter delay lines
-//        float tmp = rando.nextFloat();
-//        int tmp = (accum1 + accum2);
-//        accum1 = accum2;
-//        accum2 = tmp;
-//        std::cout << accum2 <<std::endl;
-        D[n] = *new nvs_delays::delay(65536, 44100.f);
+    for (int n = 0; n < D_IJ; n++) {
+		X[n] = 0.f;
+		Y[n] = 0.f;
         D[n].setDelayTimeMS(D_times_ranged[n] * timeScaling);
-        D[n].setInterpolation(nvs_delays::delay::interp::floor);
-        apd[n].setDelayTimeMS(D_times_ranged[n] * timeScaling);
-        apd[n].setInterpolation(nvs_delays::delay::interp::floor);
+        D[n].setInterpolation(nvs::delays::interp_e::floor);
      }
 
 	for (auto &hp : hp6dB){
 		hp.setMode(nvs::filters::mode_e::HP);
 	}
 }
-ShredVerbAudioProcessor::~ShredVerbAudioProcessor()
-{
-    delete[] X;
-    delete[] Y;
-    delete[] D;
-    delete[] preD;
-}
 void ShredVerbAudioProcessor::initialiseBuilder(foleys::MagicGUIBuilder& builder) {
 	builder.registerJUCEFactories();
 	builder.registerJUCELookAndFeels();
-	presetList = builder.getMagicState().createAndAddObject<PresetListBox>("Presets");
+	foleys::MagicGUIState& state = builder.getMagicState();
+	
+	presetList = state.createAndAddObject<PresetListBox>("Presets");
 	presetList->onSelectionChanged = [&](int number)
 	{
 		std::cout << "load?\n";
 //		loadPresetInternal (number);
 	};
-	builder.getMagicState().addTrigger ("save-preset", [this]
+	state.addTrigger ("save-preset", [this]
 	{
 		std::cout << "save?\n";
 		savePresetInternal();
 	});
+	
+//	presetPanel = state.createAndAddObject<Gui::PresetPanel>("Presets Panel");
+	
+//	presetPanel->onSelectionChanged = [&](int number)
+//	{
+//		std::cout << "load?\n";
+////		loadPresetInternal (number);
+//	};
+
 }
 
 void ShredVerbAudioProcessor::savePresetInternal()
@@ -231,39 +209,35 @@ void ShredVerbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
     std::cout << "min del time: " << minDelTimeMS << "\nmax del time: " << maxDelTimeMS << std::endl;
     
-    for (int n = 0; n < D_IJ; n++)
-    {
+	//feed forward pair
+	for (auto &pd : preDelays){
+		pd.clear();
+		pd.setSampleRate(sampleRate);
+//		pd.set
+#pragma message("set predelay block size!")
+	}
+	
+    for (int n = 0; n < D_IJ; n++) {
         tvap[n].clear();
         tvap[n].setSampleRate(sampleRate);
 		tvap[n].setBlockSize(samplesPerBlock);
-        tvap[n].setCutoff(1000.f * float(n + 1));
-        tvap[n].setResonance(100.f * float(n + 1));
-    }
-    //feed forward pair
-    if (nIn > 0){
-        preD[0].setSampleRate(sampleRate);
-        if (nIn == 2){
-            preD[1].setSampleRate(sampleRate);
-        }
-    }
-    else{
-        std::cerr << "NUM INPUT CHANS == 0" << std::endl;
     }
 
+	for (auto &d : D)  {
+		d.clear();
+		d.setSampleRate((float)sampleRate);
+#pragma message("set delay block size!")
+	}
     for (int n = 0; n < (nIn + nOut); n++)
     {
+		hp6dB[n].clear();
 		hp6dB[n].setSampleRate((float)sampleRate);
 		hp6dB[n].setBlockSize(samplesPerBlock);
-		hp6dB[n].setCutoff(80.f);
     }
-    for (int n = 0; n < D_IJ; n++){
-        butters[n].setSampleRate(sampleRate);
-		butters[n].setBlockSize(samplesPerBlock);
-        butters[n].setCutoff(18000.0);
-    }
-    for (int i = 0; i < D_IJ; i++)  {
-        D[i].setSampleRate((float)sampleRate);
-        apd[i].setSampleRate((float)sampleRate);
+    for (auto &b : butters){
+		b.clear();
+        b.setSampleRate(sampleRate);
+		b.setBlockSize(samplesPerBlock);
     }
 }
 
@@ -397,24 +371,32 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 		tvap[i].setResonanceTarget(_ap_fb[i]);
 	}
 	
-    for (int n = 0; n < (nIn + nOut); n++)  {
-        hp6dB[n].setCutoffTarget(_lop);
+	for (auto &filt : butters){
+		filt.setCutoffTarget(_lop);
+	}
+    for (auto &filt : hp6dB)  {
+        filt.setCutoffTarget(_hip);
     }
     
     for (int samp = 0; samp < numSamps; samp++)
     {
-        for (int i = 0; i < nIn; i++){
-            preD[i].updateDelayTimeMS(current_preDtime[i], (float)_oneOverBlockSize);
+        for (int i = 0; i < preDelays.size(); i++){
+            preDelays[i].updateDelayTimeMS(current_preDtime[i], (float)_oneOverBlockSize);
         }
         for (int i = 0; i < D_IJ; i++) {
             D[i].updateDelayTimeMS(nvs::memoryless::clamp
-				   (current_Dtime[i] * timeScaling, minDelTimeMS, maxDelTimeMS), (float)_oneOverBlockSize);
-            apd[i].updateDelayTimeMS(nvs::memoryless::clamp
-					(current_Dtime[i] * timeScaling, minDelTimeMS, maxDelTimeMS), (float)_oneOverBlockSize);
-            
-            tvap[i].update_f_pi();
+										(current_Dtime[i] * timeScaling, minDelTimeMS, maxDelTimeMS),
+									(float)_oneOverBlockSize);
+
+			tvap[i].update_f_pi();
             tvap[i].update_f_b();
         }
+		for (auto &f : hp6dB){
+			f.updateCutoff();
+		}
+		for (auto &f : butters){
+			f.updateCutoff();
+		}
         
         float leftSamp = *(inBuffL + samp);
         float rightSamp = *(inBuffR + samp);
@@ -422,12 +404,12 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
         float inDrive = juce::Decibels::decibelsToGain<float>(_drive);
         float outDrive = 1.f / inDrive;
         
-        float preDelSamp[nIn];
+        std::array<float, 2> preDelSamp;
         
         if (nIn > 0){   // could be optimized to avoid branch
-            preDelSamp[0]  = preD[0].tick_cubic(leftSamp);
+            preDelSamp[0]  = preDelays[0].tick_cubic(leftSamp);
             if (nIn == 2){
-                preDelSamp[1] = preD[1].tick_cubic(rightSamp);
+                preDelSamp[1] = preDelays[1].tick_cubic(rightSamp);
             }
         }
         
@@ -444,39 +426,21 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 //        Y[3] = tvap[3].filter_fbmod(Y[3], _ap_dist1, _ap_dist2);
         
         for (int i = 0; i < D_IJ; i++) {
-            int j;
-            for (j = 0; j < D_IJ; j++) {
+            for (int j = 0; j < D_IJ; j++) {
                 tmp[i] += G[i][j] * Y[j] * (_g);
             }
             tmp[i] += X[i];
 			for (int j = 0; j < D_IJ; ++j){
-				tmp[0] = butters[0](tmp[0], _lop);
-				tmp[1] = butters[1](tmp[1], _lop);
-				tmp[2] = butters[2](tmp[2], _lop);
-				tmp[3] = butters[3](tmp[3], _lop);
+				tmp[j] = butters[j](tmp[j]);
 			}
 			for (int j = 0; j < D_IJ; ++j){
-				tmp[0] = hp6dB[0](tmp[0], _hip);
-				tmp[1] = hp6dB[1](tmp[1], _hip);
-				tmp[2] = hp6dB[2](tmp[2], _hip);
-				tmp[3] = hp6dB[3](tmp[3], _hip);
+				tmp[j] = hp6dB[j](tmp[j]);
 			}
         }
-/*L	INTERNAL*/ tmp[0] = tvap[0].filter_fbmod(tmp[0], inner_f_pi[0], inner_f_b[0]);
-/*L DIRECT*/ tmp[1] = tvap[1].filter_fbmod(tmp[1], outer_f_pi[0], outer_f_b[0]);
-/*R DIRECT*/ tmp[2] = tvap[2].filter_fbmod(tmp[2], outer_f_pi[1], outer_f_b[1]);
-/*R INTERNAL*/ tmp[3] = tvap[3].filter_fbmod(tmp[3], inner_f_pi[1], inner_f_b[1]);
-        
-        // can just have 1 tmp line and 1 Y line in for loop
-        
-//        Y[0] = apd[0][0].filter(tmp[0]) + apd[0][1].filter(tmp[1])
-//        + apd[0][2].filter(tmp[2]) + apd[0][3].filter(tmp[3]);
-//        Y[1] = apd[1][0].filter(tmp[0]) + apd[1][1].filter(tmp[1])
-//        + apd[1][2].filter(tmp[2]) + apd[1][3].filter(tmp[3]);
-//        Y[2] = apd[2][0].filter(tmp[0]) + apd[2][1].filter(tmp[1])
-//        + apd[2][2].filter(tmp[2]) + apd[2][3].filter(tmp[3]);
-//        Y[3] = apd[3][0].filter(tmp[0]) + apd[3][1].filter(tmp[1])
-//        + apd[3][2].filter(tmp[2]) + apd[3][3].filter(tmp[3]);
+/*L	INTERNAL*/ tmp[0] = tvap[0].filter_fbmod(tmp[0], inner_f_pi[1], inner_f_b[0]);
+/*L DIRECT*/ tmp[1] = tvap[1].filter_fbmod(tmp[1], outer_f_pi[0], outer_f_b[1]);
+/*R DIRECT*/ tmp[2] = tvap[2].filter_fbmod(tmp[2], outer_f_pi[1], outer_f_b[0]);
+/*R INTERNAL*/ tmp[3] = tvap[3].filter_fbmod(tmp[3], inner_f_pi[0], inner_f_b[1]);
         
         Y[0] = D[0].tick_cubic(tmp[0]);
         Y[1] = D[1].tick_cubic(tmp[1]);

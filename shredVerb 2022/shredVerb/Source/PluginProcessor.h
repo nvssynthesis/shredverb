@@ -16,6 +16,9 @@
 #include "include/nvs_filters.h"
 #include "params.h"
 #include "PresetListBox.h"
+
+#include "PresetPanel.h"
+
 #include <string>
 #include <array>
 #define D_IJ 4
@@ -31,7 +34,7 @@ public:
     //==============================================================================
     ShredVerbAudioProcessor ();
 //#if DEF_EDITOR
-    ~ShredVerbAudioProcessor() override; //
+//    ~ShredVerbAudioProcessor() override; //
 //#endif
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -82,12 +85,11 @@ public:
         {1.f, 0.f, 0.f, -1.f},
         {0.f, 1.f, -1.f, 0.f}
     };
-	float *X = NULL;
-	float *Y = NULL;
+	std::array<float, D_IJ> X;
+	std::array<float, D_IJ> Y;
 	
-    nvs_delays::delay *preD = NULL;
-    nvs_delays::delay *D = NULL;
-    nvs_delays::allpass_delay *apd = NULL;
+    std::array<nvs::delays::Delay<32768, float>, 2> preDelays;
+    std::array<nvs::delays::Delay<65536, float>, D_IJ> D;
     float D_times_ranged[D_IJ];
 
     std::array<nvs::filters::tvap<float>, D_IJ> tvap;
@@ -140,6 +142,7 @@ private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParams();
     
     PresetListBox*  presetList   = nullptr;
+	Gui::PresetPanel* presetPanel = nullptr;
 
     std::atomic<float>* driveParam = nullptr;
     std::atomic<float>* predelayParam = nullptr;
