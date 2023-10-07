@@ -12,16 +12,19 @@ namespace BinaryData
     const int            DEFAULT_v4_1_xmlSize = 13375;
 
     extern const char*   DEFAULT_v2_42_xml;
-    const int            DEFAULT_v2_42_xmlSize = 12994;
+    const int            DEFAULT_v2_42_xmlSize = 12993;
 
     extern const char*   DIRECT_EDIT_2_0_xml;
     const int            DIRECT_EDIT_2_0_xmlSize = 9394;
 
     extern const char*   DEFAULT_v4_xml;
-    const int            DEFAULT_v4_xmlSize = 12994;
+    const int            DEFAULT_v4_xmlSize = 12993;
+
+    extern const char*   DEFAULT_v5_xml;
+    const int            DEFAULT_v5_xmlSize = 16110;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 4;
+    const int namedResourceListSize = 5;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];

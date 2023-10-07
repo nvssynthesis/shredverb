@@ -19,7 +19,7 @@
 	-improve effect of altering various inner/outer distortions
 	-perhaps add SVF bandpass filter as INPUT stage to the TVAP modulation inputs
 		**-overcomplicate UI? should its f_c and q be tied to that of TVAP?
-	-tvaps should be controlled by XYpad instead of 2 knobs?
+**	-tvaps should be controlled by XYpad instead of 2 knobs?
 	-maybe double each of the TVAPs in series to amplify their phasial effect
  */
 
@@ -38,7 +38,7 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
 
 	// set GUI
     // this is how i was loading default, but docs actually say to do this as return... in createEditor
-    magicState.setGuiValueTree (BinaryData::DEFAULT_v4_1_xml, BinaryData::DEFAULT_v4_1_xmlSize);
+    magicState.setGuiValueTree (BinaryData::DEFAULT_v5_xml, BinaryData::DEFAULT_v5_xmlSize);
 
     // pointers are copied to items declared in object so they don't go out of scope
     driveParam    = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::drive));
@@ -70,6 +70,11 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
     time2Param = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::time2));
     time3Param = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::time3));
 
+	apdGparams[0] = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::g0));
+	apdGparams[1] = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::g1));
+	apdGparams[2] = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::g2));
+	apdGparams[3] = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::g3));
+	
     outputGainParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::output_gain));
     interpParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::interp_type));
     randomizeParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::randomize));
@@ -83,10 +88,11 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
 	D_times_ranged[1] = param_stuff::paramDefaults.at(param_stuff::params_e::time1);
 	D_times_ranged[2] = param_stuff::paramDefaults.at(param_stuff::params_e::time2);
 	D_times_ranged[3] = param_stuff::paramDefaults.at(param_stuff::params_e::time3);
-
+	
+	X.fill(0.f);
+	Y.fill(0.f);
+	
     for (int n = 0; n < D_IJ; n++) {
-		X[n] = 0.f;
-		Y[n] = 0.f;
         D[n].setDelayTimeMS(D_times_ranged[n] * timeScaling);
         D[n].setInterpolation(nvs::delays::interp_e::floor);
      }
@@ -286,39 +292,44 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 		buffer.clear (i, 0, numSamps);
 	}
 	
-    auto const* const inBuffL = buffer.getReadPointer(0);
-    auto const* inBuffR = inBuffL;
-	if (getTotalNumInputChannels() > 1){
-		inBuffR = buffer.getReadPointer(1);
-	}
+	std::array<float const* const, 2> inBuff {
+		buffer.getReadPointer(0),
+		(getTotalNumInputChannels() > 1) ? buffer.getReadPointer(1) : buffer.getReadPointer(0)
+	};
+
+	std::array<float* const, 2> outBuff {
+		buffer.getWritePointer(0),
+		(getTotalNumOutputChannels() > 1) ? buffer.getWritePointer(1) : buffer.getWritePointer(0)
+	};
+    
+	float const inDrive = juce::Decibels::decibelsToGain<float>(*driveParam);
+	float const outDrive = 1.f / inDrive;
 	
-    auto* const outBuffL = buffer.getWritePointer(0);
-    auto* outBuffR = outBuffL;
-    if (getTotalNumOutputChannels() > 1)
-        outBuffR = buffer.getWritePointer(1);
-    
-    float const _drive = *driveParam;
-    float const _predel = *predelayParam;
-    
+	float const _predel = nvs::memoryless::clamp(static_cast<float>(*predelayParam), minDelTimeMS, maxDelTimeMS);
+
     float const _g = *fbParam;
     float _size = *sizeParam;
     _size *= _size;		// breaking const is a sign that the param itself should be shaped
+	
     float const _hip = *hipParam;
     float const _lop = *lopParam;
 	
-	float  time0 = *time0Param;
-	float  time1 = *time1Param;
-	float  time2 = *time2Param;
-	float  time3 = *time3Param;
-    std::array<float const *, 4> const times {
-		&time0,
-		&time1,
-		&time2,
-		&time3
+    std::array<float const, 4> const times {
+		*time0Param,
+		*time1Param,
+		*time2Param,
+		*time3Param
+	};
+	
+	std::array<float const, 4> const del_gs {
+		*apdGparams[0],
+		*apdGparams[1],
+		*apdGparams[2],
+		*apdGparams[3]
 	};
 	
     float const _dryWet = dryWetParam->load();
-    float const _outputGain = outputGainParam->load();
+	float const outGain = juce::Decibels::decibelsToGain<float>(outputGainParam->load());
 
 	std::array<float, 4> _ap_f_pi {
 		*allpassFrequencyPiParam0,
@@ -350,14 +361,9 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     nvs::memoryless::metaparamA(float(*dist2Outr), outer_f_b);
     
     //=============================================================================
-    float current_preDtime[nIn];
-    for (int i = 0; i < nIn; i++) {
-		current_preDtime[i] = nvs::memoryless::clamp(_predel, minDelTimeMS, maxDelTimeMS);
-    }
 	
-	// yes these are not an efficient way to update all this stuff... will fix later
     for (int i = 0; i < D_IJ; i++) {
-        D_times_ranged[i] = *(times[i]);
+        D_times_ranged[i] = times[i];
     }
 	
     std::array<float, D_IJ> current_Dtime;
@@ -380,50 +386,48 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     
     for (int samp = 0; samp < numSamps; samp++)
     {
-        for (int i = 0; i < preDelays.size(); i++){
-            preDelays[i].updateDelayTimeMS(current_preDtime[i], (float)_oneOverBlockSize);
+        for (auto &pd : preDelays){
+            pd.updateDelayTimeMS(_predel, (float)_oneOverBlockSize);
         }
         for (int i = 0; i < D_IJ; i++) {
             D[i].updateDelayTimeMS(nvs::memoryless::clamp
 										(current_Dtime[i] * timeScaling, minDelTimeMS, maxDelTimeMS),
 									(float)_oneOverBlockSize);
-
-			tvap[i].update_f_pi();
-            tvap[i].update_f_b();
+			D[i].update_g(del_gs[i], (float)_oneOverBlockSize);
         }
+		for (auto &filt : tvap){
+			filt.update_f_pi();
+			filt.update_f_b();
+		}
 		for (auto &f : hp6dB){
 			f.updateCutoff();
 		}
 		for (auto &f : butters){
 			f.updateCutoff();
 		}
-        
-        float leftSamp = *(inBuffL + samp);
-        float rightSamp = *(inBuffR + samp);
-        
-        float inDrive = juce::Decibels::decibelsToGain<float>(_drive);
-        float outDrive = 1.f / inDrive;
-        
-        std::array<float, 2> preDelSamp;
-        
-        if (nIn > 0){   // could be optimized to avoid branch
-            preDelSamp[0]  = preDelays[0].tick_cubic(leftSamp);
-            if (nIn == 2){
-                preDelSamp[1] = preDelays[1].tick_cubic(rightSamp);
-            }
+//=============================================================================
+		// now the actual signal path
+		
+		// preserve these until end for dry/wet mixing
+		std::array<float, 2> inSamps {
+			*(inBuff[0] + samp),
+			*(inBuff[1] + samp)
+		};
+		
+        {	// scope for preDelSamp
+			std::array<float, 2> preDelSamp;
+			
+			for (auto i = 0; i < preDelays.size(); ++i){
+				preDelSamp[i]  = preDelays[i].tick_cubic(inSamps[i]);
+			}
+			
+			X[0] = 0.f;
+			X[1] = preDelSamp[0] * inDrive;
+			X[2] = preDelSamp[1] * inDrive;
+			X[3] = 0.f;
         }
-        
-        X[0] = 0.f;
-        X[1] = preDelSamp[0] * inDrive;
-        X[2] = preDelSamp[1] * inDrive;
-        X[3] = 0.f;
 
-        float tmp[4] {0.f, 0.f, 0.f, 0.f};
-        
-//        Y[0] = tvap[0].filter_fbmod(Y[0], _ap_dist1, _ap_dist2);
-//        Y[1] = tvap[1].filter_fbmod(Y[1], _ap_dist1, _ap_dist2);
-//        Y[2] = tvap[2].filter_fbmod(Y[2], _ap_dist1, _ap_dist2);
-//        Y[3] = tvap[3].filter_fbmod(Y[3], _ap_dist1, _ap_dist2);
+        std::array<float, D_IJ> tmp {0.f, 0.f, 0.f, 0.f};
         
         for (int i = 0; i < D_IJ; i++) {
             for (int j = 0; j < D_IJ; j++) {
@@ -442,10 +446,10 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 /*R DIRECT*/ tmp[2] = tvap[2].filter_fbmod(tmp[2], outer_f_pi[1], outer_f_b[0]);
 /*R INTERNAL*/ tmp[3] = tvap[3].filter_fbmod(tmp[3], inner_f_pi[0], inner_f_b[1]);
         
-        Y[0] = D[0].tick_cubic(tmp[0]);
-        Y[1] = D[1].tick_cubic(tmp[1]);
-        Y[2] = D[2].tick_cubic(tmp[2]);
-        Y[3] = D[3].tick_cubic(tmp[3]);
+        Y[0] = D[0].filter(tmp[0]);
+        Y[1] = D[1].filter(tmp[1]);
+        Y[2] = D[2].filter(tmp[2]);
+        Y[3] = D[3].filter(tmp[3]);
         
         // D should just be 4 delay lines!
 //        for (int i = 0; i < D_IJ; i++)  {
@@ -463,24 +467,24 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 //        Y[3] = D[3][0].tick(tmp[0]) + D[3][1].tick(tmp[1])
 //             + D[3][2].tick(tmp[2]) + D[3][3].tick(tmp[3]);
 
-        float outGain = juce::Decibels::decibelsToGain<float>(_outputGain);
-
-        float wetL = Y[1];
-        float wetR = Y[2];
-        
-        wetL *= outGain * outDrive;
-        wetR *= outGain * outDrive;
+		std::array<float, 2> wet {
+			Y[1] * outGain * outDrive,
+			Y[2] * outGain * outDrive
+		};
 
 #if PROTECT_OUTPUT
-        wetL = nvs::memoryless::clamp1<float>(wetL);
-        wetR = nvs::memoryless::clamp1<float>(wetR);
+		for (auto &w : wet){
+			w = nvs::memoryless::clamp1<float>(w);
+		}
 #endif
-        float finalOutL = wetL * _dryWet + leftSamp * (1 - _dryWet) ;
-        float finalOutR = wetR * _dryWet + rightSamp * (1 - _dryWet) ;
-
-        
-        *(outBuffL + samp) = finalOutL * 0.999;
-        *(outBuffR + samp) = finalOutR * 0.999;
+		std::array<float, 2> finalOut {
+			wet[0] * _dryWet + inSamps[0] * (1 - _dryWet),
+			wet[1] * _dryWet + inSamps[1] * (1 - _dryWet)
+		};
+		
+		for (int i = 0; i < 2; ++i){
+			*(outBuff[i] + samp) = finalOut[i] * 0.999;
+		}
     }
 }
 #if DEF_EDITOR
@@ -567,6 +571,29 @@ void ShredVerbAudioProcessor::addDelayParameters (juce::AudioProcessorValueTreeS
                                                                       std::move (time2),
                                                                       std::move (time3));
     layout.add (std::move (group));
+	
+	std::array<
+		std::unique_ptr<juce::AudioParameterFloat>,
+	4> gs {
+		getUniqueParam(param_stuff::params_e::g0),
+		getUniqueParam(param_stuff::params_e::g1),
+		getUniqueParam(param_stuff::params_e::g2),
+		getUniqueParam(param_stuff::params_e::g3)
+	};
+	
+	centrVal = 0.f;
+	interval = 0.f;
+	for (auto & uptr : gs){
+		uptr->range.setSkewForCentre(centrVal);
+		uptr->range.interval = interval;
+	}
+	
+	group = std::make_unique<juce::AudioProcessorParameterGroup>("diffusions", "DIFFUSIONS", "|",
+																	  std::move (gs[0]),
+																	  std::move (gs[1]),
+																	  std::move (gs[2]),
+																	  std::move (gs[3]));
+	layout.add(std::move(group));
 }
 void ShredVerbAudioProcessor::addAllpassParameters (juce::AudioProcessorValueTreeState::ParameterLayout& layout){
     auto getRange = [&](param_stuff::params_e idx){return juce::NormalisableRange<float>(getMin(idx), getMax(idx),

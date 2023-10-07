@@ -40,6 +40,7 @@
       <FILE id="znLLqt" name="DIRECT EDIT 2.0.xml" compile="0" resource="1"
             file="Resources/DIRECT EDIT 2.0.xml"/>
       <FILE id="YJLBcg" name="DEFAULT v4.xml" compile="0" resource="1" file="Resources/DEFAULT v4.xml"/>
+      <FILE id="tXmY8m" name="DEFAULT v5.xml" compile="0" resource="1" file="Resources/DEFAULT v5.xml"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>

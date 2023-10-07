@@ -80,16 +80,16 @@ public:
 	// explore code of rev2~ and rev3~
     
     float G[D_IJ][D_IJ] = {
-        {0.f, 1.f, 1.f, 0.f},
-        {-1.f, 0.f, 0.f, -1.f},
-        {1.f, 0.f, 0.f, -1.f},
-        {0.f, 1.f, -1.f, 0.f}
+        {0.f,  1.f,  1.f,  0.f},
+        {-1.f, 0.f,  0.f, -1.f},
+        {1.f,  0.f,  0.f, -1.f},
+        {0.f,  1.f, -1.f,  0.f}
     };
 	std::array<float, D_IJ> X;
 	std::array<float, D_IJ> Y;
 	
     std::array<nvs::delays::Delay<32768, float>, 2> preDelays;
-    std::array<nvs::delays::Delay<65536, float>, D_IJ> D;
+    std::array<nvs::delays::AllpassDelay<65536, float>, D_IJ> D;
     float D_times_ranged[D_IJ];
 
     std::array<nvs::filters::tvap<float>, D_IJ> tvap;
@@ -102,11 +102,11 @@ public:
     }
     
 private:
-    const float timeScaling = 500.f;    // multiplier for the [0..1) delay times, PRE-size parameter
+	static constexpr float timeScaling {500.f};    // multiplier for the [0..1) delay times, PRE-size parameter
     float minDelTimeMS, maxDelTimeMS;
     
-    static constexpr unsigned int versionHint = 1;
-	static constexpr float intervalVal = 0.01f;
+	static constexpr unsigned int versionHint = 1;
+	static constexpr float intervalVal = 0.f;
     
     static std::string getID(param_stuff::params_e idx){    return param_stuff::paramIDs.at(idx);       }
     static std::string getName(param_stuff::params_e idx){  return param_stuff::paramNames.at(idx);     }
@@ -172,6 +172,11 @@ private:
     std::atomic<float>* time1Param = nullptr;
     std::atomic<float>* time2Param = nullptr;
     std::atomic<float>* time3Param = nullptr;
+	
+	std::array<std::atomic<float>*, D_IJ> apdGparams {
+		nullptr, nullptr, nullptr, nullptr
+	};
+
 
     std::atomic<float>* outputGainParam = nullptr;
     

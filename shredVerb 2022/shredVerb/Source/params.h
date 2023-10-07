@@ -23,6 +23,11 @@ struct param_stuff{
         time1,
         time2,
         time3,
+		
+		g0,
+		g1,
+		g2,
+		g3,
 
         drive,
         dist1_outer,
@@ -76,7 +81,11 @@ struct param_stuff{
         {params_e::time0, "delay time 0"},
         {params_e::time1, "delay time 1"},
         {params_e::time2, "delay time 2"},
-        {params_e::time3, "delay time 3"}
+        {params_e::time3, "delay time 3"},
+		{params_e::g0,		"g0"},
+		{params_e::g1,		"g1"},
+		{params_e::g2,		"g2"},
+		{params_e::g3,		"g3"}
     };
     inline static const std::map<params_e, std::string> paramNames =
     {
@@ -105,7 +114,11 @@ struct param_stuff{
         {params_e::time0, "Delay 0"},
         {params_e::time1, "Delay 1"},
         {params_e::time2, "Delay 2"},
-        {params_e::time3, "Delay 3"}
+        {params_e::time3, "Delay 3"},
+		{params_e::g0,		"g0"},
+		{params_e::g1,		"g1"},
+		{params_e::g2,		"g2"},
+		{params_e::g3,		"g3"}
     };
     inline static const float f_pi_min = 0.23f;
     inline static const float f_pi_max = 22000.f;
@@ -139,7 +152,11 @@ struct param_stuff{
         {params_e::time0,       {0.0001f, 1.f}},
         {params_e::time1,       {0.0001f, 1.f}},
         {params_e::time2,       {0.0001f, 1.f}},
-        {params_e::time3,       {0.0001f, 1.f}}
+        {params_e::time3,       {0.0001f, 1.f}},
+		{params_e::g0,			{-1.f, 1.f}},
+		{params_e::g1,		  	{-1.f, 1.f}},
+		{params_e::g2,			{-1.f, 1.f}},
+		{params_e::g3,			{-1.f, 1.f}}
     };
     inline static const std::map<params_e, float> paramDefaults =
     {
@@ -169,6 +186,10 @@ struct param_stuff{
         {params_e::time1,       0.3f},
         {params_e::time2,       0.4f},
         {params_e::time3,       0.2f},
+		{params_e::g0,			0.f},
+		{params_e::g1,		  	0.f},
+		{params_e::g2,			0.f},
+		{params_e::g3,			0.f}
     };
 
     inline static const std::map<params_e, float> paramSkewFactorFromMidpoints =
@@ -198,7 +219,11 @@ struct param_stuff{
         {params_e::time0,       0.5f},
         {params_e::time1,       0.5f},
         {params_e::time2,       0.5f},
-        {params_e::time3,       0.5f}
+        {params_e::time3,       0.5f},
+		{params_e::g0,			0.f},
+		{params_e::g1,		  	0.f},
+		{params_e::g2,			0.f},
+		{params_e::g3,			0.f}
     };
     inline static const std::map<params_e, int> paramNumDecimalPlacesToDisplay =
     {
@@ -227,7 +252,11 @@ struct param_stuff{
         {params_e::time0,       2},
         {params_e::time1,       2},
         {params_e::time2,       2},
-        {params_e::time3,       2}
+        {params_e::time3,       2},
+		{params_e::g0,			3},
+		{params_e::g1,		  	3},
+		{params_e::g2,			3},
+		{params_e::g3,			3}
     };
     // to be defined/initialized in PluginEditor constructor
     static const size_t numParams = (size_t)(params_e::count);
