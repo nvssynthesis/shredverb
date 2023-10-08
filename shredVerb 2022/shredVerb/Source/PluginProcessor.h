@@ -76,7 +76,8 @@ public:
 	
 	void initialiseBuilder(foleys::MagicGUIBuilder& builder) override;
 	void savePresetInternal();
-    
+	void loadPresetInternal(int index);
+
 	// explore code of rev2~ and rev3~
     
     float G[D_IJ][D_IJ] = {
@@ -93,6 +94,7 @@ public:
     float D_times_ranged[D_IJ];
 
     std::array<nvs::filters::tvap<float>, D_IJ> tvap;
+	std::array<nvs::filters::svf_lin_naive<float>, D_IJ> fm_bp;
     std::array<nvs::filters::onePole<float>, D_IJ> hp6dB;
     
     std::array<nvs::filters::butterworth2p<double>, D_IJ> butters;
@@ -184,7 +186,14 @@ private:
     std::atomic<float>* randomizeParam = nullptr;
     
     juce::Random rando;
-    
+	void randomizeParams();
+	template<size_t N>
+	void randomizeParams(std::array<param_stuff::params_e, N> params);
+	void randomizeDelays();
+	void randomizeQualia();
+	void randomizeCharacter();
+	void randomizeAllpass();
+
 //    foleys::MagicProcessorState magicState ;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ShredVerbAudioProcessor)

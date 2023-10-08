@@ -95,12 +95,80 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
     for (int n = 0; n < D_IJ; n++) {
         D[n].setDelayTimeMS(D_times_ranged[n] * timeScaling);
         D[n].setInterpolation(nvs::delays::interp_e::floor);
-     }
-
+	}
+	for (auto &bp : fm_bp){
+		bp.setMode(nvs::filters::mode_e::BP);
+	}
 	for (auto &hp : hp6dB){
 		hp.setMode(nvs::filters::mode_e::HP);
 	}
 }
+template<size_t N>
+void ShredVerbAudioProcessor::randomizeParams(std::array<param_stuff::params_e, N> params){
+	for (auto p : params){
+		float val = rando.nextFloat();
+		
+		auto param = paramVT.getParameter(param_stuff::paramIDs.at(p));
+		
+		param->beginChangeGesture();
+		param->setValueNotifyingHost(juce::jlimit(0.f, 1.f, val));
+		param->endChangeGesture();
+	}
+}
+
+void ShredVerbAudioProcessor::randomizeDelays(){
+	std::array<param_stuff::params_e, 8> dParams = {
+		param_stuff::params_e::time0,
+		param_stuff::params_e::time1,
+		param_stuff::params_e::time2,
+		param_stuff::params_e::time3,
+		param_stuff::params_e::g0,
+		param_stuff::params_e::g1,
+		param_stuff::params_e::g2,
+		param_stuff::params_e::g3
+	};
+	randomizeParams(dParams);
+}
+void ShredVerbAudioProcessor::randomizeQualia(){
+	std::array<param_stuff::params_e, 5> dParams = {
+		param_stuff::params_e::predelay,
+		param_stuff::params_e::size,
+		param_stuff::params_e::highpass,
+		param_stuff::params_e::lowpass,
+		param_stuff::params_e::decay
+	};
+	randomizeParams(dParams);
+}
+void ShredVerbAudioProcessor::randomizeCharacter(){
+	std::array<param_stuff::params_e, 5> dParams = {
+		param_stuff::params_e::drive,
+		param_stuff::params_e::dist1_inner,
+		param_stuff::params_e::dist1_outer,
+		param_stuff::params_e::dist2_inner,
+		param_stuff::params_e::dist2_outer
+	};
+	randomizeParams(dParams);
+}
+void ShredVerbAudioProcessor::randomizeAllpass(){
+	std::array<param_stuff::params_e, 8> dParams = {
+		param_stuff::params_e::tvap0_f_b,
+		param_stuff::params_e::tvap1_f_b,
+		param_stuff::params_e::tvap2_f_b,
+		param_stuff::params_e::tvap3_f_b,
+		param_stuff::params_e::tvap0_f_pi,
+		param_stuff::params_e::tvap1_f_pi,
+		param_stuff::params_e::tvap2_f_pi,
+		param_stuff::params_e::tvap3_f_pi
+	};
+	randomizeParams(dParams);
+}
+void ShredVerbAudioProcessor::randomizeParams(){
+	randomizeDelays();
+	randomizeQualia();
+	randomizeCharacter();
+	randomizeAllpass();
+}
+
 void ShredVerbAudioProcessor::initialiseBuilder(foleys::MagicGUIBuilder& builder) {
 	builder.registerJUCEFactories();
 	builder.registerJUCELookAndFeels();
@@ -118,14 +186,19 @@ void ShredVerbAudioProcessor::initialiseBuilder(foleys::MagicGUIBuilder& builder
 		savePresetInternal();
 	});
 	
-//	presetPanel = state.createAndAddObject<Gui::PresetPanel>("Presets Panel");
+	state.addTrigger("randomize", [this]{
+		randomizeParams();
+	});
 	
-//	presetPanel->onSelectionChanged = [&](int number)
-//	{
-//		std::cout << "load?\n";
-////		loadPresetInternal (number);
-//	};
+//	presetList = this->magicState.MagicProcessorState::createAndAddObject<PresetListBox>("presets");
+	
+	presetList = state.createAndAddObject<PresetListBox>("Presets List");
 
+	presetList->onSelectionChanged = [&](int number)
+	{
+		std::cout << "load?\n";
+		loadPresetInternal (number);
+	};
 }
 
 void ShredVerbAudioProcessor::savePresetInternal()
@@ -140,15 +213,15 @@ void ShredVerbAudioProcessor::savePresetInternal()
 
 	presetNode.appendChild (preset, nullptr);
 }
-//
-//void ShredVerbAudioProcessor::loadPresetInternal(int index)
-//{
-//	presetNode = magicState.getSettings().getOrCreateChildWithName ("presets", nullptr);
-//	auto preset = presetNode.getChild (index);
-//
-//	foleys::ParameterManager manager (*this);
-//	manager.loadParameterValues (preset);
-//}
+
+void ShredVerbAudioProcessor::loadPresetInternal(int index)
+{
+	presetNode = magicState.getSettings().getOrCreateChildWithName ("presets", nullptr);
+	auto preset = presetNode.getChild (index);
+
+	foleys::ParameterManager manager (*this);
+	manager.loadParameterValues (preset);
+}
 
 #if DEF_EDITOR
 //==============================================================================
@@ -228,6 +301,11 @@ void ShredVerbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
         tvap[n].setSampleRate(sampleRate);
 		tvap[n].setBlockSize(samplesPerBlock);
     }
+	for (auto &bp : fm_bp){
+		bp.clear();
+		bp.setSampleRate(sampleRate);
+		bp.setBlockSize(samplesPerBlock);
+	}
 
 	for (auto &d : D)  {
 		d.clear();
@@ -286,11 +364,12 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     auto const nOut = getTotalNumOutputChannels();
     int const numSamps = buffer.getNumSamples();
 	
-	[[deprecated]]	// any function using this param during processBlock should be deprecated
-    double const _oneOverBlockSize = 1 / (double)numSamps;
 	for (auto i = nIn; i < nOut; ++i){
 		buffer.clear (i, 0, numSamps);
 	}
+	
+	[[deprecated]]	// any function using this param during processBlock should be deprecated
+    double const _oneOverBlockSize = 1 / (double)numSamps;
 	
 	std::array<float const* const, 2> inBuff {
 		buffer.getReadPointer(0),
@@ -302,47 +381,48 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 		(getTotalNumOutputChannels() > 1) ? buffer.getWritePointer(1) : buffer.getWritePointer(0)
 	};
     
-	float const inDrive = juce::Decibels::decibelsToGain<float>(*driveParam);
+	float const inDrive = juce::Decibels::decibelsToGain<float>(driveParam->load());
 	float const outDrive = 1.f / inDrive;
 	
-	float const _predel = nvs::memoryless::clamp(static_cast<float>(*predelayParam), minDelTimeMS, maxDelTimeMS);
+	float const _predel = nvs::memoryless::clamp(
+					 static_cast<float>(predelayParam->load()), minDelTimeMS, maxDelTimeMS);
 
-    float const _g = *fbParam;
-    float _size = *sizeParam;
+    float const _g = fbParam->load();
+    float _size = sizeParam->load();
     _size *= _size;		// breaking const is a sign that the param itself should be shaped
 	
-    float const _hip = *hipParam;
-    float const _lop = *lopParam;
+    float const _hip = hipParam->load();
+    float const _lop = lopParam->load();
 	
     std::array<float const, 4> const times {
-		*time0Param,
-		*time1Param,
-		*time2Param,
-		*time3Param
+		time0Param->load(),
+		time1Param->load(),
+		time2Param->load(),
+		time3Param->load()
 	};
 	
 	std::array<float const, 4> const del_gs {
-		*apdGparams[0],
-		*apdGparams[1],
-		*apdGparams[2],
-		*apdGparams[3]
+		apdGparams[0]->load(),
+		apdGparams[1]->load(),
+		apdGparams[2]->load(),
+		apdGparams[3]->load()
 	};
 	
     float const _dryWet = dryWetParam->load();
 	float const outGain = juce::Decibels::decibelsToGain<float>(outputGainParam->load());
 
 	std::array<float, 4> _ap_f_pi {
-		*allpassFrequencyPiParam0,
-		*allpassFrequencyPiParam1,
-		*allpassFrequencyPiParam2,
-		*allpassFrequencyPiParam3
+		allpassFrequencyPiParam0->load(),
+		allpassFrequencyPiParam1->load(),
+		allpassFrequencyPiParam2->load(),
+		allpassFrequencyPiParam3->load()
 	};
 	
 	std::array<float, 4> _ap_fb {
-		*allpassBandwidthParam0,
-		*allpassBandwidthParam1,
-		*allpassBandwidthParam2,
-		*allpassBandwidthParam3
+		allpassBandwidthParam0->load(),
+		allpassBandwidthParam1->load(),
+		allpassBandwidthParam2->load(),
+		allpassBandwidthParam3->load()
 	};
 	
 	/* these cannot be std::arrays until i redo  nvs::memoryless::metaparamA */
@@ -375,6 +455,8 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 	for (int i = 0; i < D_IJ; ++i){
 		tvap[i].setCutoffTarget(_ap_f_pi[i]);
 		tvap[i].setResonanceTarget(_ap_fb[i]);
+		fm_bp[i].setCutoffTarget(_ap_f_pi[i]);
+		fm_bp[i].setResonanceTarget(_ap_fb[i]);
 	}
 	
 	for (auto &filt : butters){
@@ -398,6 +480,10 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 		for (auto &filt : tvap){
 			filt.update_f_pi();
 			filt.update_f_b();
+		}
+		for (auto &filt : fm_bp){
+			filt.updateCutoff();
+			filt.updateResonance();
 		}
 		for (auto &f : hp6dB){
 			f.updateCutoff();
@@ -441,11 +527,23 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 				tmp[j] = hp6dB[j](tmp[j]);
 			}
         }
+#if CLASSIC_WAY
 /*L	INTERNAL*/ tmp[0] = tvap[0].filter_fbmod(tmp[0], inner_f_pi[1], inner_f_b[0]);
 /*L DIRECT*/ tmp[1] = tvap[1].filter_fbmod(tmp[1], outer_f_pi[0], outer_f_b[1]);
 /*R DIRECT*/ tmp[2] = tvap[2].filter_fbmod(tmp[2], outer_f_pi[1], outer_f_b[0]);
 /*R INTERNAL*/ tmp[3] = tvap[3].filter_fbmod(tmp[3], inner_f_pi[0], inner_f_b[1]);
-        
+#else
+		std::array<float, 4> intrnlWcModSig = {
+			fm_bp[0](tmp[0]) * 100000.f,
+			fm_bp[1](tmp[1]) * 100000.f,
+			fm_bp[2](tmp[2]) * 100000.f,
+			fm_bp[3](tmp[3]) * 100000.f,
+		};
+/*L	INTERNAL*/ tmp[0] = tvap[0](tmp[0], _ap_f_pi[0] + inner_f_pi[1]*intrnlWcModSig[0], _ap_fb[0]);
+/*L DIRECT*/ tmp[1] = tvap[1](tmp[1], _ap_f_pi[1] + outer_f_pi[0]*intrnlWcModSig[1], _ap_fb[1]);
+/*R DIRECT*/ tmp[2] = tvap[2](tmp[2], _ap_f_pi[2] + outer_f_pi[1]*intrnlWcModSig[2], _ap_fb[2]);
+/*R INTERNAL*/ tmp[3] = tvap[3](tmp[3], _ap_f_pi[3] + inner_f_pi[0]*intrnlWcModSig[3], _ap_fb[3]);
+#endif
         Y[0] = D[0].filter(tmp[0]);
         Y[1] = D[1].filter(tmp[1]);
         Y[2] = D[2].filter(tmp[2]);
