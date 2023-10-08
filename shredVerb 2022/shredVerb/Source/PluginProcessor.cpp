@@ -539,6 +539,7 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 			fm_bp[2](tmp[2]) * 100000.f,
 			fm_bp[3](tmp[3]) * 100000.f,
 		};
+#pragma message("need to smooth these cutoff/reso if doing it this way")
 /*L	INTERNAL*/ tmp[0] = tvap[0](tmp[0], _ap_f_pi[0] + inner_f_pi[1]*intrnlWcModSig[0], _ap_fb[0]);
 /*L DIRECT*/ tmp[1] = tvap[1](tmp[1], _ap_f_pi[1] + outer_f_pi[0]*intrnlWcModSig[1], _ap_fb[1]);
 /*R DIRECT*/ tmp[2] = tvap[2](tmp[2], _ap_f_pi[2] + outer_f_pi[1]*intrnlWcModSig[2], _ap_fb[2]);
