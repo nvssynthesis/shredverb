@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<magic>
+  <Styles>
+    <Style name="default">
+      <Nodes/>
+      <Classes>
+        <plot-view border="2" background-color="black" border-color="silver" display="contents"/>
+        <nomargin margin="0" padding="0" border="0"/>
+        <group margin="5" padding="5" border="2" flex-direction="column"/>
+        <transparent background-color="transparentblack"/>
+      </Classes>
+      <Types>
+        <Slider border="0" slider-textbox="textbox-below"/>
+        <ToggleButton border="0" max-height="50" caption-size="0" text="Active"/>
+        <TextButton border="0" max-height="50" caption-size="0"/>
+        <ComboBox border="0" max-height="50" caption-size="0"/>
+        <Plot border="0" margin="0" padding="0" background-color="FF473E51"
+              radius="0"/>
+        <XYDragComponent border="0" margin="0" padding="0" background-color="FF473E51"
+                         radius="0"/>
+      </Types>
+      <Palettes>
+        <default/>
+      </Palettes>
+    </Style>
+  </Styles>
+  <View id="root" resizable="1" resize-corner="1" lookAndFeel="FoleysFinest"
+        flex-direction="column" caption="nvssynthesis::shredverb" caption-color=""
+        border-color="FF000000" background-color="FF000000" tab-color="FF000000"
+        width="600" height="700" min-width="100" min-height="100" padding="1"
+        margin="1" border="0" radius="5">
+    <View flex-shrink="1.0" flex-grow=".29" padding="2" border="0" margin="5"
+          id="utility" background-color="FF441A1A" max-height="50" min-height="40">
+      <ListBox list-box-model="Presets List" margin="2" padding="2" border="0"/>
+      <TextButton onClick="save-preset" text="Save" border="0" padding="2" margin="2"
+                  button-color="FF143D30" id="save"/>
+      <TextButton onClick="randomize" text="Randomize" margin="2" padding="2" border="0"
+                  button-color="FF4C2255" id="randomize" min-height=""/>
+    </View>
+    <View flex-grow="3" background-color="FF441A1A" border-color="FF441A1A"
+          radius="9" margin="2" padding="2" border="2" min-width="500"
+          tab-color="FF000000" id="main" tab-caption="" min-height="">
+      <View caption="QUALIA" class="group" background-color="FF441A1A" tab-color=""
+            border-color="FF535252" flex-shrink="1.0" flex-grow="0.7" caption-size="25"
+            caption-color="FF644A66" min-height="400" min-width="30" margin="2">
+        <Slider caption="Predelay" parameter="predelay" lookAndFeel="Skeuomorphic"
+                background-color="FF441A1A" slider-background="FF473E51" slider-thumb="FF51548F"
+                slider-track="FF322A39" caption-size="20" caption-color="FF906464"
+                slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
+        <Slider caption="Spatial Size" parameter="size" lookAndFeel="Skeuomorphic"
+                background-color="FF441A1A" slider-background="FF473E51" slider-thumb="FF51548F"
+                slider-track="FF322A39" caption-size="20" caption-color="FF906464"
+                slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
+        <Slider caption="Decay" parameter="decay" lookAndFeel="Skeuomorphic"
+                background-color="FF441A1A" slider-background="FF473E51" slider-thumb="FF51548F"
+                slider-track="FF322A39" caption-size="20" caption-color="FF906464"
+                slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
+        <Slider caption="Highpass Cutoff" parameter="hip" lookAndFeel="Skeuomorphic"
+                background-color="FF441A1A" slider-background="FF441A1A" slider-thumb="FF51548F"
+                slider-track="FF322A39" caption-size="20" caption-color="FF906464"
+                slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
+        <Slider caption="Lowpass Cutoff" parameter="lop" lookAndFeel="Skeuomorphic"
+                background-color="FF441A1A" slider-background="FF441A1A" slider-thumb="FF51548F"
+                slider-track="FF322A39" caption-size="20" caption-color="FF906464"
+                slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
+        <TextButton id="randomize" button-color="FF4C2255" max-height="30" border="0"
+                    padding="2" margin="2" min-height="30" onClick="randomize qualia"/>
+      </View>
+      <View caption="SHRED" class="group" background-color="FF441A1A" border-color="FF535252"
+            caption-color="FF644A66" caption-size="25" margin="2" padding="5"
+            border="2" min-height="400" flex-align-items="" flex-justify-content="">
+        <View flex-direction="column" margin="1" padding="1" border="1" flex-grow="2.9"
+              radius="5" border-color="FF535252" background-color="FF441A1A">
+          <Slider caption="Outer Distortion 1" parameter="outer distortion 1" lookAndFeel="Skeuomorphic"
+                  background-color="FF441A1A" slider-track="FF322A39" caption-size="20"
+                  slider-background="FF473E51" slider-thumb="FF51548F" caption-color="FF906464"
+                  slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"
+                  margin="1" padding="8" border="" radius="0"/>
+          <Slider caption="Inner Distortion 1" parameter="inner distortion 1" lookAndFeel="Skeuomorphic"
+                  pos-x="-19.3676%" pos-y="46.089%" pos-width="100%" pos-height="24.9097%"
+                  background-color="FF441A1A" slider-background="FF473E51" slider-track="FF322A39"
+                  caption-size="20" slider-thumb="FF51548F" caption-color="FF906464"
+                  slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"
+                  margin="1" padding="8" radius="0"/>
+          <Slider caption="Inner Distortion 2" parameter="inner distortion 2" lookAndFeel="Skeuomorphic"
+                  background-color="FF441A1A" slider-background="FF473E51" slider-track="FF322A39"
+                  caption-size="20" slider-thumb="FF51548F" caption-color="FF906464"
+                  slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"
+                  margin="1" padding="8" radius="0"/>
+          <Slider caption="Outer Distortion 2" parameter="outer distortion 2" lookAndFeel="Skeuomorphic"
+                  background-color="FF441A1A" slider-track="FF322A39" caption-size="20"
+                  slider-background="FF473E51" slider-thumb="FF51548F" caption-color="FF906464"
+                  slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"
+                  margin="1" padding="8" border-color="FF000000" border="0" radius=""/>
+        </View>
+        <Slider caption="Drive" parameter="drive" lookAndFeel="Skeuomorphic"
+                background-color="FF441A1A" slider-track="FF322A39" caption-size="20"
+                slider-background="FF473E51" slider-thumb="FF51548F" caption-color="FF906464"
+                slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"
+                flex-grow="0.7" border-color="FF535252" border="0" padding="8"
+                margin="1" radius="9"/>
+        <TextButton id="randomize" button-color="FF4C2255" max-height="30" min-height="30"
+                    height="30" flex-grow="1.0" flex-order="0" margin="2" padding="2"
+                    border="0" onClick="randomize shred" pos-x="-4.66667%" pos-y="86.4035%"
+                    pos-width="100%" pos-height="6.57895%"/>
+      </View>
+      <View caption="ALLPASS" class="group" flex-grow="1.2" background-color="FF441A1A"
+            border-color="FF535252" caption-size="25" caption-color="FF644A66"
+            margin="2" min-height="400" flex-wrap="nowrap" flex-justify-content="start">
+        <View background-color="FF441A1A" border="1" border-color="FF535252"
+              radius="5" margin="1" padding="1">
+          <Slider caption="Base 1" parameter="tvap1 freq" background-color="FF441A1A"
+                  slider-background="FF473E51" slider-thumb="FF51548F" slider-track="FF322A39"
+                  caption-size="20" caption-color="FF906464" slider-text="FF8B4747"
+                  slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
+          <Slider caption="Width 1" parameter="tvap1 bandwidth" lookAndFeel="FoleysFinest"
+                  background-color="FF441A1A" slider-background="FF473E51" slider-thumb="FF51548F"
+                  slider-track="FF322A39" caption-size="20" caption-color="FF906464"
+                  slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
+        </View>
+        <View flex-grow="1" min-width="1.0" flex-order="0" flex-align-self="stretch"
+              background-color="FF441A1A" border="1" border-color="FF535252"
+              radius="5" margin="1" padding="1">
+          <Slider caption="Base 2" parameter="tvap0 freq" background-color="FF441A1A"
+                  slider-background="FF473E51" slider-track="FF322A39" caption-size="20"
+                  slider-thumb="FF51548F" caption-color="FF906464" slider-text="FF8B4747"
+                  slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
+          <Slider caption="Width 2" parameter="tvap0 bandwidth" lookAndFeel="FoleysFinest"
+                  background-color="FF441A1A" slider-background="FF473E51" slider-thumb="FF51548F"
+                  slider-track="FF322A39" caption-size="20" caption-color="FF906464"
+                  slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
+        </View>
+        <View background-color="FF441A1A" border="1" border-color="FF535252"
+              radius="5" margin="1" padding="1">
+          <Slider caption="Base 3" parameter="tvap3 freq" background-color="FF441A1A"
+                  tab-color="" slider-background="FF473E51" slider-thumb="FF51548F"
+                  slider-track="FF322A39" caption-size="20" caption-color="FF906464"
+                  slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
+          <Slider caption="Width 3" parameter="tvap3 bandwidth" lookAndFeel="FoleysFinest"
+                  background-color="FF441A1A" slider-background="FF473E51" slider-thumb="FF51548F"
+                  slider-track="FF322A39" caption-size="20" caption-color="FF906464"
+                  slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
+        </View>
+        <View background-color="FF441A1A" border="1" border-color="FF535252"
+              radius="5" margin="1" padding="1">
+          <Slider caption="Base 4" parameter="tvap2 freq" background-color="FF441A1A"
+                  slider-background="FF473E51" slider-thumb="FF51548F" slider-track="FF322A39"
+                  caption-size="20" caption-color="FF906464" slider-text="FF8B4747"
+                  slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
+          <Slider caption="Width 4" parameter="tvap2 bandwidth" lookAndFeel="FoleysFinest"
+                  background-color="FF441A1A" slider-background="FF473E51" slider-thumb="FF51548F"
+                  slider-track="FF322A39" caption-size="20" caption-color="FF906464"
+                  slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
+        </View>
+        <TextButton flex-shrink="1" flex-grow=".5" text="" button-color="FF4C2255"
+                    max-height="30" min-height="30" margin="2" padding="2" border="0"
+                    onClick="randomize allpass"/>
+      </View>
+      <View caption="OUTPUT" class="group" border-color="FF535252" background-color="FF441A1A"
+            flex-grow="0.8" caption-size="25" caption-color="FF644A66" min-width="10"
+            flex-shrink="1.0" min-height="400" margin="2">
+        <Slider caption="Dry/Wet" parameter="dryWet" lookAndFeel="Skeuomorphic"
+                background-color="FF441A1A" slider-background="FF473E51" slider-thumb="FF51548F"
+                slider-track="FF322A39" caption-size="20" caption-color="FF906464"
+                slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
+        <Slider caption="Output Gain" parameter="output gain" lookAndFeel="Skeuomorphic"
+                background-color="FF441A1A" slider-background="FF473E51" slider-thumb="FF51548F"
+                slider-track="FF322A39" caption-size="20" caption-color="FF906464"
+                slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
+      </View>
+    </View>
+    <View flex-direction="column" margin="2" padding="2" border="2" radius="9"
+          border-color="FF441A1A" background-color="FF441A1A" tab-color="FF000000"
+          min-height="160" max-height="260">
+      <View min-height="12" max-height="30" margin="0" padding="0" border="0"
+            background-color="FF441A1A" id="TIMINGS title" flex-align-self="stretch">
+        <View flex-grow=".4" border="0" background-color="FF441A1A"/>
+        <View caption="TIMINGS" class="group" caption-color="FF644A66" background-color="FF441A1A"
+              border-color="FF441A1A" caption-size="25" flex-direction="row"
+              radius="0" border="0" padding="0" margin="0" title="" flex-justify-content="start"
+              flex-grow=".1" min-width="35" max-height="30" flex-shrink="1"
+              min-height="15" pos-x="" pos-y=""/>
+        <View flex-grow=".4" margin="2" padding="2" border="0" background-color="FF441A1A"
+              caption="" id="Randomize">
+          <TextButton margin="2" padding="2" border="0" button-color="FF4C2255" id="Randomize"
+                      max-width="50" flex-align-self="stretch" onClick="randomize delays"/>
+        </View>
+      </View>
+      <View padding="0" margin="0" id="TIMINGS params" min-height="50">
+        <View flex-direction="column" background-color="FF441A1A" padding="1"
+              margin="1" border="0" radius="1">
+          <View margin="2" border="0" lookAndFeel="FoleysFinest" padding="8"
+                radius="2" border-color="FF535252" background-color="FF441A1A"
+                min-height="20" flex-grow="1">
+            <Slider caption="Outer Time 1" parameter="delay time 1" background-color="FF441A1A"
+                    slider-background="FF473E51" slider-track="FF322A39" caption-size="20"
+                    slider-thumb="FF51548F" caption-color="FF906464" slider-text="FF8B4747"
+                    slider-text-background="FF280A32" slider-text-highlight="FF7B3197"
+                    border-color="FF535252" margin="0" padding="0" border="0" flex-grow="1"
+                    radius="0" flex-shrink="1" min-width="180"/>
+            <Slider slider-type="rotary-horizontal-vertical" parameter="g1" caption="Outer g1"
+                    caption-color="FF906464" border-color="FF535252" background-color="FF441A1A"
+                    margin="0" padding="0" border="0" radius="0" slider-text="FF8B4747"
+                    slider-text-background="FF280A32" flex-grow="1" min-height="0"
+                    caption-size="20" max-width="80"/>
+          </View>
+          <View margin="2" border="0" padding="8" radius="2" border-color="FF535252"
+                background-color="FF441A1A" min-height="20">
+            <Slider caption="Inner Time 1" parameter="delay time 0" background-color="FF441A1A"
+                    slider-background="FF473E51" slider-track="FF322A39" caption-size="20"
+                    slider-thumb="FF51548F" caption-color="FF906464" slider-text="FF8B4747"
+                    slider-text-background="FF280A32" slider-text-highlight="FF7B3197"
+                    margin="0" padding="0" border="0" border-color="FF535252" flex-grow="1"
+                    radius="0" min-width="180"/>
+            <Slider slider-type="rotary-horizontal-vertical" parameter="g0" caption="Inner g1"
+                    caption-color="FF906464" border-color="FF535252" background-color="FF441A1A"
+                    margin="0" padding="0" border="0" radius="0" slider-text="FF8B4747"
+                    slider-background="" slider-text-background="FF280A32" max-width="80"/>
+          </View>
+        </View>
+        <View flex-direction="column" background-color="FF441A1A" padding="1"
+              margin="1" border="0" radius="1">
+          <View margin="2" border="0" padding="8" radius="2" border-color="FF535252"
+                background-color="FF441A1A">
+            <Slider slider-type="rotary-horizontal-vertical" parameter="g2" caption="Outer g2"
+                    caption-color="FF906464" border-color="FF535252" background-color="FF441A1A"
+                    margin="0" padding="0" border="0" radius="0" slider-text="FF8B4747"
+                    slider-text-background="FF280A32" max-width="80"/>
+            <Slider caption="Outer Time 2" parameter="delay time 2" background-color="FF441A1A"
+                    slider-background="FF473E51" slider-track="FF322A39" caption-size="20"
+                    slider-thumb="FF51548F" caption-color="FF906464" slider-text="FF8B4747"
+                    slider-text-background="FF280A32" slider-text-highlight="FF7B3197"
+                    border-color="FF535252" border="0" padding="0" margin="0" flex-grow="1"
+                    radius="0" min-width="180"/>
+          </View>
+          <View margin="2" padding="8" border="0" radius="2" border-color="FF535252"
+                background-color="FF441A1A">
+            <Slider slider-type="rotary-horizontal-vertical" parameter="g3" caption="Inner g2"
+                    caption-color="FF906464" border-color="FF535252" background-color="FF441A1A"
+                    margin="0" padding="0" border="0" radius="0" slider-text="FF8B4747"
+                    slider-text-background="FF280A32" max-width="80"/>
+            <Slider caption="Inner Time 2" parameter="delay time 3" background-color="FF441A1A"
+                    slider-background="FF473E51" slider-track="FF322A39" caption-size="20"
+                    slider-thumb="FF51548F" caption-color="FF906464" slider-text="FF8B4747"
+                    slider-text-background="FF280A32" slider-text-highlight="FF7B3197"
+                    border-color="FF535252" margin="0" padding="0" border="0" flex-grow="1"
+                    radius="0" min-width="180"/>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</magic>

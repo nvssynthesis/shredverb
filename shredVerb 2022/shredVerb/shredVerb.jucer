@@ -2,13 +2,14 @@
 
 <JUCERPROJECT id="RE3GOQ" name="shredVerb" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              headerPath="/Users/nicholassolem/development/eigen-3.4.0&#10;/Users/nicholassolem/development/nvs_libraries/nvs_libraries"
+              headerPath="/Users/nicholassolem/development/eigen-3.4.0&#10;/Users/nicholassolem/development/nvs_libraries/nvs_libraries&#10;/Users/nicholassolem/development/thirdparty/Sprout"
               cppLanguageStandard="20" pluginFormats="buildAU,buildAUv3,buildStandalone,buildVST3"
               companyEmail="nicholas93solem@gmail.com" companyWebsite="https://nvssynthesis.github.io/"
               companyName="nvssynthesis" pluginDesc="effed up reverb" pluginAAXCategory="16,64,8,8192"
               pluginVSTCategory="kPlugCategRoomFx" pluginVST3Category="Delay,Distortion,Filter,Fx,Network,Reverb,Stereo"
               pluginManufacturer="nvssynthesis" pluginManufacturerCode="Nvss"
-              pluginCode="Nvss" userNotes="reverb that shreds" pluginChannelConfigs="{1, 2}, {2, 2}">
+              pluginCode="Nvss" userNotes="reverb that shreds" pluginChannelConfigs="{1, 2}, {2, 2}"
+              defines="_LIBCPP_ENABLE_CXX20_REMOVED_TYPE_TRAITS">
   <MAINGROUP id="gAxdps" name="shredVerb">
     <GROUP id="{009C1DCF-94C9-913B-568E-A59E1545E46A}" name="Source">
       <GROUP id="{8674C93D-9EC4-CA33-F1CC-68EBA5E78509}" name="PresetManagement">
@@ -49,7 +50,8 @@
                hardenedRuntimeOptions="com.apple.security.device.audio-input"
                microphonePermissionNeeded="1">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="shredVerb" userNotes="The reverb that shreds."/>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="shredVerb" userNotes="The reverb that shreds."
+                       optimisation="1"/>
         <CONFIGURATION isDebug="0" name="Release" targetName="shredVerb" userNotes="The reverb that shreds."
                        defines="FOLEYS_SHOW_GUI_EDITOR_PALLETTE=0"/>
       </CONFIGURATIONS>

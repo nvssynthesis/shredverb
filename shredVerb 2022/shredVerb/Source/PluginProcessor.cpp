@@ -21,6 +21,7 @@
 		**-overcomplicate UI? should its f_c and q be tied to that of TVAP?
 **	-tvaps should be controlled by XYpad instead of 2 knobs?
 	-maybe double each of the TVAPs in series to amplify their phasial effect
+	-drive should only affect the scaling of the control signals. this would also resolve the unintuitive makeup gain.
  */
 
 #define PROTECT_OUTPUT 1
@@ -189,6 +190,18 @@ void ShredVerbAudioProcessor::initialiseBuilder(foleys::MagicGUIBuilder& builder
 	state.addTrigger("randomize", [this]{
 		randomizeParams();
 	});
+	state.addTrigger("randomize delays", [this]{
+		randomizeDelays();
+	});
+	state.addTrigger("randomize qualia", [this]{
+		randomizeQualia();
+	});
+	state.addTrigger("randomize shred", [this]{
+		randomizeCharacter();
+	});
+	state.addTrigger("randomize allpass", [this]{
+		randomizeAllpass();
+	});
 	
 //	presetList = this->magicState.MagicProcessorState::createAndAddObject<PresetListBox>("presets");
 	
@@ -283,6 +296,8 @@ void ShredVerbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     auto nIn = getTotalNumInputChannels();
     auto nOut = getTotalNumOutputChannels();
     
+	maxPreDelTimeMS = float((preDelays[0].getDelaySize() - 10) * 1000) / (float)sampleRate; // no more than buffer length - 10
+
     maxDelTimeMS = float((D[0].getDelaySize() - 10) * 1000) / (float)sampleRate; // no more than buffer length - 10
     minDelTimeMS = float(3 * 1000) / (float)sampleRate; // no less than 3 samples
 
@@ -382,10 +397,10 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 	};
     
 	float const inDrive = juce::Decibels::decibelsToGain<float>(driveParam->load());
-	float const outDrive = 1.f / inDrive;
+//	float const outDrive = 1.f / inDrive;
 	
 	float const _predel = nvs::memoryless::clamp(
-					 static_cast<float>(predelayParam->load()), minDelTimeMS, maxDelTimeMS);
+					 static_cast<float>(predelayParam->load()), minDelTimeMS, maxPreDelTimeMS);
 
     float const _g = fbParam->load();
     float _size = sizeParam->load();
@@ -426,20 +441,24 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 	};
 	
 	/* these cannot be std::arrays until i redo  nvs::memoryless::metaparamA */
-    float inner_f_pi[2], outer_f_pi[2];
-    float inner_f_b[2], outer_f_b[2];
+//    float inner_f_pi[2], outer_f_pi[2];
+//    float inner_f_b[2], outer_f_b[2];
 
     // ACTUALLY RESHAPE FROM 2 METAPARAMS INTO 4 PARAMS:
-    auto dist1Iner = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist1_inner));
-    auto dist1Outr = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist1_outer));
-    auto dist2Iner = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist2_inner));
-    auto dist2Outr = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist2_outer));
+//    auto dist1Iner = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist1_inner));
+//    auto dist1Outr = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist1_outer));
+//    auto dist2Iner = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist2_inner));
+//    auto dist2Outr = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist2_outer));
     
-    nvs::memoryless::metaparamA(float(*dist1Iner), inner_f_pi);
-    nvs::memoryless::metaparamA(float(*dist1Outr), outer_f_pi);
-    nvs::memoryless::metaparamA(float(*dist2Iner), inner_f_b);
-    nvs::memoryless::metaparamA(float(*dist2Outr), outer_f_b);
+//    nvs::memoryless::metaparamA(float(*dist1Iner), inner_f_pi);
+//    nvs::memoryless::metaparamA(float(*dist1Outr), outer_f_pi);
+//    nvs::memoryless::metaparamA(float(*dist2Iner), inner_f_b);
+//    nvs::memoryless::metaparamA(float(*dist2Outr), outer_f_b);
     
+	float dist1inner = dist1inerParam->load();
+	float dist2inner = dist2inerParam->load();
+	float dist1outer = dist1outrParam->load();
+	float dist2outer = dist2outrParam->load();
     //=============================================================================
 	
     for (int i = 0; i < D_IJ; i++) {
@@ -453,10 +472,15 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     }
 	
 	for (int i = 0; i < D_IJ; ++i){
+		float bw = _ap_fb[i];
 		tvap[i].setCutoffTarget(_ap_f_pi[i]);
-		tvap[i].setResonanceTarget(_ap_fb[i]);
+		tvap[i].setResonanceTarget(bw);
+		
 		fm_bp[i].setCutoffTarget(_ap_f_pi[i]);
-		fm_bp[i].setResonanceTarget(_ap_fb[i]);
+		
+		bw = nvs::memoryless::clamp_low(bw, 0.2f);
+		float reso = _ap_f_pi[i] / bw;
+		fm_bp[i].setResonanceTarget(reso);
 	}
 	
 	for (auto &filt : butters){
@@ -508,8 +532,8 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 			}
 			
 			X[0] = 0.f;
-			X[1] = preDelSamp[0] * inDrive;
-			X[2] = preDelSamp[1] * inDrive;
+			X[1] = preDelSamp[0];// * inDrive;
+			X[2] = preDelSamp[1];// * inDrive;
 			X[3] = 0.f;
         }
 
@@ -534,21 +558,21 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 /*R INTERNAL*/ tmp[3] = tvap[3].filter_fbmod(tmp[3], inner_f_pi[0], inner_f_b[1]);
 #else
 		std::array<float, 4> intrnlWcModSig = {
-			fm_bp[0](tmp[0]) * 100000.f,
-			fm_bp[1](tmp[1]) * 100000.f,
-			fm_bp[2](tmp[2]) * 100000.f,
-			fm_bp[3](tmp[3]) * 100000.f,
+			nvs::memoryless::unboundSat2(fm_bp[0](tmp[0]) * 1000000000.f) * 100.f * inDrive,
+			nvs::memoryless::unboundSat2(fm_bp[1](tmp[1]) * 1000000000.f) * 100.f * inDrive,
+			nvs::memoryless::unboundSat2(fm_bp[2](tmp[2]) * 1000000000.f) * 100.f * inDrive,
+			nvs::memoryless::unboundSat2(fm_bp[3](tmp[3]) * 1000000000.f) * 100.f * inDrive
 		};
 #pragma message("need to smooth these cutoff/reso if doing it this way")
-/*L	INTERNAL*/ tmp[0] = tvap[0](tmp[0], _ap_f_pi[0] + inner_f_pi[1]*intrnlWcModSig[0], _ap_fb[0]);
-/*L DIRECT*/ tmp[1] = tvap[1](tmp[1], _ap_f_pi[1] + outer_f_pi[0]*intrnlWcModSig[1], _ap_fb[1]);
-/*R DIRECT*/ tmp[2] = tvap[2](tmp[2], _ap_f_pi[2] + outer_f_pi[1]*intrnlWcModSig[2], _ap_fb[2]);
-/*R INTERNAL*/ tmp[3] = tvap[3](tmp[3], _ap_f_pi[3] + inner_f_pi[0]*intrnlWcModSig[3], _ap_fb[3]);
+/*L	INTERNAL*/ tmp[0] = tvap[0](tmp[0], _ap_f_pi[0] + dist1inner*intrnlWcModSig[0], _ap_fb[0]);
+/*L DIRECT*/ tmp[1] = tvap[1](tmp[1], _ap_f_pi[1] + dist1outer*intrnlWcModSig[1], _ap_fb[1]);
+/*R DIRECT*/ tmp[2] = tvap[2](tmp[2], _ap_f_pi[2] + dist2outer*intrnlWcModSig[2], _ap_fb[2]);
+/*R INTERNAL*/ tmp[3] = tvap[3](tmp[3], _ap_f_pi[3] + dist2inner*intrnlWcModSig[3], _ap_fb[3]);
 #endif
-        Y[0] = D[0].filter(tmp[0]);
-        Y[1] = D[1].filter(tmp[1]);
-        Y[2] = D[2].filter(tmp[2]);
-        Y[3] = D[3].filter(tmp[3]);
+        Y[0] = D[0](tmp[0]);
+        Y[1] = D[1](tmp[1]);
+        Y[2] = D[2](tmp[2]);
+        Y[3] = D[3](tmp[3]);
         
         // D should just be 4 delay lines!
 //        for (int i = 0; i < D_IJ; i++)  {
@@ -567,13 +591,13 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 //             + D[3][2].tick(tmp[2]) + D[3][3].tick(tmp[3]);
 
 		std::array<float, 2> wet {
-			Y[1] * outGain * outDrive,
-			Y[2] * outGain * outDrive
+			Y[1] * outGain,// * outDrive,
+			Y[2] * outGain // * outDrive
 		};
 
 #if PROTECT_OUTPUT
 		for (auto &w : wet){
-			w = nvs::memoryless::clamp1<float>(w);
+			w = nvs::memoryless::clamp1<float>(w * 0.7f);
 		}
 #endif
 		std::array<float, 2> finalOut {

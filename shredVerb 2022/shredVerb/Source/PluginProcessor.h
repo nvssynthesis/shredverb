@@ -90,7 +90,54 @@ public:
 	std::array<float, D_IJ> Y;
 	
     std::array<nvs::delays::Delay<32768, float>, 2> preDelays;
-    std::array<nvs::delays::AllpassDelay<65536, float>, D_IJ> D;
+	struct diffusedDelay {
+		void setSampleRate(float sampleRate){
+			for (auto &d : delays){
+				d.setSampleRate(sampleRate);
+			}
+		}
+		void clear(){
+			for (auto &d : delays){
+				d.clear();
+			}
+		}
+		void setDelayTimeMS(double t){
+			for (int i = 0; i < n_delays; ++i){
+				delays[i].setDelayTimeMS(t * ratios[i]);
+			}
+		}
+		[[deprecated]]
+		void updateDelayTimeMS(float target, float oneOverBlockSize){
+			for (int i = 0; i < n_delays; ++i){
+				delays[i].updateDelayTimeMS(target * ratios[i], oneOverBlockSize);
+			}
+		}
+		void setInterpolation(nvs::delays::interp_e interp){
+			for (auto &d : delays){
+				d.setInterpolation(interp);
+			}
+		}
+		void update_g(float g_target, float oneOverBlockSize){
+			for (auto &d : delays){
+				d.update_g(g_target, oneOverBlockSize);
+			}
+		}
+		unsigned int getDelaySize() const {
+			return delays[0].getDelaySize();
+		}
+		float operator()(float inp){
+			float val = delays[3].filter(delays[2].filter(delays[1].filter(delays[0].filter(inp))));
+			return val;
+		}
+	private:
+		static constexpr size_t n_delays {4};
+		std::array<nvs::delays::AllpassDelay<8192, float>, n_delays> delays;
+		std::array<float, n_delays> ratios {
+			7.f, 11.f, 17.f, 23.f
+		};
+	};
+	
+    std::array<diffusedDelay, D_IJ> D;
     float D_times_ranged[D_IJ];
 
     std::array<nvs::filters::tvap<float>, D_IJ> tvap;
@@ -104,8 +151,8 @@ public:
     }
     
 private:
-	static constexpr float timeScaling {500.f};    // multiplier for the [0..1) delay times, PRE-size parameter
-    float minDelTimeMS, maxDelTimeMS;
+	static constexpr float timeScaling {64.f};    // multiplier for the [0..1) delay times, PRE-size parameter
+    float minDelTimeMS, maxDelTimeMS, maxPreDelTimeMS;
     
 	static constexpr unsigned int versionHint = 1;
 	static constexpr float intervalVal = 0.f;
