@@ -22,6 +22,9 @@
 **	-tvaps should be controlled by XYpad instead of 2 knobs?
 	-maybe double each of the TVAPs in series to amplify their phasial effect
 	-drive should only affect the scaling of the control signals. this would also resolve the unintuitive makeup gain.
+ 
+	-improve quality (dezippering, equal power) of output section
+	-add linking option for the 2 sides of outer distortion
  */
 
 #define PROTECT_OUTPUT 1
@@ -422,7 +425,7 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 		apdGparams[3]->load()
 	};
 	
-    float const _dryWet = dryWetParam->load();
+    float const _dryWet = dryWetParam->load() / 100.f;
 	float const outGain = juce::Decibels::decibelsToGain<float>(outputGainParam->load());
 
 	std::array<float, 4> _ap_f_pi {
@@ -538,6 +541,12 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
         std::array<float, D_IJ> tmp {0.f, 0.f, 0.f, 0.f};
         
+		/* G:
+			{0.f,  1.f,  1.f,  0.f},
+			{-1.f, 0.f,  0.f, -1.f},
+			{1.f,  0.f,  0.f, -1.f},
+			{0.f,  1.f, -1.f,  0.f}
+		*/
         for (int i = 0; i < D_IJ; i++) {
             for (int j = 0; j < D_IJ; j++) {
                 tmp[i] += G[i][j] * Y[j] * (_g);
@@ -572,22 +581,6 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
         Y[1] = D[1](tmp[1]);
         Y[2] = D[2](tmp[2]);
         Y[3] = D[3](tmp[3]);
-        
-        // D should just be 4 delay lines!
-//        for (int i = 0; i < D_IJ; i++)  {
-//            for (int j = 1; j < D_IJ; j++)  {
-//                Y[i] += D[i][j].tick_linear(tmp[j]);
-//            }
-//        }
-// ideally this should work if function pointer works
-//        Y[0] = D[0][0].tick(tmp[0]) + D[0][1].tick(tmp[1])
-//             + D[0][2].tick(tmp[2]) + D[0][3].tick(tmp[3]);
-//        Y[1] = D[1][0].tick(tmp[0]) + D[1][1].tick(tmp[1])
-//             + D[1][2].tick(tmp[2]) + D[1][3].tick(tmp[3]);
-//        Y[2] = D[2][0].tick(tmp[0]) + D[2][1].tick(tmp[1])
-//             + D[2][2].tick(tmp[2]) + D[2][3].tick(tmp[3]);
-//        Y[3] = D[3][0].tick(tmp[0]) + D[3][1].tick(tmp[1])
-//             + D[3][2].tick(tmp[2]) + D[3][3].tick(tmp[3]);
 
 		std::array<float, 2> wet {
 			Y[1] * outGain,// * outDrive,
@@ -596,7 +589,7 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
 #if PROTECT_OUTPUT
 		for (auto &w : wet){
-			w = nvs::memoryless::clamp1<float>(w * 0.7f);
+			w = nvs::memoryless::clamp(w, -2.5f, 2.5f);
 		}
 #endif
 		std::array<float, 2> finalOut {

@@ -888,7 +888,7 @@ static const unsigned char temp_binary_data_4[] =
 "    </View>\r\n"
 "    <View flex-direction=\"column\" margin=\"2\" padding=\"2\" border=\"2\" radius=\"9\"\r\n"
 "          border-color=\"FF441A1A\" background-color=\"FF441A1A\" tab-color=\"FF000000\"\r\n"
-"          min-height=\"160\" max-height=\"260\">\r\n"
+"          min-height=\"160\" max-height=\"200\">\r\n"
 "      <View min-height=\"12\" max-height=\"30\" margin=\"0\" padding=\"0\" border=\"0\"\r\n"
 "            background-color=\"FF441A1A\" id=\"TIMINGS title\" flex-align-self=\"stretch\">\r\n"
 "        <View flex-grow=\".4\" border=\"0\" background-color=\"FF441A1A\"/>\r\n"
@@ -906,9 +906,9 @@ static const unsigned char temp_binary_data_4[] =
 "      <View padding=\"0\" margin=\"0\" id=\"TIMINGS params\" min-height=\"50\">\r\n"
 "        <View flex-direction=\"column\" background-color=\"FF441A1A\" padding=\"1\"\r\n"
 "              margin=\"1\" border=\"0\" radius=\"1\">\r\n"
-"          <View margin=\"2\" border=\"0\" lookAndFeel=\"FoleysFinest\" padding=\"8\"\r\n"
+"          <View margin=\"3\" border=\"0\" lookAndFeel=\"FoleysFinest\" padding=\"2\"\r\n"
 "                radius=\"2\" border-color=\"FF535252\" background-color=\"FF441A1A\"\r\n"
-"                min-height=\"20\" flex-grow=\"1\">\r\n"
+"                min-height=\"20\" flex-grow=\"1\" min-width=\"\">\r\n"
 "            <Slider caption=\"Outer Time 1\" parameter=\"delay time 1\" background-color=\"FF441A1A\"\r\n"
 "                    slider-background=\"FF473E51\" slider-track=\"FF322A39\" caption-size=\"20\"\r\n"
 "                    slider-thumb=\"FF51548F\" caption-color=\"FF906464\" slider-text=\"FF8B4747\"\r\n"
@@ -918,11 +918,11 @@ static const unsigned char temp_binary_data_4[] =
 "            <Slider slider-type=\"rotary-horizontal-vertical\" parameter=\"g1\" caption=\"Outer g1\"\r\n"
 "                    caption-color=\"FF906464\" border-color=\"FF535252\" background-color=\"FF441A1A\"\r\n"
 "                    margin=\"0\" padding=\"0\" border=\"0\" radius=\"0\" slider-text=\"FF8B4747\"\r\n"
-"                    slider-text-background=\"FF280A32\" flex-grow=\"1\" min-height=\"0\"\r\n"
-"                    caption-size=\"20\" max-width=\"80\"/>\r\n"
+"                    slider-text-background=\"FF280A32\" flex-grow=\"1\" caption-size=\"20\"\r\n"
+"                    max-width=\"80\" min-height=\"\" min-width=\"\"/>\r\n"
 "          </View>\r\n"
-"          <View margin=\"2\" border=\"0\" padding=\"8\" radius=\"2\" border-color=\"FF535252\"\r\n"
-"                background-color=\"FF441A1A\" min-height=\"20\">\r\n"
+"          <View margin=\"3\" border=\"0\" padding=\"2\" radius=\"2\" border-color=\"FF535252\"\r\n"
+"                background-color=\"FF441A1A\" min-height=\"20\" min-width=\"\">\r\n"
 "            <Slider caption=\"Inner Time 1\" parameter=\"delay time 0\" background-color=\"FF441A1A\"\r\n"
 "                    slider-background=\"FF473E51\" slider-track=\"FF322A39\" caption-size=\"20\"\r\n"
 "                    slider-thumb=\"FF51548F\" caption-color=\"FF906464\" slider-text=\"FF8B4747\"\r\n"
@@ -937,12 +937,12 @@ static const unsigned char temp_binary_data_4[] =
 "        </View>\r\n"
 "        <View flex-direction=\"column\" background-color=\"FF441A1A\" padding=\"1\"\r\n"
 "              margin=\"1\" border=\"0\" radius=\"1\">\r\n"
-"          <View margin=\"2\" border=\"0\" padding=\"8\" radius=\"2\" border-color=\"FF535252\"\r\n"
-"                background-color=\"FF441A1A\">\r\n"
+"          <View margin=\"3\" border=\"0\" padding=\"2\" radius=\"2\" border-color=\"FF535252\"\r\n"
+"                background-color=\"FF441A1A\" min-width=\"\">\r\n"
 "            <Slider slider-type=\"rotary-horizontal-vertical\" parameter=\"g2\" caption=\"Outer g2\"\r\n"
 "                    caption-color=\"FF906464\" border-color=\"FF535252\" background-color=\"FF441A1A\"\r\n"
 "                    margin=\"0\" padding=\"0\" border=\"0\" radius=\"0\" slider-text=\"FF8B4747\"\r\n"
-"                    slider-text-background=\"FF280A32\" max-width=\"80\"/>\r\n"
+"                    slider-text-background=\"FF280A32\" max-width=\"80\" min-height=\"0.0\"/>\r\n"
 "            <Slider caption=\"Outer Time 2\" parameter=\"delay time 2\" background-color=\"FF441A1A\"\r\n"
 "                    slider-background=\"FF473E51\" slider-track=\"FF322A39\" caption-size=\"20\"\r\n"
 "                    slider-thumb=\"FF51548F\" caption-color=\"FF906464\" slider-text=\"FF8B4747\"\r\n"
@@ -950,8 +950,8 @@ static const unsigned char temp_binary_data_4[] =
 "                    border-color=\"FF535252\" border=\"0\" padding=\"0\" margin=\"0\" flex-grow=\"1\"\r\n"
 "                    radius=\"0\" min-width=\"180\"/>\r\n"
 "          </View>\r\n"
-"          <View margin=\"2\" padding=\"8\" border=\"0\" radius=\"2\" border-color=\"FF535252\"\r\n"
-"                background-color=\"FF441A1A\">\r\n"
+"          <View margin=\"3\" padding=\"2\" border=\"0\" radius=\"2\" border-color=\"FF535252\"\r\n"
+"                background-color=\"FF441A1A\" min-width=\"\">\r\n"
 "            <Slider slider-type=\"rotary-horizontal-vertical\" parameter=\"g3\" caption=\"Inner g2\"\r\n"
 "                    caption-color=\"FF906464\" border-color=\"FF535252\" background-color=\"FF441A1A\"\r\n"
 "                    margin=\"0\" padding=\"0\" border=\"0\" radius=\"0\" slider-text=\"FF8B4747\"\r\n"
@@ -987,7 +987,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes)
         case 0xbfe8695b:  numBytes = 12993; return DEFAULT_v2_42_xml;
         case 0xeae37c9c:  numBytes = 9394; return DIRECT_EDIT_2_0_xml;
         case 0xd54ac2b4:  numBytes = 12993; return DEFAULT_v4_xml;
-        case 0xd558da35:  numBytes = 18836; return DEFAULT_v5_xml;
+        case 0xd558da35:  numBytes = 18917; return DEFAULT_v5_xml;
         default: break;
     }
 

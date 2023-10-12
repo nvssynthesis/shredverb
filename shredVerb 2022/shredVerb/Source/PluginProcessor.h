@@ -6,7 +6,10 @@
   ==============================================================================
 */
 
-// TODO: add pre-gain, pre-delay, decouple metaparams
+/** TODO:
+ -change static size of each delay within diffusedDelay so that it doesnt waste space
+ 
+ */
 // independent adjustment of delay times
 
 #pragma once

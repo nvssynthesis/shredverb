@@ -133,11 +133,11 @@ namespace param_stuff{
     {
         {params_e::drive,       {-60.f, 	60.f, 	0.f}},
         {params_e::predelay,    {0.f, 		500.f, 	100.f}},
-        {params_e::decay,       {0.f, 		1.f, 	0.5f}},
+        {params_e::decay,       {0.f, 		1.f, 	0.75f}},
         {params_e::size,        {0.001f, 	1.f, 	0.5f}},
-        {params_e::lowpass,     {200.f, 	20000.f, 1000.f}},
-        {params_e::highpass,    {10.f, 		800.f, 	200.f}},
-        {params_e::drywet,      {0.f, 		1.f, 	0.7f}},
+        {params_e::lowpass,     {200.f, 	22000.f,1000.f}},
+        {params_e::highpass,    {1.f, 		300.f, 	40.f}},
+        {params_e::drywet,      {0.f, 		100.f, 	70.7f}},
         {params_e::tvap0_f_pi,  f_pi_rng},
         {params_e::tvap0_f_b,   f_b_rng},
         {params_e::tvap1_f_pi,  f_pi_rng},
@@ -164,11 +164,10 @@ namespace param_stuff{
     {
         {params_e::drive,       0.f},
         {params_e::predelay,    0.f},
-        {params_e::decay,       0.5f},
+        {params_e::decay,       0.75f},
         {params_e::size,        0.5f},
         {params_e::lowpass,     12000.f},
         {params_e::highpass,    20.f},
-        {params_e::drywet,      1.f},
         {params_e::tvap0_f_pi,  500.f},
         {params_e::tvap0_f_b,   500.f},
         {params_e::tvap1_f_pi,  500.f},
@@ -181,28 +180,28 @@ namespace param_stuff{
         {params_e::dist1_outer, 0.f},
         {params_e::dist2_inner, 0.f},
         {params_e::dist2_outer, 0.f},
-        {params_e::interp_type, 0.f},
-        {params_e::randomize,   0.f},
-        {params_e::output_gain, 0.f},
-        {params_e::time0,       0.2315797811f},
-        {params_e::time1,       0.3f},
-        {params_e::time2,       0.4f},
-        {params_e::time3,       0.2f},
-		{params_e::g0,			0.f},
-		{params_e::g1,		  	0.f},
-		{params_e::g2,			0.f},
-		{params_e::g3,			0.f}
+        {params_e::time0,       0.411f},	// inner 1
+        {params_e::time1,       0.5f},		// outer 1
+        {params_e::time2,       0.55f},		// outer 2
+        {params_e::time3,       0.653f},	// inner 2
+		
+		{params_e::g0,			0.5f},		// inner 1
+		{params_e::g1,		  	0.7f},		// outer 1
+		{params_e::g2,			0.3f},		// outer 2
+		{params_e::g3,			-0.8f},		// inner 2
+		{params_e::drywet,      100.f},
+		{params_e::output_gain, -10.f}
     };
 
     inline static const std::map<params_e, float> paramSkewFactorFromMidpoints =
     {
         {params_e::drive,       0.f},
         {params_e::predelay,    100.f},
-        {params_e::decay,       0.5f},
+        {params_e::decay,       0.75f},
         {params_e::size,        0.5f},
         {params_e::lowpass,     1000.f},
         {params_e::highpass,    1000.f},
-        {params_e::drywet,      0.5f},
+        {params_e::drywet,      50.f},
         {params_e::tvap0_f_pi,  1000.f},
         {params_e::tvap0_f_b,   1000.f},
         {params_e::tvap1_f_pi,  1000.f},
@@ -279,6 +278,7 @@ namespace param_stuff{
 			Db,
 			Hz,
 			ms,
+			Percent,
 			unitless,
 			NumUnits
 		};
@@ -289,6 +289,7 @@ namespace param_stuff{
 			case Unit::Db: return "dB";
 			case Unit::Hz: return "hz";
 			case Unit::ms: return "ms";
+			case Unit::Percent: return "%";
 			default: return "Unknown";
 			}
 		}
@@ -409,6 +410,13 @@ namespace param_stuff{
 					return String(val, 1) + " ms";
 				};
 			}
+			inline ValToStr percent()
+			{
+				return [](float val, int)
+				{
+					return String(val, 1) + " %";
+				};
+			}
 			inline ValToStr noop()
 			{
 				return [](float val, int)
@@ -442,11 +450,18 @@ namespace param_stuff{
 				};
 			}
 		
-			 StrToVal ms()
+			inline StrToVal ms()
 			{
 				return [](const String& str)
 				{
 					return str.removeCharacters(toString(Unit::ms)).getFloatValue();
+				};
+			}
+			inline StrToVal percent()
+			{
+				return [](const String& str)
+				{
+					return str.removeCharacters(toString(Unit::Percent)).getFloatValue();
 				};
 			}
 			inline StrToVal noop(){
@@ -490,7 +505,7 @@ namespace param_stuff{
 			{params_e::tvap3_f_pi,  Unit::Hz},
 			{params_e::tvap3_f_b,   Unit::Hz},
 			
-			{params_e::drywet,		Unit::unitless},
+			{params_e::drywet,		Unit::Percent},
 			{params_e::output_gain, Unit::Db}
 		};
 	
@@ -498,34 +513,34 @@ namespace param_stuff{
 		{
 			ValToStr valToStrFunc;
 			StrToVal strToValFunc;
-			juce::NormalisableRange<float> range;
 
 			const auto name = paramNames.at(param);
 			const auto ID = paramIDs.at(param);
 
 			const auto minmaxcentre = param_stuff::paramRanges.at(param);
+			juce::NormalisableRange<float> range = range::withCentre(minmaxcentre[0], minmaxcentre[1], minmaxcentre[2]);
 
 			switch (paramStrToUnit.at(param))
 			{
 				case Unit::Db:
 					valToStrFunc = valToStr::db();
 					strToValFunc = strToVal::db();
-					range = range::withCentre(minmaxcentre[0], minmaxcentre[1], minmaxcentre[2]);
 					break;
 				case Unit::Hz:
 					valToStrFunc = valToStr::hz();
 					strToValFunc = strToVal::hz();
-					range = range::withCentre(minmaxcentre[0], minmaxcentre[1], minmaxcentre[2]);
 					break;
 				case Unit::ms:
 					valToStrFunc = valToStr::ms();
 					strToValFunc = strToVal::ms();
-					range = range::withCentre(minmaxcentre[0], minmaxcentre[1], minmaxcentre[2]);
+					break;
+				case Unit::Percent:
+					valToStrFunc = valToStr::percent();
+					strToValFunc = strToVal::percent();
 					break;
 				case Unit::unitless:
 					valToStrFunc = valToStr::noop();
 					strToValFunc = strToVal::noop();
-					range = range::withCentre(minmaxcentre[0], minmaxcentre[1], minmaxcentre[2]);
 					break;
 			}
 		
