@@ -57,11 +57,11 @@
                 slider-track="FF322A39" caption-size="20" caption-color="FF906464"
                 slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
         <Slider caption="Highpass Cutoff" parameter="hip" lookAndFeel="Skeuomorphic"
-                background-color="FF441A1A" slider-background="FF441A1A" slider-thumb="FF51548F"
+                background-color="FF441A1A" slider-background="FF473E51" slider-thumb="FF51548F"
                 slider-track="FF322A39" caption-size="20" caption-color="FF906464"
                 slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
         <Slider caption="Lowpass Cutoff" parameter="lop" lookAndFeel="Skeuomorphic"
-                background-color="FF441A1A" slider-background="FF441A1A" slider-thumb="FF51548F"
+                background-color="FF441A1A" slider-background="FF473E51" slider-thumb="FF51548F"
                 slider-track="FF322A39" caption-size="20" caption-color="FF906464"
                 slider-text="FF8B4747" slider-text-background="FF280A32" slider-text-highlight="FF7B3197"/>
         <TextButton id="randomize" button-color="FF4C2255" max-height="30" border="0"

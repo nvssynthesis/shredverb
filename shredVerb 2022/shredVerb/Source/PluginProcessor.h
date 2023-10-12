@@ -129,11 +129,14 @@ public:
 			float val = delays[3].filter(delays[2].filter(delays[1].filter(delays[0].filter(inp))));
 			return val;
 		}
+		float getLargestRatio() const {
+			return ratios.back();
+		}
 	private:
 		static constexpr size_t n_delays {4};
 		std::array<nvs::delays::AllpassDelay<8192, float>, n_delays> delays;
 		std::array<float, n_delays> ratios {
-			7.f, 11.f, 17.f, 23.f
+			5.f, 13.f, 23.f, 53.f
 		};
 	};
 	
@@ -146,38 +149,18 @@ public:
     
     std::array<nvs::filters::butterworth2p<double>, D_IJ> butters;
     
-    param_stuff *getParamStuff(){
-        return &ps;
-    }
+//    param_stuff *getParamStuff(){
+//        return &ps;
+//    }
     
 private:
-	static constexpr float timeScaling {64.f};    // multiplier for the [0..1) delay times, PRE-size parameter
+	static constexpr float timeScaling {2.78f};    // multiplier for the [0..1) delay times, PRE-size parameter
     float minDelTimeMS, maxDelTimeMS, maxPreDelTimeMS;
-    
-	static constexpr unsigned int versionHint = 1;
-	static constexpr float intervalVal = 0.f;
-    
-    static std::string getID(param_stuff::params_e idx){    return param_stuff::paramIDs.at(idx);       }
-    static std::string getName(param_stuff::params_e idx){  return param_stuff::paramNames.at(idx);     }
-    static float getMin(param_stuff::params_e idx){         return param_stuff::paramRanges.at(idx)[0]; }
-    static float getMax(param_stuff::params_e idx){         return param_stuff::paramRanges.at(idx)[1]; }
-    static float getDef(param_stuff::params_e idx){         return param_stuff::paramDefaults.at(idx);  }
-    
-    static std::unique_ptr<juce::AudioParameterFloat>
-	getUniqueParam(param_stuff::params_e idx) {
-        return std::make_unique<juce::AudioParameterFloat>
-									(
-									   juce::ParameterID(getID(idx), versionHint),
-									   getName(idx),
-									   juce::NormalisableRange<float> (getMin(idx), getMax(idx), intervalVal),
-									   getDef(idx)
-									 );
-    }
 
 	juce::ValueTree  presetNode;
 
     juce::AudioProcessorValueTreeState paramVT;
-    param_stuff ps;
+//    param_stuff ps;
 
     void addReverbParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
     void addDelayParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
@@ -196,7 +179,7 @@ private:
     std::atomic<float>* driveParam = nullptr;
     std::atomic<float>* predelayParam = nullptr;
 
-    std::atomic<float>* fbParam  = nullptr;
+    std::atomic<float>* decayParam  = nullptr;
     std::atomic<float>* sizeParam = nullptr;
     std::atomic<float>* lopParam = nullptr;
     std::atomic<float>* hipParam = nullptr;
