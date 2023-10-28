@@ -8,6 +8,9 @@
 
 namespace BinaryData
 {
+    extern const char*   DEFAULT_V6_xml;
+    const int            DEFAULT_V6_xmlSize = 18937;
+
     extern const char*   DEFAULT_v4_1_xml;
     const int            DEFAULT_v4_1_xmlSize = 13375;
 
@@ -24,7 +27,7 @@ namespace BinaryData
     const int            DEFAULT_v5_xmlSize = 18917;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 5;
+    const int namedResourceListSize = 6;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];

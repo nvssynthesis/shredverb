@@ -9,8 +9,268 @@
 namespace BinaryData
 {
 
-//================== DEFAULT v4.1.xml ==================
+//================== DEFAULT V6.xml ==================
 static const unsigned char temp_binary_data_0[] =
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+"\r\n"
+"<magic>\r\n"
+"  <Styles>\r\n"
+"    <Style name=\"default\">\r\n"
+"      <Nodes/>\r\n"
+"      <Classes>\r\n"
+"        <plot-view border=\"2\" background-color=\"black\" border-color=\"silver\" display=\"contents\"/>\r\n"
+"        <nomargin margin=\"0\" padding=\"0\" border=\"0\"/>\r\n"
+"        <group margin=\"5\" padding=\"5\" border=\"2\" flex-direction=\"column\"/>\r\n"
+"        <transparent background-color=\"transparentblack\"/>\r\n"
+"      </Classes>\r\n"
+"      <Types>\r\n"
+"        <Slider border=\"0\" slider-textbox=\"textbox-below\"/>\r\n"
+"        <ToggleButton border=\"0\" max-height=\"50\" caption-size=\"0\" text=\"Active\"/>\r\n"
+"        <TextButton border=\"0\" max-height=\"50\" caption-size=\"0\"/>\r\n"
+"        <ComboBox border=\"0\" max-height=\"50\" caption-size=\"0\"/>\r\n"
+"        <Plot border=\"0\" margin=\"0\" padding=\"0\" background-color=\"FF473E51\"\r\n"
+"              radius=\"0\"/>\r\n"
+"        <XYDragComponent border=\"0\" margin=\"0\" padding=\"0\" background-color=\"FF473E51\"\r\n"
+"                         radius=\"0\"/>\r\n"
+"      </Types>\r\n"
+"      <Palettes>\r\n"
+"        <default/>\r\n"
+"      </Palettes>\r\n"
+"    </Style>\r\n"
+"  </Styles>\r\n"
+"  <View id=\"root\" resizable=\"1\" resize-corner=\"1\" lookAndFeel=\"FoleysFinest\"\r\n"
+"        flex-direction=\"column\" caption=\"nvssynthesis::shredverb\" caption-color=\"\"\r\n"
+"        border-color=\"FF000000\" background-color=\"FF000000\" tab-color=\"FF000000\"\r\n"
+"        width=\"600\" height=\"700\" min-width=\"100\" min-height=\"100\" padding=\"1\"\r\n"
+"        margin=\"1\" border=\"0\" radius=\"5\">\r\n"
+"    <PresetPanel/>\r\n"
+"    <View flex-shrink=\"1.0\" flex-grow=\".29\" padding=\"2\" border=\"0\" margin=\"5\"\r\n"
+"          id=\"utility\" background-color=\"FF441A1A\" max-height=\"50\" min-height=\"40\">\r\n"
+"      <ListBox list-box-model=\"Presets List\" margin=\"2\" padding=\"2\" border=\"0\"/>\r\n"
+"      <TextButton onClick=\"save-preset\" text=\"Save\" border=\"0\" padding=\"2\" margin=\"2\"\r\n"
+"                  button-color=\"FF143D30\" id=\"save\"/>\r\n"
+"      <TextButton onClick=\"randomize\" text=\"Randomize\" margin=\"2\" padding=\"2\" border=\"0\"\r\n"
+"                  button-color=\"FF4C2255\" id=\"randomize\" min-height=\"\"/>\r\n"
+"    </View>\r\n"
+"    <View flex-grow=\"3\" background-color=\"FF441A1A\" border-color=\"FF441A1A\"\r\n"
+"          radius=\"9\" margin=\"2\" padding=\"2\" border=\"2\" min-width=\"500\"\r\n"
+"          tab-color=\"FF000000\" id=\"main\" tab-caption=\"\" min-height=\"\">\r\n"
+"      <View caption=\"QUALIA\" class=\"group\" background-color=\"FF441A1A\" tab-color=\"\"\r\n"
+"            border-color=\"FF535252\" flex-shrink=\"1.0\" flex-grow=\"0.7\" caption-size=\"25\"\r\n"
+"            caption-color=\"FF644A66\" min-height=\"400\" min-width=\"30\" margin=\"2\">\r\n"
+"        <Slider caption=\"Predelay\" parameter=\"predelay\" lookAndFeel=\"Skeuomorphic\"\r\n"
+"                background-color=\"FF441A1A\" slider-background=\"FF473E51\" slider-thumb=\"FF51548F\"\r\n"
+"                slider-track=\"FF322A39\" caption-size=\"20\" caption-color=\"FF906464\"\r\n"
+"                slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"/>\r\n"
+"        <Slider caption=\"Spatial Size\" parameter=\"size\" lookAndFeel=\"Skeuomorphic\"\r\n"
+"                background-color=\"FF441A1A\" slider-background=\"FF473E51\" slider-thumb=\"FF51548F\"\r\n"
+"                slider-track=\"FF322A39\" caption-size=\"20\" caption-color=\"FF906464\"\r\n"
+"                slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"/>\r\n"
+"        <Slider caption=\"Decay\" parameter=\"decay\" lookAndFeel=\"Skeuomorphic\"\r\n"
+"                background-color=\"FF441A1A\" slider-background=\"FF473E51\" slider-thumb=\"FF51548F\"\r\n"
+"                slider-track=\"FF322A39\" caption-size=\"20\" caption-color=\"FF906464\"\r\n"
+"                slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"/>\r\n"
+"        <Slider caption=\"Highpass Cutoff\" parameter=\"hip\" lookAndFeel=\"Skeuomorphic\"\r\n"
+"                background-color=\"FF441A1A\" slider-background=\"FF473E51\" slider-thumb=\"FF51548F\"\r\n"
+"                slider-track=\"FF322A39\" caption-size=\"20\" caption-color=\"FF906464\"\r\n"
+"                slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"/>\r\n"
+"        <Slider caption=\"Lowpass Cutoff\" parameter=\"lop\" lookAndFeel=\"Skeuomorphic\"\r\n"
+"                background-color=\"FF441A1A\" slider-background=\"FF473E51\" slider-thumb=\"FF51548F\"\r\n"
+"                slider-track=\"FF322A39\" caption-size=\"20\" caption-color=\"FF906464\"\r\n"
+"                slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"/>\r\n"
+"        <TextButton id=\"randomize\" button-color=\"FF4C2255\" max-height=\"30\" border=\"0\"\r\n"
+"                    padding=\"2\" margin=\"2\" min-height=\"30\" onClick=\"randomize qualia\"/>\r\n"
+"      </View>\r\n"
+"      <View caption=\"SHRED\" class=\"group\" background-color=\"FF441A1A\" border-color=\"FF535252\"\r\n"
+"            caption-color=\"FF644A66\" caption-size=\"25\" margin=\"2\" padding=\"5\"\r\n"
+"            border=\"2\" min-height=\"400\" flex-align-items=\"\" flex-justify-content=\"\">\r\n"
+"        <View flex-direction=\"column\" margin=\"1\" padding=\"1\" border=\"1\" flex-grow=\"2.9\"\r\n"
+"              radius=\"5\" border-color=\"FF535252\" background-color=\"FF441A1A\">\r\n"
+"          <Slider caption=\"Outer Distortion 1\" parameter=\"outer distortion 1\" lookAndFeel=\"Skeuomorphic\"\r\n"
+"                  background-color=\"FF441A1A\" slider-track=\"FF322A39\" caption-size=\"20\"\r\n"
+"                  slider-background=\"FF473E51\" slider-thumb=\"FF51548F\" caption-color=\"FF906464\"\r\n"
+"                  slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"\r\n"
+"                  margin=\"1\" padding=\"8\" border=\"\" radius=\"0\"/>\r\n"
+"          <Slider caption=\"Inner Distortion 1\" parameter=\"inner distortion 1\" lookAndFeel=\"Skeuomorphic\"\r\n"
+"                  pos-x=\"-19.3676%\" pos-y=\"46.089%\" pos-width=\"100%\" pos-height=\"24.9097%\"\r\n"
+"                  background-color=\"FF441A1A\" slider-background=\"FF473E51\" slider-track=\"FF322A39\"\r\n"
+"                  caption-size=\"20\" slider-thumb=\"FF51548F\" caption-color=\"FF906464\"\r\n"
+"                  slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"\r\n"
+"                  margin=\"1\" padding=\"8\" radius=\"0\"/>\r\n"
+"          <Slider caption=\"Inner Distortion 2\" parameter=\"inner distortion 2\" lookAndFeel=\"Skeuomorphic\"\r\n"
+"                  background-color=\"FF441A1A\" slider-background=\"FF473E51\" slider-track=\"FF322A39\"\r\n"
+"                  caption-size=\"20\" slider-thumb=\"FF51548F\" caption-color=\"FF906464\"\r\n"
+"                  slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"\r\n"
+"                  margin=\"1\" padding=\"8\" radius=\"0\"/>\r\n"
+"          <Slider caption=\"Outer Distortion 2\" parameter=\"outer distortion 2\" lookAndFeel=\"Skeuomorphic\"\r\n"
+"                  background-color=\"FF441A1A\" slider-track=\"FF322A39\" caption-size=\"20\"\r\n"
+"                  slider-background=\"FF473E51\" slider-thumb=\"FF51548F\" caption-color=\"FF906464\"\r\n"
+"                  slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"\r\n"
+"                  margin=\"1\" padding=\"8\" border-color=\"FF000000\" border=\"0\" radius=\"\"/>\r\n"
+"        </View>\r\n"
+"        <Slider caption=\"Drive\" parameter=\"drive\" lookAndFeel=\"Skeuomorphic\"\r\n"
+"                background-color=\"FF441A1A\" slider-track=\"FF322A39\" caption-size=\"20\"\r\n"
+"                slider-background=\"FF473E51\" slider-thumb=\"FF51548F\" caption-color=\"FF906464\"\r\n"
+"                slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"\r\n"
+"                flex-grow=\"0.7\" border-color=\"FF535252\" border=\"0\" padding=\"8\"\r\n"
+"                margin=\"1\" radius=\"9\"/>\r\n"
+"        <TextButton id=\"randomize\" button-color=\"FF4C2255\" max-height=\"30\" min-height=\"30\"\r\n"
+"                    height=\"30\" flex-grow=\"1.0\" flex-order=\"0\" margin=\"2\" padding=\"2\"\r\n"
+"                    border=\"0\" onClick=\"randomize shred\" pos-x=\"-4.66667%\" pos-y=\"86.4035%\"\r\n"
+"                    pos-width=\"100%\" pos-height=\"6.57895%\"/>\r\n"
+"      </View>\r\n"
+"      <View caption=\"ALLPASS\" class=\"group\" flex-grow=\"1.2\" background-color=\"FF441A1A\"\r\n"
+"            border-color=\"FF535252\" caption-size=\"25\" caption-color=\"FF644A66\"\r\n"
+"            margin=\"2\" min-height=\"400\" flex-wrap=\"nowrap\" flex-justify-content=\"start\">\r\n"
+"        <View background-color=\"FF441A1A\" border=\"1\" border-color=\"FF535252\"\r\n"
+"              radius=\"5\" margin=\"1\" padding=\"1\">\r\n"
+"          <Slider caption=\"Base 1\" parameter=\"tvap1 freq\" background-color=\"FF441A1A\"\r\n"
+"                  slider-background=\"FF473E51\" slider-thumb=\"FF51548F\" slider-track=\"FF322A39\"\r\n"
+"                  caption-size=\"20\" caption-color=\"FF906464\" slider-text=\"FF8B4747\"\r\n"
+"                  slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"/>\r\n"
+"          <Slider caption=\"Width 1\" parameter=\"tvap1 bandwidth\" lookAndFeel=\"FoleysFinest\"\r\n"
+"                  background-color=\"FF441A1A\" slider-background=\"FF473E51\" slider-thumb=\"FF51548F\"\r\n"
+"                  slider-track=\"FF322A39\" caption-size=\"20\" caption-color=\"FF906464\"\r\n"
+"                  slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"/>\r\n"
+"        </View>\r\n"
+"        <View flex-grow=\"1\" min-width=\"1.0\" flex-order=\"0\" flex-align-self=\"stretch\"\r\n"
+"              background-color=\"FF441A1A\" border=\"1\" border-color=\"FF535252\"\r\n"
+"              radius=\"5\" margin=\"1\" padding=\"1\">\r\n"
+"          <Slider caption=\"Base 2\" parameter=\"tvap0 freq\" background-color=\"FF441A1A\"\r\n"
+"                  slider-background=\"FF473E51\" slider-track=\"FF322A39\" caption-size=\"20\"\r\n"
+"                  slider-thumb=\"FF51548F\" caption-color=\"FF906464\" slider-text=\"FF8B4747\"\r\n"
+"                  slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"/>\r\n"
+"          <Slider caption=\"Width 2\" parameter=\"tvap0 bandwidth\" lookAndFeel=\"FoleysFinest\"\r\n"
+"                  background-color=\"FF441A1A\" slider-background=\"FF473E51\" slider-thumb=\"FF51548F\"\r\n"
+"                  slider-track=\"FF322A39\" caption-size=\"20\" caption-color=\"FF906464\"\r\n"
+"                  slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"/>\r\n"
+"        </View>\r\n"
+"        <View background-color=\"FF441A1A\" border=\"1\" border-color=\"FF535252\"\r\n"
+"              radius=\"5\" margin=\"1\" padding=\"1\">\r\n"
+"          <Slider caption=\"Base 3\" parameter=\"tvap3 freq\" background-color=\"FF441A1A\"\r\n"
+"                  tab-color=\"\" slider-background=\"FF473E51\" slider-thumb=\"FF51548F\"\r\n"
+"                  slider-track=\"FF322A39\" caption-size=\"20\" caption-color=\"FF906464\"\r\n"
+"                  slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"/>\r\n"
+"          <Slider caption=\"Width 3\" parameter=\"tvap3 bandwidth\" lookAndFeel=\"FoleysFinest\"\r\n"
+"                  background-color=\"FF441A1A\" slider-background=\"FF473E51\" slider-thumb=\"FF51548F\"\r\n"
+"                  slider-track=\"FF322A39\" caption-size=\"20\" caption-color=\"FF906464\"\r\n"
+"                  slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"/>\r\n"
+"        </View>\r\n"
+"        <View background-color=\"FF441A1A\" border=\"1\" border-color=\"FF535252\"\r\n"
+"              radius=\"5\" margin=\"1\" padding=\"1\">\r\n"
+"          <Slider caption=\"Base 4\" parameter=\"tvap2 freq\" background-color=\"FF441A1A\"\r\n"
+"                  slider-background=\"FF473E51\" slider-thumb=\"FF51548F\" slider-track=\"FF322A39\"\r\n"
+"                  caption-size=\"20\" caption-color=\"FF906464\" slider-text=\"FF8B4747\"\r\n"
+"                  slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"/>\r\n"
+"          <Slider caption=\"Width 4\" parameter=\"tvap2 bandwidth\" lookAndFeel=\"FoleysFinest\"\r\n"
+"                  background-color=\"FF441A1A\" slider-background=\"FF473E51\" slider-thumb=\"FF51548F\"\r\n"
+"                  slider-track=\"FF322A39\" caption-size=\"20\" caption-color=\"FF906464\"\r\n"
+"                  slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"/>\r\n"
+"        </View>\r\n"
+"        <TextButton flex-shrink=\"1\" flex-grow=\".5\" text=\"\" button-color=\"FF4C2255\"\r\n"
+"                    max-height=\"30\" min-height=\"30\" margin=\"2\" padding=\"2\" border=\"0\"\r\n"
+"                    onClick=\"randomize allpass\"/>\r\n"
+"      </View>\r\n"
+"      <View caption=\"OUTPUT\" class=\"group\" border-color=\"FF535252\" background-color=\"FF441A1A\"\r\n"
+"            flex-grow=\"0.8\" caption-size=\"25\" caption-color=\"FF644A66\" min-width=\"10\"\r\n"
+"            flex-shrink=\"1.0\" min-height=\"400\" margin=\"2\">\r\n"
+"        <Slider caption=\"Dry/Wet\" parameter=\"dryWet\" lookAndFeel=\"Skeuomorphic\"\r\n"
+"                background-color=\"FF441A1A\" slider-background=\"FF473E51\" slider-thumb=\"FF51548F\"\r\n"
+"                slider-track=\"FF322A39\" caption-size=\"20\" caption-color=\"FF906464\"\r\n"
+"                slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"/>\r\n"
+"        <Slider caption=\"Output Gain\" parameter=\"output gain\" lookAndFeel=\"Skeuomorphic\"\r\n"
+"                background-color=\"FF441A1A\" slider-background=\"FF473E51\" slider-thumb=\"FF51548F\"\r\n"
+"                slider-track=\"FF322A39\" caption-size=\"20\" caption-color=\"FF906464\"\r\n"
+"                slider-text=\"FF8B4747\" slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"/>\r\n"
+"      </View>\r\n"
+"    </View>\r\n"
+"    <View flex-direction=\"column\" margin=\"2\" padding=\"2\" border=\"2\" radius=\"9\"\r\n"
+"          border-color=\"FF441A1A\" background-color=\"FF441A1A\" tab-color=\"FF000000\"\r\n"
+"          min-height=\"160\" max-height=\"200\">\r\n"
+"      <View min-height=\"12\" max-height=\"30\" margin=\"0\" padding=\"0\" border=\"0\"\r\n"
+"            background-color=\"FF441A1A\" id=\"TIMINGS title\" flex-align-self=\"stretch\">\r\n"
+"        <View flex-grow=\".4\" border=\"0\" background-color=\"FF441A1A\"/>\r\n"
+"        <View caption=\"TIMINGS\" class=\"group\" caption-color=\"FF644A66\" background-color=\"FF441A1A\"\r\n"
+"              border-color=\"FF441A1A\" caption-size=\"25\" flex-direction=\"row\"\r\n"
+"              radius=\"0\" border=\"0\" padding=\"0\" margin=\"0\" title=\"\" flex-justify-content=\"start\"\r\n"
+"              flex-grow=\".1\" min-width=\"35\" max-height=\"30\" flex-shrink=\"1\"\r\n"
+"              min-height=\"15\" pos-x=\"\" pos-y=\"\"/>\r\n"
+"        <View flex-grow=\".4\" margin=\"2\" padding=\"2\" border=\"0\" background-color=\"FF441A1A\"\r\n"
+"              caption=\"\" id=\"Randomize\">\r\n"
+"          <TextButton margin=\"2\" padding=\"2\" border=\"0\" button-color=\"FF4C2255\" id=\"Randomize\"\r\n"
+"                      max-width=\"50\" flex-align-self=\"stretch\" onClick=\"randomize delays\"/>\r\n"
+"        </View>\r\n"
+"      </View>\r\n"
+"      <View padding=\"0\" margin=\"0\" id=\"TIMINGS params\" min-height=\"50\">\r\n"
+"        <View flex-direction=\"column\" background-color=\"FF441A1A\" padding=\"1\"\r\n"
+"              margin=\"1\" border=\"0\" radius=\"1\">\r\n"
+"          <View margin=\"3\" border=\"0\" lookAndFeel=\"FoleysFinest\" padding=\"2\"\r\n"
+"                radius=\"2\" border-color=\"FF535252\" background-color=\"FF441A1A\"\r\n"
+"                min-height=\"20\" flex-grow=\"1\" min-width=\"\">\r\n"
+"            <Slider caption=\"Outer Time 1\" parameter=\"delay time 1\" background-color=\"FF441A1A\"\r\n"
+"                    slider-background=\"FF473E51\" slider-track=\"FF322A39\" caption-size=\"20\"\r\n"
+"                    slider-thumb=\"FF51548F\" caption-color=\"FF906464\" slider-text=\"FF8B4747\"\r\n"
+"                    slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"\r\n"
+"                    border-color=\"FF535252\" margin=\"0\" padding=\"0\" border=\"0\" flex-grow=\"1\"\r\n"
+"                    radius=\"0\" flex-shrink=\"1\" min-width=\"180\"/>\r\n"
+"            <Slider slider-type=\"rotary-horizontal-vertical\" parameter=\"g1\" caption=\"Outer g1\"\r\n"
+"                    caption-color=\"FF906464\" border-color=\"FF535252\" background-color=\"FF441A1A\"\r\n"
+"                    margin=\"0\" padding=\"0\" border=\"0\" radius=\"0\" slider-text=\"FF8B4747\"\r\n"
+"                    slider-text-background=\"FF280A32\" flex-grow=\"1\" caption-size=\"20\"\r\n"
+"                    max-width=\"80\" min-height=\"\" min-width=\"\"/>\r\n"
+"          </View>\r\n"
+"          <View margin=\"3\" border=\"0\" padding=\"2\" radius=\"2\" border-color=\"FF535252\"\r\n"
+"                background-color=\"FF441A1A\" min-height=\"20\" min-width=\"\">\r\n"
+"            <Slider caption=\"Inner Time 1\" parameter=\"delay time 0\" background-color=\"FF441A1A\"\r\n"
+"                    slider-background=\"FF473E51\" slider-track=\"FF322A39\" caption-size=\"20\"\r\n"
+"                    slider-thumb=\"FF51548F\" caption-color=\"FF906464\" slider-text=\"FF8B4747\"\r\n"
+"                    slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"\r\n"
+"                    margin=\"0\" padding=\"0\" border=\"0\" border-color=\"FF535252\" flex-grow=\"1\"\r\n"
+"                    radius=\"0\" min-width=\"180\"/>\r\n"
+"            <Slider slider-type=\"rotary-horizontal-vertical\" parameter=\"g0\" caption=\"Inner g1\"\r\n"
+"                    caption-color=\"FF906464\" border-color=\"FF535252\" background-color=\"FF441A1A\"\r\n"
+"                    margin=\"0\" padding=\"0\" border=\"0\" radius=\"0\" slider-text=\"FF8B4747\"\r\n"
+"                    slider-background=\"\" slider-text-background=\"FF280A32\" max-width=\"80\"/>\r\n"
+"          </View>\r\n"
+"        </View>\r\n"
+"        <View flex-direction=\"column\" background-color=\"FF441A1A\" padding=\"1\"\r\n"
+"              margin=\"1\" border=\"0\" radius=\"1\">\r\n"
+"          <View margin=\"3\" border=\"0\" padding=\"2\" radius=\"2\" border-color=\"FF535252\"\r\n"
+"                background-color=\"FF441A1A\" min-width=\"\">\r\n"
+"            <Slider slider-type=\"rotary-horizontal-vertical\" parameter=\"g2\" caption=\"Outer g2\"\r\n"
+"                    caption-color=\"FF906464\" border-color=\"FF535252\" background-color=\"FF441A1A\"\r\n"
+"                    margin=\"0\" padding=\"0\" border=\"0\" radius=\"0\" slider-text=\"FF8B4747\"\r\n"
+"                    slider-text-background=\"FF280A32\" max-width=\"80\" min-height=\"0.0\"/>\r\n"
+"            <Slider caption=\"Outer Time 2\" parameter=\"delay time 2\" background-color=\"FF441A1A\"\r\n"
+"                    slider-background=\"FF473E51\" slider-track=\"FF322A39\" caption-size=\"20\"\r\n"
+"                    slider-thumb=\"FF51548F\" caption-color=\"FF906464\" slider-text=\"FF8B4747\"\r\n"
+"                    slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"\r\n"
+"                    border-color=\"FF535252\" border=\"0\" padding=\"0\" margin=\"0\" flex-grow=\"1\"\r\n"
+"                    radius=\"0\" min-width=\"180\"/>\r\n"
+"          </View>\r\n"
+"          <View margin=\"3\" padding=\"2\" border=\"0\" radius=\"2\" border-color=\"FF535252\"\r\n"
+"                background-color=\"FF441A1A\" min-width=\"\">\r\n"
+"            <Slider slider-type=\"rotary-horizontal-vertical\" parameter=\"g3\" caption=\"Inner g2\"\r\n"
+"                    caption-color=\"FF906464\" border-color=\"FF535252\" background-color=\"FF441A1A\"\r\n"
+"                    margin=\"0\" padding=\"0\" border=\"0\" radius=\"0\" slider-text=\"FF8B4747\"\r\n"
+"                    slider-text-background=\"FF280A32\" max-width=\"80\"/>\r\n"
+"            <Slider caption=\"Inner Time 2\" parameter=\"delay time 3\" background-color=\"FF441A1A\"\r\n"
+"                    slider-background=\"FF473E51\" slider-track=\"FF322A39\" caption-size=\"20\"\r\n"
+"                    slider-thumb=\"FF51548F\" caption-color=\"FF906464\" slider-text=\"FF8B4747\"\r\n"
+"                    slider-text-background=\"FF280A32\" slider-text-highlight=\"FF7B3197\"\r\n"
+"                    border-color=\"FF535252\" margin=\"0\" padding=\"0\" border=\"0\" flex-grow=\"1\"\r\n"
+"                    radius=\"0\" min-width=\"180\"/>\r\n"
+"          </View>\r\n"
+"        </View>\r\n"
+"      </View>\r\n"
+"    </View>\r\n"
+"  </View>\r\n"
+"</magic>\r\n";
+
+const char* DEFAULT_V6_xml = (const char*) temp_binary_data_0;
+
+//================== DEFAULT v4.1.xml ==================
+static const unsigned char temp_binary_data_1[] =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
 "\r\n"
 "<magic>\r\n"
@@ -199,10 +459,10 @@ static const unsigned char temp_binary_data_0[] =
 "  </View>\r\n"
 "</magic>\r\n";
 
-const char* DEFAULT_v4_1_xml = (const char*) temp_binary_data_0;
+const char* DEFAULT_v4_1_xml = (const char*) temp_binary_data_1;
 
 //================== DEFAULT v2.42.xml ==================
-static const unsigned char temp_binary_data_1[] =
+static const unsigned char temp_binary_data_2[] =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
 "\r\n"
 "<magic>\r\n"
@@ -387,10 +647,10 @@ static const unsigned char temp_binary_data_1[] =
 "  </View>\r\n"
 "</magic>\r\n";
 
-const char* DEFAULT_v2_42_xml = (const char*) temp_binary_data_1;
+const char* DEFAULT_v2_42_xml = (const char*) temp_binary_data_2;
 
 //================== DIRECT EDIT 2.0.xml ==================
-static const unsigned char temp_binary_data_2[] =
+static const unsigned char temp_binary_data_3[] =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
 "\r\n"
 "<magic>\r\n"
@@ -522,10 +782,10 @@ static const unsigned char temp_binary_data_2[] =
 "</magic>\r\n"
 "\0\r\n";
 
-const char* DIRECT_EDIT_2_0_xml = (const char*) temp_binary_data_2;
+const char* DIRECT_EDIT_2_0_xml = (const char*) temp_binary_data_3;
 
 //================== DEFAULT v4.xml ==================
-static const unsigned char temp_binary_data_3[] =
+static const unsigned char temp_binary_data_4[] =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
 "\r\n"
 "<magic>\r\n"
@@ -710,10 +970,10 @@ static const unsigned char temp_binary_data_3[] =
 "  </View>\r\n"
 "</magic>\r\n";
 
-const char* DEFAULT_v4_xml = (const char*) temp_binary_data_3;
+const char* DEFAULT_v4_xml = (const char*) temp_binary_data_4;
 
 //================== DEFAULT v5.xml ==================
-static const unsigned char temp_binary_data_4[] =
+static const unsigned char temp_binary_data_5[] =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
 "\r\n"
 "<magic>\r\n"
@@ -969,7 +1229,7 @@ static const unsigned char temp_binary_data_4[] =
 "  </View>\r\n"
 "</magic>\r\n";
 
-const char* DEFAULT_v5_xml = (const char*) temp_binary_data_4;
+const char* DEFAULT_v5_xml = (const char*) temp_binary_data_5;
 
 
 const char* getNamedResource (const char* resourceNameUTF8, int& numBytes);
@@ -983,6 +1243,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes)
 
     switch (hash)
     {
+        case 0x9ecbddd6:  numBytes = 18937; return DEFAULT_V6_xml;
         case 0xa9b63e66:  numBytes = 13375; return DEFAULT_v4_1_xml;
         case 0xbfe8695b:  numBytes = 12993; return DEFAULT_v2_42_xml;
         case 0xeae37c9c:  numBytes = 9394; return DIRECT_EDIT_2_0_xml;
@@ -997,6 +1258,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes)
 
 const char* namedResourceList[] =
 {
+    "DEFAULT_V6_xml",
     "DEFAULT_v4_1_xml",
     "DEFAULT_v2_42_xml",
     "DIRECT_EDIT_2_0_xml",
@@ -1006,6 +1268,7 @@ const char* namedResourceList[] =
 
 const char* originalFilenames[] =
 {
+    "DEFAULT V6.xml",
     "DEFAULT v4.1.xml",
     "DEFAULT v2.42.xml",
     "DIRECT EDIT 2.0.xml",

@@ -111,6 +111,7 @@
 		341055ABECEDBF3FDA836916 /* AU */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shredVerb.component; sourceTree = BUILT_PRODUCTS_DIR; };
 		382686B05570ED390FB51626 /* JuceHeader.h */ /* JuceHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceHeader.h; path = ../../JuceLibraryCode/JuceHeader.h; sourceTree = SOURCE_ROOT; };
 		3DA7C1253D845B61FB4BA825 /* nvs_memoryless.h */ /* nvs_memoryless.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nvs_memoryless.h; path = ../../../../../nvs_libraries/nvs_libraries/include/nvs_memoryless.h; sourceTree = SOURCE_ROOT; };
+		3DF110F5BC74C2E33995267B /* DEFAULT V6.xml */ /* DEFAULT V6.xml */ = {isa = PBXFileReference; lastKnownFileType = file.xml; name = "DEFAULT V6.xml"; path = "../../Resources/DEFAULT V6.xml"; sourceTree = SOURCE_ROOT; };
 		41540552503A6C81082AF601 /* CoreAudioKit.framework */ /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
 		416EBB61EA74158BC2BCB22B /* nvs_LFO.cpp */ /* nvs_LFO.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = nvs_LFO.cpp; path = ../../../../../nvs_libraries/nvs_libraries/src/nvs_LFO.cpp; sourceTree = SOURCE_ROOT; };
 		47223C55290CCE880A7B8CE0 /* RecentFilesMenuTemplate.nib */ /* RecentFilesMenuTemplate.nib */ = {isa = PBXFileReference; lastKnownFileType = file.nib; name = RecentFilesMenuTemplate.nib; path = RecentFilesMenuTemplate.nib; sourceTree = SOURCE_ROOT; };
@@ -358,6 +359,7 @@
 		D7ED66E1C4BCFD15F21E53F5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3DF110F5BC74C2E33995267B,
 				AAD41EB22E4C4EE91F2BC51B,
 				2DB428F4193E32235A9BF00E,
 				7505614FACD89137D56E8439,

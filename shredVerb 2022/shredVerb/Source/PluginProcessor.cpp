@@ -42,7 +42,7 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
 
 	// set GUI
     // this is how i was loading default, but docs actually say to do this as return... in createEditor
-    magicState.setGuiValueTree (BinaryData::DEFAULT_v5_xml, BinaryData::DEFAULT_v5_xmlSize);
+    magicState.setGuiValueTree (BinaryData::DEFAULT_V6_xml, BinaryData::DEFAULT_V6_xmlSize);
 
     // pointers are copied to items declared in object so they don't go out of scope
     driveParam    = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::drive));
@@ -176,6 +176,9 @@ void ShredVerbAudioProcessor::randomizeParams(){
 void ShredVerbAudioProcessor::initialiseBuilder(foleys::MagicGUIBuilder& builder) {
 	builder.registerJUCEFactories();
 	builder.registerJUCELookAndFeels();
+	
+	builder.registerFactory("PresetPanel", *Gui::PresetPanelItem::factory);
+	
 	foleys::MagicGUIState& state = builder.getMagicState();
 	
 	presetList = state.createAndAddObject<PresetListBox>("Presets");
@@ -215,6 +218,9 @@ void ShredVerbAudioProcessor::initialiseBuilder(foleys::MagicGUIBuilder& builder
 		std::cout << "load?\n";
 		loadPresetInternal (number);
 	};
+	
+	presetPanel = state.createAndAddObject<Gui::PresetPanel>("Preset Panel");
+	
 }
 
 void ShredVerbAudioProcessor::savePresetInternal()
@@ -611,7 +617,6 @@ bool ShredVerbAudioProcessor::hasEditor() const
 juce::AudioProcessorEditor* ShredVerbAudioProcessor::createEditor()
 {
     return new foleys::MagicPluginEditor(magicState);
-//    return new ShredVerbAudioProcessorEditor (*this, paramVT);
 }
 //==============================================================================
 void ShredVerbAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
