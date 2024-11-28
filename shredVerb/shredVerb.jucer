@@ -63,9 +63,10 @@
                microphonePermissionNeeded="1" xcodeValidArchs="arm64">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug" targetName="shredVerb" userNotes="The reverb that shreds."
-                       optimisation="1"/>
+                       optimisation="1" macOSDeploymentTarget="13.0" osxCompatibility="13.0 SDK"/>
         <CONFIGURATION isDebug="0" name="Release" targetName="shredVerb" userNotes="The reverb that shreds."
-                       defines="FOLEYS_SHOW_GUI_EDITOR_PALLETTE=0"/>
+                       defines="FOLEYS_SHOW_GUI_EDITOR_PALLETTE=0" macOSDeploymentTarget="13.0"
+                       osxCompatibility="13.0 SDK"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="../../../../../Applications/JUCE/modules"/>
