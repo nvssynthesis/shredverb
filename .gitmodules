@@ -1,3 +1,6 @@
 [submodule "nvs_libraries"]
 	path = nvs_libraries
 	url = https://github.com/nvssynthesis/nvs_libraries.git
+[submodule "libs/nvs_libraries"]
+	path = libs/nvs_libraries
+	url = https://github.com/nvssynthesis/nvs_libraries.git
