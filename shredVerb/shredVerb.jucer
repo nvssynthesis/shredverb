@@ -4,7 +4,7 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
               headerPath="../../../libs/nvs_libraries&#10;../../../libs/nvs_libraries/nvs_libraries/external/sprout"
               cppLanguageStandard="20" pluginFormats="buildAU,buildAUv3,buildStandalone,buildVST3"
-              companyEmail="nicholas93solem@gmail.com" companyWebsite="https://nvssynthesis.github.io/"
+              companyEmail="nickosolem@gmail.com" companyWebsite="https://nvssynthesis.github.io/"
               companyName="nvssynthesis" pluginDesc="effed up reverb" pluginAAXCategory="16,64,8,8192"
               pluginVSTCategory="kPlugCategRoomFx" pluginVST3Category="Delay,Distortion,Filter,Fx,Network,Reverb,Stereo"
               pluginManufacturer="nvssynthesis" pluginManufacturerCode="Nvss"
@@ -43,6 +43,8 @@
       <FILE id="ftaSr0" name="PresetListBox.h" compile="0" resource="0" file="Source/PresetListBox.h"/>
     </GROUP>
     <GROUP id="{17F96A0E-7C5C-E590-39B0-FC0D70462767}" name="Resources">
+      <FILE id="plgVOd" name="no_preset_manager_plus_randomize_labels.xml"
+            compile="0" resource="1" file="Resources/no_preset_manager_plus_randomize_labels.xml"/>
       <FILE id="vl5NA3" name="DEFAULT V6.xml" compile="0" resource="1" file="Resources/DEFAULT V6.xml"/>
       <FILE id="yOBbwi" name="DEFAULT v4.1.xml" compile="0" resource="1"
             file="Resources/DEFAULT v4.1.xml"/>

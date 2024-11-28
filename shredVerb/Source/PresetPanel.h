@@ -20,7 +20,7 @@ class PresetPanel	:		public Component
 , 							ComboBox::Listener
 {
 public:
-	PresetPanel(int i)
+	PresetPanel(/*int i*/)
 	{
 		configureButton(saveButton, "Save");
 		configureButton(deleteButton, "Delete");
@@ -122,16 +122,10 @@ private:
 class PresetPanelItem	:	public foleys::GuiItem
 {
 public:
-//	FOLEYS_DECLARE_GUI_FACTORY(PresetPanelItem);
-//	FOLEYS_DECLARE_GUI_FACTORY with extra arg:
-	static inline std::unique_ptr<foleys::GuiItem> factory (foleys::MagicGUIBuilder& builder, const juce::ValueTree& node, int i)
-	{
-		return std::make_unique<PresetPanelItem>(builder, node, i);
-	}
+	FOLEYS_DECLARE_GUI_FACTORY(PresetPanelItem);
 	
-	PresetPanelItem(foleys::MagicGUIBuilder& builder, const juce::ValueTree& node, int i)
-	: foleys::GuiItem (builder, node),
-	pp(i)
+	PresetPanelItem(foleys::MagicGUIBuilder& builder, const juce::ValueTree& node)
+	: foleys::GuiItem (builder, node)
 	{
 		addAndMakeVisible(pp);
 	}
@@ -145,7 +139,7 @@ public:
 	}
 private:
 	PresetPanel pp;
-//	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PresetPanelItem)
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PresetPanelItem)
 };
 
 //PresetPanel pp;

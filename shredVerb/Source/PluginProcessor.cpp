@@ -38,13 +38,13 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
 //#endif
 	paramVT(*this, nullptr, juce::Identifier ("APVTSshredverb"), createParameterLayout())
 ,	presetManager(paramVT)
-,	presetPanel(42)
+,	presetPanel()
 {
     FOLEYS_SET_SOURCE_PATH (__FILE__);
 
 	// set GUI
     // this is how i was loading default, but docs actually say to do this as return... in createEditor
-    magicState.setGuiValueTree (BinaryData::DEFAULT_V6_xml, BinaryData::DEFAULT_V6_xmlSize);
+    magicState.setGuiValueTree (BinaryData::no_preset_manager_plus_randomize_labels_xml, BinaryData::no_preset_manager_plus_randomize_labels_xmlSize);
 
 	presetPanel.assignPresetManager(&presetManager);
 	
