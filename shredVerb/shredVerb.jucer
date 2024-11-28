@@ -2,7 +2,8 @@
 
 <JUCERPROJECT id="RE3GOQ" name="shredVerb" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              headerPath="../libs/nvs_libraries" cppLanguageStandard="20" pluginFormats="buildAU,buildAUv3,buildStandalone,buildVST3"
+              headerPath="../../../libs/nvs_libraries&#10;../../../libs/nvs_libraries/nvs_libraries/external/sprout"
+              cppLanguageStandard="20" pluginFormats="buildAU,buildAUv3,buildStandalone,buildVST3"
               companyEmail="nicholas93solem@gmail.com" companyWebsite="https://nvssynthesis.github.io/"
               companyName="nvssynthesis" pluginDesc="effed up reverb" pluginAAXCategory="16,64,8,8192"
               pluginVSTCategory="kPlugCategRoomFx" pluginVST3Category="Delay,Distortion,Filter,Fx,Network,Reverb,Stereo"
@@ -10,38 +11,19 @@
               pluginCode="Shrv" userNotes="reverb that shreds" pluginChannelConfigs="{1, 2}, {2, 2}"
               defines="_LIBCPP_ENABLE_CXX20_REMOVED_TYPE_TRAITS">
   <MAINGROUP id="gAxdps" name="shredVerb">
+    <GROUP id="{D0FB04A6-FE4B-F6A7-DFD8-6B4D90D0241B}" name="nvs_libs">
+      <FILE id="gB1g5e" name="nvs_delayFilters.h" compile="0" resource="0"
+            file="../libs/nvs_libraries/nvs_libraries/include/nvs_delayFilters.h"/>
+      <FILE id="OnFH5g" name="nvs_denormal.h" compile="0" resource="0" file="../libs/nvs_libraries/nvs_libraries/include/nvs_denormal.h"/>
+      <FILE id="tAZO1J" name="nvs_filters.h" compile="0" resource="0" file="../libs/nvs_libraries/nvs_libraries/include/nvs_filters.h"/>
+      <FILE id="wgYDPB" name="nvs_gen.h" compile="0" resource="0" file="../libs/nvs_libraries/nvs_libraries/include/nvs_gen.h"/>
+      <FILE id="f74PkQ" name="nvs_LFO.h" compile="0" resource="0" file="../libs/nvs_libraries/nvs_libraries/include/nvs_LFO.h"/>
+      <FILE id="q1Vyvb" name="nvs_logpow.h" compile="0" resource="0" file="../libs/nvs_libraries/nvs_libraries/include/nvs_logpow.h"/>
+      <FILE id="CsyINb" name="nvs_matrix2x2.h" compile="0" resource="0" file="../libs/nvs_libraries/nvs_libraries/include/nvs_matrix2x2.h"/>
+      <FILE id="AGdLjr" name="nvs_memoryless.h" compile="0" resource="0"
+            file="../libs/nvs_libraries/nvs_libraries/include/nvs_memoryless.h"/>
+    </GROUP>
     <GROUP id="{009C1DCF-94C9-913B-568E-A59E1545E46A}" name="Source">
-      <GROUP id="{F5FCF83C-0C54-6408-A234-A42CB90E9FDC}" name="libs">
-        <GROUP id="{10881F88-F6F2-ECBE-207C-87C79DFA2C53}" name="nvs_libraries">
-          <GROUP id="{24D58FF0-BA7C-6318-FC3B-82018712C5D9}" name="nvs_libraries">
-            <GROUP id="{87CC96FC-F5EC-8494-26B3-AC34131414B1}" name="include">
-              <GROUP id="{55B07AB1-E595-07CA-1E57-A344F4F39A2A}" name="interpolation">
-                <FILE id="JQOSxg" name="hermite.h" compile="0" resource="0" file="../libs/nvs_libraries/nvs_libraries/include/interpolation/hermite.h"/>
-                <FILE id="WAKiDw" name="hermite_double.h" compile="0" resource="0"
-                      file="../libs/nvs_libraries/nvs_libraries/include/interpolation/hermite_double.h"/>
-              </GROUP>
-              <FILE id="BS3Mgu" name="nvs_delayFilters.h" compile="0" resource="0"
-                    file="../libs/nvs_libraries/nvs_libraries/include/nvs_delayFilters.h"/>
-              <FILE id="Ajl0ZH" name="nvs_denormal.h" compile="0" resource="0" file="../libs/nvs_libraries/nvs_libraries/include/nvs_denormal.h"/>
-              <FILE id="UayzhU" name="nvs_filters.h" compile="0" resource="0" file="../libs/nvs_libraries/nvs_libraries/include/nvs_filters.h"/>
-              <FILE id="NMhzAf" name="nvs_gen.h" compile="0" resource="0" file="../libs/nvs_libraries/nvs_libraries/include/nvs_gen.h"/>
-              <FILE id="HQ3cFj" name="nvs_LFO.h" compile="0" resource="0" file="../libs/nvs_libraries/nvs_libraries/include/nvs_LFO.h"/>
-              <FILE id="o6iM7D" name="nvs_logpow.h" compile="0" resource="0" file="../libs/nvs_libraries/nvs_libraries/include/nvs_logpow.h"/>
-              <FILE id="xgzmDq" name="nvs_matrix2x2.h" compile="0" resource="0" file="../libs/nvs_libraries/nvs_libraries/include/nvs_matrix2x2.h"/>
-              <FILE id="TiblP6" name="nvs_memoryless.h" compile="0" resource="0"
-                    file="../libs/nvs_libraries/nvs_libraries/include/nvs_memoryless.h"/>
-            </GROUP>
-            <GROUP id="{923B6174-DF3C-FD37-99F8-6E2808909121}" name="tests">
-              <FILE id="KCWaG0" name="nvs_gen_test.cpp" compile="1" resource="0"
-                    file="../libs/nvs_libraries/nvs_libraries/tests/nvs_gen_test.cpp"/>
-            </GROUP>
-            <FILE id="vkVDNi" name="CMakeLists.txt" compile="0" resource="1" file="../libs/nvs_libraries/nvs_libraries/CMakeLists.txt"/>
-          </GROUP>
-          <FILE id="n8EaZs" name="CMakeLists.txt" compile="0" resource="1" file="../libs/nvs_libraries/CMakeLists.txt"/>
-          <FILE id="DAmKHt" name="LICENSE" compile="0" resource="1" file="../libs/nvs_libraries/LICENSE"/>
-          <FILE id="bedMUE" name="README.md" compile="0" resource="1" file="../libs/nvs_libraries/README.md"/>
-        </GROUP>
-      </GROUP>
       <GROUP id="{E502F9D0-181B-BC48-B1DE-EDCD0A476E9A}" name="Service">
         <FILE id="QH5NpU" name="PresetManager.cpp" compile="1" resource="0"
               file="Source/Service/PresetManager.cpp"/>

@@ -15,8 +15,8 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "include/nvs_delayFilters.h"
-#include "include/nvs_filters.h"
+#include "nvs_libraries/include/nvs_delayFilters.h"
+#include "nvs_libraries/include/nvs_filters.h"
 #include "params.h"
 #include "PresetListBox.h"
 
