@@ -190,7 +190,7 @@ namespace param_stuff{
 		{params_e::g2,			0.3f},		// outer 2
 		{params_e::g3,			-0.8f},		// inner 2
 		{params_e::drywet,      100.f},
-		{params_e::output_gain, -10.f}
+		{params_e::output_gain, 0.f}
     };
 
     inline static const std::map<params_e, float> paramSkewFactorFromMidpoints =
