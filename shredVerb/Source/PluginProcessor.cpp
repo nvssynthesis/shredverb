@@ -379,7 +379,7 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 	}
 	
 	[[deprecated]]	// any function using this param during processBlock should be deprecated
-    double const _oneOverBlockSize = 1 / (double)numSamps;
+    double const oneOverBlockSize = 1.0 / (double)numSamps;
 	
 	std::array<float const* const, 2> inBuff {
 		buffer.getReadPointer(0),
@@ -393,16 +393,15 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     
 	float const inDrive = juce::Decibels::decibelsToGain<float>(driveParam->load());
 	
-	float const _predel = nvs::memoryless::clamp(
+	float const predel = nvs::memoryless::clamp(
 					 static_cast<float>(predelayParam->load()), minDelTimeMS, maxPreDelTimeMS);
 
-    float const _decay = decayParam->load();
-	auto const _g = _decay * 0.707106781186548;
-    float _size = sizeParam->load();
-    _size *= _size;		// breaking const is a sign that the param itself should be shaped
+    float const decay = decayParam->load();
+    float size_val = sizeParam->load();
+    size_val *= size_val;		// breaking const is a sign that the param itself should be shaped
 	
-    float const _hip = hipParam->load();
-    float const _lop = lopParam->load();
+    float const hip_cutoff = hipParam->load();
+    float const lop_cutoff = lopParam->load();
 	
     std::array<float const, 4> const times {
 		time0Param->load(),
@@ -463,7 +462,7 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     std::array<float, D_IJ> current_Dtime;
     for (int i = 0; i < D_IJ; i++) {
         current_Dtime[i] = D_times_ranged[i];
-        current_Dtime[i] *= _size;
+        current_Dtime[i] *= size_val;
     }
 	
 	for (int i = 0; i < D_IJ; ++i){
@@ -479,22 +478,22 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 	}
 	
 	for (auto &filt : butters){
-		filt.setCutoffTarget(_lop);
+		filt.setCutoffTarget(lop_cutoff);
 	}
     for (auto &filt : hp6dB)  {
-        filt.setCutoffTarget(_hip);
+        filt.setCutoffTarget(hip_cutoff);
     }
     
     for (int samp = 0; samp < numSamps; samp++)
     {
         for (auto &pd : preDelays){
-            pd.updateDelayTimeMS(_predel, (float)_oneOverBlockSize);
+            pd.updateDelayTimeMS(predel, (float)oneOverBlockSize);
         }
         for (int i = 0; i < D_IJ; i++) {
             D[i].updateDelayTimeMS(nvs::memoryless::clamp
 										(current_Dtime[i] * timeScaling, minDelTimeMS, maxDelTimeMS),
-									(float)_oneOverBlockSize);
-			D[i].update_g(del_gs[i] * _decay, (float)_oneOverBlockSize);
+									(float)oneOverBlockSize);
+			D[i].update_g(del_gs[i] * decay, (float)oneOverBlockSize);
         }
 		for (auto &filt : tvap){
 			filt.update_f_pi();
@@ -540,9 +539,10 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 			{1.f,  0.f,  0.f, -1.f},
 			{0.f,  1.f, -1.f,  0.f}
 		*/
+		auto const g = decay * 0.707106781186548;
         for (int i = 0; i < D_IJ; i++) {
             for (int j = 0; j < D_IJ; j++) {
-                tmp[i] += G[i][j] * Y[j] * (_g);
+                tmp[i] += G[i][j] * Y[j] * (g);
             }
             tmp[i] += X[i];
 			for (int j = 0; j < D_IJ; ++j){
