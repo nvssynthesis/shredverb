@@ -79,11 +79,11 @@ void PresetPanel::resized() {
 	float margin = 4.0f;
 	// add your controls with the same relative widths and 1px margin
 	fb.items = {
-		FlexItem (saveButton)               .withFlex (0.08f).withMargin (margin),
+		FlexItem (saveButton)               .withFlex (0.1f).withMargin (margin),
 		FlexItem (previousPresetButton)     .withFlex (0.05f).withMargin (margin),
 		FlexItem (presetListBox)            .withFlex (0.6f).withMargin (margin),
 		FlexItem (nextPresetButton)         .withFlex (0.05f).withMargin (margin),
-		FlexItem (deleteButton)             .withFlex (0.08f).withMargin (margin)
+		FlexItem (deleteButton)             .withFlex (0.1f).withMargin (margin)
 	};
 	
 	// perform the layout in our component's bounds
