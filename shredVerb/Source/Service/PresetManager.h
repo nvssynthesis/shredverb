@@ -12,29 +12,34 @@
 
 #include <JuceHeader.h>
 
-namespace Service
-{
+namespace nvs::service {
 
-class PresetManager
+class PresetManager	:	juce::ValueTree::Listener
 {
 public:
-	static const juce::File defaultDirectory;
-	static const juce::String extension;
+	using String = juce::String;
+	using StringArray = juce::StringArray;
+	using APVTS = juce::AudioProcessorValueTreeState;
+	using File = juce::File;
+	using Value = juce::Value;
+	using ValueTree = juce::ValueTree;
 	
-	PresetManager(juce::AudioProcessorValueTreeState&);
-	
-	void savePreset(const juce::String& presetName);
-	void deletePreset(const juce::String& presetName);
-	void loadPreset(const juce::String& presetName);
-	void loadNextPreset();
-	void loadPreviousPreset();
-	juce::StringArray getAllPresets() const;
-	juce::String getCurrentPreset() const;
-	
-	
+	static const File defaultDirectory;
+	static const String extension;
+	static const String presetNameProperty;
+
+	PresetManager(APVTS& apvts);
+	void savePreset(const String &name);
+	void deletePreset(const String &name);
+	void loadPreset(const String &name);
+	int loadNextPreset();
+	int loadPreviousPreset();
+	StringArray getAllPresets() const;
+	String getCurrentPreset() const;
 private:
-	juce::AudioProcessorValueTreeState& apvts;
-	juce::String currentPreset;
+	void valueTreeRedirected(ValueTree& treeWhichHasBeenChanged) override;
+	APVTS& _apvts;
+	Value currentPreset;
 };
 
-}
+}	// namespace nvs::service

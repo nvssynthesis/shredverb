@@ -30,23 +30,18 @@
 #define PROTECT_OUTPUT 1
 //==============================================================================
 ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
-//#ifndef JucePlugin_PreferredChannelConfigurations
 	foleys::MagicProcessor (juce::AudioProcessor::BusesProperties()
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                        ),
-//#endif
 	paramVT(*this, nullptr, juce::Identifier ("APVTSshredverb"), createParameterLayout())
-,	presetManager(paramVT)
-,	presetPanel()
 {
     FOLEYS_SET_SOURCE_PATH (__FILE__);
 
+	presetManager = std::make_unique<nvs::service::PresetManager>(paramVT);
 	// set GUI
     // this is how i was loading default, but docs actually say to do this as return... in createEditor
-    magicState.setGuiValueTree (BinaryData::no_preset_manager_plus_randomize_labels_xml, BinaryData::no_preset_manager_plus_randomize_labels_xmlSize);
-
-	presetPanel.assignPresetManager(&presetManager);
+    magicState.setGuiValueTree (BinaryData::_19_9_25_xml, BinaryData::_19_9_25_xmlSize);
 	
     // pointers are copied to items declared in object so they don't go out of scope
     driveParam    = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::drive));
@@ -176,12 +171,57 @@ void ShredVerbAudioProcessor::randomizeParams(){
 	randomizeCharacter();
 	randomizeAllpass();
 }
+nvs::service::PresetManager& ShredVerbAudioProcessor::getPresetManager() const {
+	return *presetManager;
+}
+
+class PresetPanelItem : public foleys::GuiItem
+{
+public:
+	FOLEYS_DECLARE_GUI_FACTORY (PresetPanelItem)
+
+	PresetPanelItem (foleys::MagicGUIBuilder& builder, const juce::ValueTree& node) : foleys::GuiItem (builder, node)
+	{
+		// Create the colour names to have them configurable
+//		setColourTranslation ({
+//			{"preset-panel-background", nvs::gui::PresetPanel::backgroundColourId},
+//			{"preset-panel-draw", nvs::gui::PresetPanel::drawColourId},
+//			{"preset-panel-fill", nvs::gui::PresetPanel::fillColourId} });
+
+		addAndMakeVisible (presetPanel);
+	}
+
+	std::vector<foleys::SettableProperty> getSettableProperties() const override
+	{
+//		std::vector<foleys::SettableProperty> newProperties;
+//		newProperties.push_back ({ configNode, "factor", foleys::SettableProperty::Number, 1.0f, {} });
+//		return newProperties;
+		return {};
+	}
+
+	// Override update() to set the values to your custom component
+	void update() override
+	{
+//		auto* presetPanel = getMagicState().getObjectWithType<nvs::gui::PresetPanel>("Preset Panel");
+//		presetPanel.assignPresetManagerAndInit(service::PresetManager *)
+	}
+
+	juce::Component* getWrappedComponent() override
+	{
+		return &presetPanel;
+	}
+
+private:
+	nvs::gui::PresetPanel presetPanel;
+
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PresetPanelItem)
+};
 
 void ShredVerbAudioProcessor::initialiseBuilder(foleys::MagicGUIBuilder& builder) {
 	builder.registerJUCEFactories();
 	builder.registerJUCELookAndFeels();
 	
-	builder.registerFactory("PresetPanel", *Gui::PresetPanelItem::factory);
+	builder.registerFactory("PresetPanel", *PresetPanelItem::factory);
 	
 	foleys::MagicGUIState& state = builder.getMagicState();
 	
@@ -201,10 +241,8 @@ void ShredVerbAudioProcessor::initialiseBuilder(foleys::MagicGUIBuilder& builder
 		randomizeAllpass();
 	});
 //	
-//	presetPanel = state.createAndAddObject<Gui::PresetPanel>("Preset Panel");//,
-////															 builder,
-////															 presetNode);
-//	presetPanel->assignPresetManager(&presetManager);
+	presetPanel = state.createAndAddObject<nvs::gui::PresetPanel>("Preset Panel");
+	presetPanel->assignPresetManagerAndInit(presetManager.get());
 }
 
 #if DEF_EDITOR
@@ -746,62 +784,6 @@ juce::AudioProcessorValueTreeState::ParameterLayout ShredVerbAudioProcessor::cre
     ShredVerbAudioProcessor::addOutputParameters (layout);
     return layout;
 }
-// OLD WAY
-juce::AudioProcessorValueTreeState::ParameterLayout ShredVerbAudioProcessor::createParams()
-{
-    const unsigned int versionHint = 1;
-//    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
-    juce::AudioProcessorValueTreeState::ParameterLayout params;
-
-    for (int i = 0; i < param_stuff::numParams; ++i ){
-        param_stuff::params_e ii = (param_stuff::params_e)(i);
-
-        juce::String parameterID_str = param_stuff::paramIDs.at(ii);
-        juce::String parameterName = param_stuff::paramNames.at(ii);
-        juce::NormalisableRange<float> normRange;
-        if ((parameterID_str.compare(param_stuff::paramIDs.at(param_stuff::params_e::tvap0_f_pi)) &&
-            parameterID_str.compare(param_stuff::paramIDs.at(param_stuff::params_e::tvap0_f_b)) &&
-            parameterID_str.compare(param_stuff::paramIDs.at(param_stuff::params_e::tvap1_f_pi)) &&
-            parameterID_str.compare(param_stuff::paramIDs.at(param_stuff::params_e::tvap1_f_b)) &&
-            parameterID_str.compare(param_stuff::paramIDs.at(param_stuff::params_e::tvap2_f_pi)) &&
-            parameterID_str.compare(param_stuff::paramIDs.at(param_stuff::params_e::tvap2_f_b)) &&
-            parameterID_str.compare(param_stuff::paramIDs.at(param_stuff::params_e::tvap3_f_pi)) &&
-            parameterID_str.compare(param_stuff::paramIDs.at(param_stuff::params_e::tvap3_f_b))
-              ))
-        {
-            normRange = juce::NormalisableRange<float> (param_stuff::paramRanges.at(ii)[0],
-                                                 param_stuff::paramRanges.at(ii)[1],
-                                                 0.0001f);
-        } else {
-            normRange = juce::NormalisableRange<float> {0.23f, 22000.0f,
-                [](float start, float end, float normalised)
-                {
-                    return start + (std::pow (2.0f, normalised * 10.0f) - 1.0f) * (end - start) / 1023.0f;
-                },
-                [](float start, float end, float value)
-                {
-                    return (std::log (((value - start) * 1023.0f / (end - start)) + 1.0f) / std::log ( 2.0f)) / 10.0f;
-                },
-                [](float start, float end, float value)
-                {
-                    if (value > 3000.0f)
-                        return juce::jlimit (start, end, 100.0f * juce::roundToInt (value / 100.0f));
-
-                    if (value > 1000.0f)
-                        return juce::jlimit (start, end, 10.0f * juce::roundToInt (value / 10.0f));
-
-                    return juce::jlimit (start, end, float (juce::roundToInt (value)));
-                }};
-        }
-        float defaultVal = param_stuff::paramDefaults.at(ii);
-        
-//        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
-        params.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {parameterID_str, versionHint}, parameterName, normRange, defaultVal));
-    }
-    return params;
-//    return { params.begin(), params.end() };
-}
-
 
 //==============================================================================
 // This creates new instances of the plugin..

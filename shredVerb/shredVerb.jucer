@@ -3,13 +3,13 @@
 <JUCERPROJECT id="RE3GOQ" name="shredVerb" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
               headerPath="../../../libs/nvs_libraries&#10;../../../libs/nvs_libraries/nvs_libraries/external/sprout"
-              cppLanguageStandard="20" pluginFormats="buildAU,buildAUv3,buildStandalone,buildVST3"
+              cppLanguageStandard="20" pluginFormats="buildAU,buildStandalone,buildVST3"
               companyEmail="nickosolem@gmail.com" companyWebsite="https://nvssynthesis.github.io/"
-              companyName="nvssynthesis" pluginDesc="effed up reverb" pluginAAXCategory="16,64,8,8192"
+              companyName="Corrode Audio" pluginDesc="effed up reverb" pluginAAXCategory="16,64,8,8192"
               pluginVSTCategory="kPlugCategRoomFx" pluginVST3Category="Delay,Distortion,Filter,Fx,Network,Reverb,Stereo"
-              pluginManufacturer="nvssynthesis" pluginManufacturerCode="Nvss"
+              pluginManufacturer="Corrode Audio" pluginManufacturerCode="Crrd"
               pluginCode="Shrv" userNotes="reverb that shreds" pluginChannelConfigs="{1, 2}, {2, 2}"
-              defines="_LIBCPP_ENABLE_CXX20_REMOVED_TYPE_TRAITS">
+              defines="_LIBCPP_ENABLE_CXX20_REMOVED_TYPE_TRAITS" version="0.1.0">
   <MAINGROUP id="gAxdps" name="shredVerb">
     <GROUP id="{D0FB04A6-FE4B-F6A7-DFD8-6B4D90D0241B}" name="nvs_libs">
       <FILE id="gB1g5e" name="nvs_delayFilters.h" compile="0" resource="0"
@@ -30,6 +30,7 @@
         <FILE id="DSwGow" name="PresetManager.h" compile="0" resource="0" file="Source/Service/PresetManager.h"/>
       </GROUP>
       <GROUP id="{8674C93D-9EC4-CA33-F1CC-68EBA5E78509}" name="Gui">
+        <FILE id="BY8Dde" name="PresetPanel.cpp" compile="1" resource="0" file="Source/PresetPanel.cpp"/>
         <FILE id="c5NwSJ" name="PresetPanel.h" compile="0" resource="0" file="Source/PresetPanel.h"/>
       </GROUP>
       <FILE id="pDh9QS" name="params.h" compile="0" resource="0" file="Source/params.h"/>
@@ -43,6 +44,7 @@
       <FILE id="ftaSr0" name="PresetListBox.h" compile="0" resource="0" file="Source/PresetListBox.h"/>
     </GROUP>
     <GROUP id="{17F96A0E-7C5C-E590-39B0-FC0D70462767}" name="Resources">
+      <FILE id="csqVMH" name="19.9.25.xml" compile="0" resource="1" file="Resources/19.9.25.xml"/>
       <FILE id="plgVOd" name="no_preset_manager_plus_randomize_labels.xml"
             compile="0" resource="1" file="Resources/no_preset_manager_plus_randomize_labels.xml"/>
       <FILE id="vl5NA3" name="DEFAULT V6.xml" compile="0" resource="1" file="Resources/DEFAULT V6.xml"/>

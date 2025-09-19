@@ -28,18 +28,12 @@
 #define D_IJ 4
 
 //==============================================================================
-/**
-*/
 class ShredVerbAudioProcessor  :  public foleys::MagicProcessor,
                                     private juce::AudioProcessorValueTreeState::Listener
-//public juce::AudioProcessor
 {
 public:
     //==============================================================================
     ShredVerbAudioProcessor ();
-//#if DEF_EDITOR
-//    ~ShredVerbAudioProcessor() override; //
-//#endif
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
@@ -92,7 +86,7 @@ public:
 	std::array<float, D_IJ> Y;
 	
     std::array<nvs::delays::Delay<32768, float>, 2> preDelays;
-	struct diffusedDelay {
+	struct DiffusedDelay {
 		void setSampleRate(float sampleRate){
 			for (auto &d : delays){
 				d.setSampleRate(sampleRate);
@@ -142,7 +136,7 @@ public:
 		};
 	};
 	
-    std::array<diffusedDelay, D_IJ> D;
+    std::array<DiffusedDelay, D_IJ> D;
     float D_times_ranged[D_IJ];
 
     std::array<nvs::filters::tvap<float>, D_IJ> tvap;
@@ -151,10 +145,7 @@ public:
     
     std::array<nvs::filters::butterworth2p<double>, D_IJ> butters;
     
-//    param_stuff *getParamStuff(){
-//        return &ps;
-//    }
-	Service::PresetManager& getPresetManager() { return presetManager; }
+	nvs::service::PresetManager& getPresetManager() const;
 private:
 	static constexpr float timeScaling {2.78f};    // multiplier for the [0..1) delay times, PRE-size parameter
     float minDelTimeMS, maxDelTimeMS, maxPreDelTimeMS;
@@ -162,7 +153,6 @@ private:
 	juce::ValueTree  presetNode;
 
     juce::AudioProcessorValueTreeState paramVT;
-//    param_stuff ps;
 
     void addReverbParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
     void addDelayParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
@@ -173,11 +163,12 @@ private:
 
     void addOutputParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
-    juce::AudioProcessorValueTreeState::ParameterLayout createParams();
     
-	Service::PresetManager presetManager;
-	Gui::PresetPanel presetPanel;// = nullptr;
-
+	//==============================================================================
+	std::unique_ptr<nvs::service::PresetManager> presetManager;
+	nvs::gui::PresetPanel *presetPanel;	// we must keep persistent ptr for Foley's initializeBuilder
+	//==============================================================================
+	
     std::atomic<float>* driveParam = nullptr;
     std::atomic<float>* predelayParam = nullptr;
 
