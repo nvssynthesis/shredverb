@@ -13,7 +13,8 @@
 namespace nvs::gui
 {
 
-PresetPanel::PresetPanel()
+PresetPanel::PresetPanel(service::PresetManager *presetManager)
+:	_presetManager(presetManager)
 {
 	configureButton(saveButton, "Save");
 	configureButton(deleteButton, "Delete");
@@ -24,6 +25,8 @@ PresetPanel::PresetPanel()
 	presetListBox.setMouseCursor(juce::MouseCursor::PointingHandCursor);
 	addAndMakeVisible(presetListBox);
 	presetListBox.addListener(this);
+	
+	loadPresetList();
 }
 PresetPanel::~PresetPanel() {
 	saveButton.removeListener(this);
@@ -31,10 +34,6 @@ PresetPanel::~PresetPanel() {
 	previousPresetButton.removeListener(this);
 	nextPresetButton.removeListener(this);
 	presetListBox.removeListener(this);
-}
-void PresetPanel::assignPresetManagerAndInit(service::PresetManager *newPresetManager){
-	_presetManager = newPresetManager;
-	loadPresetList();
 }
 
 void PresetPanel::loadPresetList() {
@@ -81,9 +80,9 @@ void PresetPanel::resized() {
 	// add your controls with the same relative widths and 1px margin
 	fb.items = {
 		FlexItem (saveButton)               .withFlex (0.08f).withMargin (margin),
-		FlexItem (previousPresetButton)     .withFlex (0.03f).withMargin (margin),
+		FlexItem (previousPresetButton)     .withFlex (0.05f).withMargin (margin),
 		FlexItem (presetListBox)            .withFlex (0.6f).withMargin (margin),
-		FlexItem (nextPresetButton)         .withFlex (0.03f).withMargin (margin),
+		FlexItem (nextPresetButton)         .withFlex (0.05f).withMargin (margin),
 		FlexItem (deleteButton)             .withFlex (0.08f).withMargin (margin)
 	};
 	

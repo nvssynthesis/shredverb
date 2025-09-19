@@ -144,8 +144,6 @@ public:
     std::array<nvs::filters::onePole<float>, D_IJ> hp6dB;
     
     std::array<nvs::filters::butterworth2p<double>, D_IJ> butters;
-    
-	nvs::service::PresetManager& getPresetManager() const;
 private:
 	static constexpr float timeScaling {2.78f};    // multiplier for the [0..1) delay times, PRE-size parameter
     float minDelTimeMS, maxDelTimeMS, maxPreDelTimeMS;
@@ -163,11 +161,6 @@ private:
 
     void addOutputParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
-    
-	//==============================================================================
-	std::unique_ptr<nvs::service::PresetManager> presetManager;
-	nvs::gui::PresetPanel *presetPanel;	// we must keep persistent ptr for Foley's initializeBuilder
-	//==============================================================================
 	
     std::atomic<float>* driveParam = nullptr;
     std::atomic<float>* predelayParam = nullptr;

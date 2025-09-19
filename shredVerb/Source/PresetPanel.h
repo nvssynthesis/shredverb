@@ -20,9 +20,9 @@ class PresetPanel
 ,	juce::ComboBox::Listener
 {
 public:
-	PresetPanel();
+	PresetPanel(service::PresetManager *);
 	~PresetPanel();
-	void assignPresetManagerAndInit(service::PresetManager *);
+
 	void loadPresetList();
 	
 	void comboBoxChanged(juce::ComboBox *cb) override;

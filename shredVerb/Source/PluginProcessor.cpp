@@ -38,7 +38,7 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
 {
     FOLEYS_SET_SOURCE_PATH (__FILE__);
 
-	presetManager = std::make_unique<nvs::service::PresetManager>(paramVT);
+//	presetManager = std::make_unique<nvs::service::PresetManager>(paramVT);
 	// set GUI
     // this is how i was loading default, but docs actually say to do this as return... in createEditor
     magicState.setGuiValueTree (BinaryData::_19_9_25_xml, BinaryData::_19_9_25_xmlSize);
@@ -171,48 +171,37 @@ void ShredVerbAudioProcessor::randomizeParams(){
 	randomizeCharacter();
 	randomizeAllpass();
 }
-nvs::service::PresetManager& ShredVerbAudioProcessor::getPresetManager() const {
-	return *presetManager;
-}
 
 class PresetPanelItem : public foleys::GuiItem
 {
 public:
-	FOLEYS_DECLARE_GUI_FACTORY (PresetPanelItem)
-
+	FOLEYS_DECLARE_GUI_FACTORY(PresetPanelItem)
+	
 	PresetPanelItem (foleys::MagicGUIBuilder& builder, const juce::ValueTree& node) : foleys::GuiItem (builder, node)
-	{
-		// Create the colour names to have them configurable
-//		setColourTranslation ({
-//			{"preset-panel-background", nvs::gui::PresetPanel::backgroundColourId},
-//			{"preset-panel-draw", nvs::gui::PresetPanel::drawColourId},
-//			{"preset-panel-fill", nvs::gui::PresetPanel::fillColourId} });
-
-		addAndMakeVisible (presetPanel);
-	}
+	{}
 
 	std::vector<foleys::SettableProperty> getSettableProperties() const override
 	{
-//		std::vector<foleys::SettableProperty> newProperties;
-//		newProperties.push_back ({ configNode, "factor", foleys::SettableProperty::Number, 1.0f, {} });
-//		return newProperties;
 		return {};
 	}
 
-	// Override update() to set the values to your custom component
 	void update() override
 	{
-//		auto* presetPanel = getMagicState().getObjectWithType<nvs::gui::PresetPanel>("Preset Panel");
-//		presetPanel.assignPresetManagerAndInit(service::PresetManager *)
+		_presetPanel.reset();
+		auto *manager = magicBuilder.getMagicState().getObjectWithType<nvs::service::PresetManager>("PresetManager");
+		if (manager != nullptr){
+			_presetPanel = std::make_unique<nvs::gui::PresetPanel>(manager);
+			addAndMakeVisible(*_presetPanel);
+		}
 	}
 
 	juce::Component* getWrappedComponent() override
 	{
-		return &presetPanel;
+		return _presetPanel.get();
 	}
 
 private:
-	nvs::gui::PresetPanel presetPanel;
+	std::unique_ptr<nvs::gui::PresetPanel> _presetPanel;
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PresetPanelItem)
 };
@@ -240,9 +229,8 @@ void ShredVerbAudioProcessor::initialiseBuilder(foleys::MagicGUIBuilder& builder
 	state.addTrigger("randomize allpass", [this]{
 		randomizeAllpass();
 	});
-//	
-	presetPanel = state.createAndAddObject<nvs::gui::PresetPanel>("Preset Panel");
-	presetPanel->assignPresetManagerAndInit(presetManager.get());
+	
+	state.createAndAddObject<nvs::service::PresetManager>("PresetManager", paramVT);
 }
 
 #if DEF_EDITOR
@@ -404,7 +392,6 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 	};
     
 	float const inDrive = juce::Decibels::decibelsToGain<float>(driveParam->load());
-//	float const outDrive = 1.f / inDrive;
 	
 	float const _predel = nvs::memoryless::clamp(
 					 static_cast<float>(predelayParam->load()), minDelTimeMS, maxPreDelTimeMS);
