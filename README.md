@@ -2,7 +2,7 @@
 
 shredVerb: the reverb that shreds...
 
-<img src="images/shredverb.png" alt="shredVerb Plugin" width="600">
+<img src="images/shredverb.png" alt="shredVerb Plugin" width="480">
 
 ===============================================================
 
