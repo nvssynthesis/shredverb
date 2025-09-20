@@ -30,12 +30,12 @@
         background-color="FF000000" tab-color="FF000000" width="600"
         height="700" min-width="100" min-height="100" padding="1" margin="1"
         border="0" radius="5">
-    <View padding="2" border="0" margin="5" id="utility" background-color="FF441A1A"
-          max-height="56" flex-direction="row" min-height="" flex-shrink="1.0"
+    <View padding="1" border="0" margin="2" id="utility" background-color="FF441A1A"
+          max-height="44" flex-direction="row" min-height="" flex-shrink="1.0"
           flex-grow="10">
       <PresetPanel pos-x="-0.838926%" pos-y="-8.33333%" pos-width="100%" pos-height="15.9483%"
                    padding="0"/>
-      <TextButton onClick="randomize" text="Randomize" margin="2" padding="2" border="0"
+      <TextButton onClick="randomize" text="Randomize" margin="8" padding="2" border="0"
                   button-color="FF4C2255" id="randomize" min-height="" max-width="100"/>
     </View>
     <View flex-grow="2" background-color="FF441A1A" border-color="FF441A1A"
@@ -255,3 +255,4 @@
     </View>
   </View>
 </magic>
+ 
