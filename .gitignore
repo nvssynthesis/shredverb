@@ -1,5 +1,5 @@
 .DS_Store
 Builds/
 Modules/
-Resources/unused/
+*/Resources/unused/*
 */JuceLibraryCode/
