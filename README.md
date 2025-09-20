@@ -9,7 +9,61 @@ shredVerb is a feedback delay network at its core. This is a common reverb desig
 
 ===============================================================
 
-Controls:
+
+## Building shredVerb
+
+### Prerequisites
+Before building shredVerb, make sure you have:
+- **JUCE Framework** installed in a known directory on your system
+- **Foleys GUI Magic** installed in a known directory on your system
+- **Projucer** (comes with JUCE installation)
+- **Xcode** (macOS) or **Visual Studio** (Windows) for compilation
+
+### Build Instructions
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/[your-username]/shredverb.git
+   ```
+
+2. **Navigate to the project directory:**
+   ```bash
+   cd shredverb
+   ```
+
+3. **Initialize and update git submodules:**
+   ```bash
+   git submodule update --init --recursive
+   ```
+
+4. **Open the project in Projucer:**
+   - Launch Projucer
+   - Open the `.jucer` file in the project directory
+
+5. **Verify module dependencies:**
+   - In Projucer, go to the **Modules** section
+   - Ensure `foleys_gui_magic` appears in the module list
+   - If it appears in red, the path needs to be corrected - update the path to point to your Foleys GUI Magic installation directory
+
+6. **Generate IDE project:**
+   - Click the appropriate IDE button in Projucer:
+     - **"Save and Open in Xcode"** (macOS)
+     - **"Save and Open in Visual Studio"** (Windows)
+
+7. **Build the plugin:**
+   - In your IDE (Xcode/Visual Studio), select **Release** build configuration
+     - Note: Debug mode will enable the Foleys GUI Magic editor for GUI layout modification, which is not needed as an end user
+   - Build the project using your IDE's build command
+
+The compiled plugin will be placed in your system's plugin directory and ready to use in your DAW.
+
+### Troubleshooting
+- If Foleys GUI Magic shows up in red in the Modules section, verify the path points to the correct installation directory
+- Make sure all git submodules are properly initialized if you encounter missing dependency errors
+- Ensure your JUCE installation is up to date and compatible with the project
+
+
+Plugin Controls:
 --------------------------------------------------------------------
 QUALIA:
 
@@ -58,7 +112,6 @@ Output Gain sets the amount of amplification for the wet signal.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Known TODO list:
-create pkg installer
 add unit displays
 improve highpass filter
 de-zipper some parameters
