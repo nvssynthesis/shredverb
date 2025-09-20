@@ -45,17 +45,6 @@
     </GROUP>
     <GROUP id="{17F96A0E-7C5C-E590-39B0-FC0D70462767}" name="Resources">
       <FILE id="csqVMH" name="19.9.25.xml" compile="0" resource="1" file="Resources/19.9.25.xml"/>
-      <FILE id="plgVOd" name="no_preset_manager_plus_randomize_labels.xml"
-            compile="0" resource="1" file="Resources/no_preset_manager_plus_randomize_labels.xml"/>
-      <FILE id="vl5NA3" name="DEFAULT V6.xml" compile="0" resource="1" file="Resources/DEFAULT V6.xml"/>
-      <FILE id="yOBbwi" name="DEFAULT v4.1.xml" compile="0" resource="1"
-            file="Resources/DEFAULT v4.1.xml"/>
-      <FILE id="uY5Xnm" name="DEFAULT v2.42.xml" compile="0" resource="1"
-            file="Resources/DEFAULT v2.42.xml"/>
-      <FILE id="znLLqt" name="DIRECT EDIT 2.0.xml" compile="0" resource="1"
-            file="Resources/DIRECT EDIT 2.0.xml"/>
-      <FILE id="YJLBcg" name="DEFAULT v4.xml" compile="0" resource="1" file="Resources/DEFAULT v4.xml"/>
-      <FILE id="tXmY8m" name="DEFAULT v5.xml" compile="0" resource="1" file="Resources/DEFAULT v5.xml"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
