@@ -2,6 +2,8 @@
 
 shredVerb: the reverb that shreds...
 
+![shredVerb Plugin](images/shredverb.png)
+
 ===============================================================
 
 Short description:
