@@ -37,9 +37,9 @@ Before building shredVerb, make sure you have:
    ```
 
 4. **Open the project in Projucer:**
-   - Launch Projucer
-   - Open the `.jucer` file in the project directory
-
+   ```bash
+   open shredVerb/shredVerb.jucer
+   ```
 5. **Verify module dependencies:**
    - In Projucer, go to the **Modules** section
    - Ensure `foleys_gui_magic` appears in the module list
