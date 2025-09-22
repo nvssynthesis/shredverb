@@ -2,14 +2,14 @@
 
 <JUCERPROJECT id="RE3GOQ" name="shredVerb" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              headerPath="../../../libs/nvs_libraries&#10;../../../libs/nvs_libraries/nvs_libraries/external/sprout"
               cppLanguageStandard="20" pluginFormats="buildAU,buildStandalone,buildVST3"
               companyEmail="nickosolem@gmail.com" companyWebsite="https://nvssynthesis.github.io/"
               companyName="Corrode Audio" pluginDesc="effed up reverb" pluginAAXCategory="16,64,8,8192"
               pluginVSTCategory="kPlugCategRoomFx" pluginVST3Category="Delay,Distortion,Filter,Fx,Network,Reverb,Stereo"
               pluginManufacturer="Corrode Audio" pluginManufacturerCode="Crrd"
               pluginCode="Shrv" userNotes="reverb that shreds" pluginChannelConfigs="{1, 2}, {2, 2}"
-              defines="_LIBCPP_ENABLE_CXX20_REMOVED_TYPE_TRAITS" version="0.1.0">
+              defines="_LIBCPP_ENABLE_CXX20_REMOVED_TYPE_TRAITS" version="0.1.0"
+              headerPath="../../../libs/nvs_libraries&#10;../../../libs/nvs_libraries/nvs_libraries/external/sprout">
   <MAINGROUP id="gAxdps" name="shredVerb">
     <GROUP id="{D0FB04A6-FE4B-F6A7-DFD8-6B4D90D0241B}" name="nvs_libs">
       <FILE id="gB1g5e" name="nvs_delayFilters.h" compile="0" resource="0"

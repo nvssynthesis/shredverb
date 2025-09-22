@@ -25,7 +25,7 @@ Before building shredVerb, make sure you have:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/[your-username]/shredverb.git
+   git clone https://github.com/nvssynthesis/shredverb
    ```
 
 2. **Navigate to the project directory:**
