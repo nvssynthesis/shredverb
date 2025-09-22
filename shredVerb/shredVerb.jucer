@@ -8,8 +8,8 @@
               pluginVSTCategory="kPlugCategRoomFx" pluginVST3Category="Delay,Distortion,Filter,Fx,Network,Reverb,Stereo"
               pluginManufacturer="Corrode Audio" pluginManufacturerCode="Crrd"
               pluginCode="Shrv" userNotes="reverb that shreds" pluginChannelConfigs="{1, 2}, {2, 2}"
-              defines="_LIBCPP_ENABLE_CXX20_REMOVED_TYPE_TRAITS" version="0.1.0"
-              headerPath="../../../libs/nvs_libraries&#10;../../../libs/nvs_libraries/nvs_libraries/external/sprout">
+              defines="_LIBCPP_ENABLE_CXX20_REMOVED_TYPE_TRAITS&#10;_HAS_DEPRECATED_IS_LITERAL_TYPE=1"
+              version="0.1.0" headerPath="../../../libs/nvs_libraries&#10;../../../libs/nvs_libraries/nvs_libraries/external/sprout">
   <MAINGROUP id="gAxdps" name="shredVerb">
     <GROUP id="{D0FB04A6-FE4B-F6A7-DFD8-6B4D90D0241B}" name="nvs_libs">
       <FILE id="gB1g5e" name="nvs_delayFilters.h" compile="0" resource="0"
