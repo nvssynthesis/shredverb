@@ -1,5 +1,6 @@
 .DS_Store
 Builds/
 Modules/
-*/Resources/unused/*
+shredVerb/Resources/*
+!shredVerb/Resources/19.9.25.xml
 */JuceLibraryCode/
