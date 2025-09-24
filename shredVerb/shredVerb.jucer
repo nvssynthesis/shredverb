@@ -9,7 +9,7 @@
               pluginManufacturer="Corrode Audio" pluginManufacturerCode="Crrd"
               pluginCode="Shrv" userNotes="reverb that shreds" pluginChannelConfigs="{1, 2}, {2, 2}"
               defines="_LIBCPP_ENABLE_CXX20_REMOVED_TYPE_TRAITS&#10;_HAS_DEPRECATED_IS_LITERAL_TYPE=1"
-              version="0.1.0" headerPath="../../../libs/nvs_libraries&#10;../../../libs/nvs_libraries/nvs_libraries/external/sprout">
+              version="0.1.1" headerPath="../../../libs/nvs_libraries&#10;../../../libs/nvs_libraries/nvs_libraries/external/sprout">
   <MAINGROUP id="gAxdps" name="shredVerb">
     <GROUP id="{D0FB04A6-FE4B-F6A7-DFD8-6B4D90D0241B}" name="nvs_libs">
       <FILE id="gB1g5e" name="nvs_delayFilters.h" compile="0" resource="0"
@@ -41,7 +41,6 @@
       <FILE id="GhlTLu" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="l4dQoj" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
-      <FILE id="ftaSr0" name="PresetListBox.h" compile="0" resource="0" file="Source/PresetListBox.h"/>
     </GROUP>
     <GROUP id="{17F96A0E-7C5C-E590-39B0-FC0D70462767}" name="Resources">
       <FILE id="csqVMH" name="19.9.25.xml" compile="0" resource="1" file="Resources/19.9.25.xml"/>
