@@ -69,9 +69,7 @@ public:
 	
 	void initialiseBuilder(foleys::MagicGUIBuilder& builder) override;
 
-	// explore code of rev2~ and rev3~
-    
-	static constexpr std::array<std::array<float, 4>, 4> G = {{
+	static constexpr std::array<Array4, 4> G = {{
 		{0.f,  1.f,  1.f,  0.f},
 		{-1.f, 0.f,  0.f, -1.f},
 		{1.f,  0.f,  0.f, -1.f},
