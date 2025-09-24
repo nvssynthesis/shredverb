@@ -145,55 +145,19 @@ private:
 	juce::ValueTree  presetNode;
 
     juce::AudioProcessorValueTreeState paramVT;
-	std::unordered_map<param_stuff::params_e, std::atomic<float>*> paramPtrs;
+	std::unordered_map<param::params_e, std::atomic<float>*> paramPtrs;
 
 	void initializeParameterPointers();
-	float getParamValue(param_stuff::params_e paramId) const;
+	float getParamValue(param::params_e paramId) const;
 	
-	float getParam(param_stuff::params_e paramId) const;
+	float getParam(param::params_e paramId) const;
 	template<size_t N>
-	std::array<float, N> getParamArray(const std::array<param_stuff::params_e, N>& paramIds) const;
+	std::array<float, N> getParamArray(const std::array<param::params_e, N>& paramIds) const;
 
-		// Static arrays for grouped parameter IDs (cleaner than individual variables)
-	 static constexpr std::array<param_stuff::params_e, 4> TVAP_F_PI_PARAMS = {
-		 param_stuff::params_e::tvap0_f_pi,
-		 param_stuff::params_e::tvap1_f_pi,
-		 param_stuff::params_e::tvap2_f_pi,
-		 param_stuff::params_e::tvap3_f_pi
-	 };
-	 
-	 static constexpr std::array<param_stuff::params_e, 4> TVAP_F_B_PARAMS = {
-		 param_stuff::params_e::tvap0_f_b,
-		 param_stuff::params_e::tvap1_f_b,
-		 param_stuff::params_e::tvap2_f_b,
-		 param_stuff::params_e::tvap3_f_b
-	 };
-	 
-	 static constexpr std::array<param_stuff::params_e, 4> TIME_PARAMS = {
-		 param_stuff::params_e::time0,
-		 param_stuff::params_e::time1,
-		 param_stuff::params_e::time2,
-		 param_stuff::params_e::time3
-	 };
-	 
-	 static constexpr std::array<param_stuff::params_e, 4> DELAY_GAIN_PARAMS = {
-		 param_stuff::params_e::g0,
-		 param_stuff::params_e::g1,
-		 param_stuff::params_e::g2,
-		 param_stuff::params_e::g3
-	 };
-	 
-	 static constexpr std::array<param_stuff::params_e, 4> DISTORTION_PARAMS = {
-		 param_stuff::params_e::dist1_inner,
-		 param_stuff::params_e::dist1_outer,
-		 param_stuff::params_e::dist2_inner,
-		 param_stuff::params_e::dist2_outer
-	 };
-	
     juce::Random rando;
 	void randomizeParams();
 	template<size_t N>
-	void randomizeParams(std::array<param_stuff::params_e, N> params);
+	void randomizeParams(std::array<param::params_e, N> params);
 	void randomizeDelays();
 	void randomizeQualia();
 	void randomizeCharacter();

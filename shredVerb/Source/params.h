@@ -11,8 +11,8 @@
 #include <map>
 #include <JuceHeader.h>
 
-namespace param_stuff{
-enum class params_e{
+namespace param {
+enum class params_e {
 	predelay,
 	size,
 	highpass,
@@ -53,6 +53,42 @@ enum class params_e{
 	randomize
 };
 
+// Static arrays for grouped parameter IDs (cleaner than individual variables)
+   static constexpr std::array<params_e, 4> TVAP_F_PI_PARAMS = {
+	   params_e::tvap0_f_pi,
+	   params_e::tvap1_f_pi,
+	   params_e::tvap2_f_pi,
+	   params_e::tvap3_f_pi
+   };
+   
+   static constexpr std::array<params_e, 4> TVAP_F_B_PARAMS = {
+	   params_e::tvap0_f_b,
+	   params_e::tvap1_f_b,
+	   params_e::tvap2_f_b,
+	   params_e::tvap3_f_b
+   };
+   
+   static constexpr std::array<params_e, 4> TIME_PARAMS = {
+	   params_e::time0,
+	   params_e::time1,
+	   params_e::time2,
+	   params_e::time3
+   };
+   
+   static constexpr std::array<params_e, 4> DELAY_GAIN_PARAMS = {
+	   params_e::g0,
+	   params_e::g1,
+	   params_e::g2,
+	   params_e::g3
+   };
+   
+   static constexpr std::array<params_e, 4> DISTORTION_PARAMS = {
+	   params_e::dist1_inner,
+	   params_e::dist1_outer,
+	   params_e::dist2_inner,
+	   params_e::dist2_outer
+   };
+  
 inline static const std::map<params_e, std::string> paramIDs =
 {
 	{params_e::drive, "drive"},
@@ -463,9 +499,8 @@ namespace bast{	// from https://github.com/Mrugalla/ParametersExample
 			};
 		}
 	}	// namespace strToVal
-	using namespace param_stuff;
 
-	inline static const std::map<param_stuff::params_e, Unit> paramStrToUnit
+	inline static const std::map<params_e, Unit> paramStrToUnit
 	{
 		{params_e::predelay,    Unit::unitless},
 		{params_e::size,    	Unit::unitless},
@@ -510,7 +545,7 @@ std::unique_ptr<APF> createParam(params_e param)
 		const auto name = paramNames.at(param);
 		const auto ID = paramIDs.at(param);
 
-		const auto minmaxcentre = param_stuff::paramRanges.at(param);
+		const auto minmaxcentre = paramRanges.at(param);
 		juce::NormalisableRange<float> range = range::withCentre(minmaxcentre[0], minmaxcentre[1], minmaxcentre[2]);
 
 		switch (paramStrToUnit.at(param))
@@ -553,5 +588,4 @@ std::unique_ptr<APF> createParam(params_e param)
 
 // to be defined/initialized in PluginEditor constructor
 static const size_t numParams = (size_t)(params_e::count);
-}	// namespace param_stuff
-
+}	// namespace param
