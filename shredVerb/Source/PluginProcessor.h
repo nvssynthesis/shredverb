@@ -37,7 +37,7 @@ public:
 	void releaseResources() override;
 	//==============================================================================
 	using Array4 = std::array<float, D_IJ>;
-
+	
     void parameterChanged (const juce::String& param, float value) override;
 
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
@@ -69,6 +69,8 @@ public:
 	
 	void initialiseBuilder(foleys::MagicGUIBuilder& builder) override;
 
+private:
+	// should be reverb internals:
 	static constexpr std::array<Array4, 4> G = {{
 		{0.f,  1.f,  1.f,  0.f},
 		{-1.f, 0.f,  0.f, -1.f},
@@ -78,7 +80,7 @@ public:
 	Array4 X;
 	Array4 Y;
 	
-    std::array<nvs::delays::Delay<32768, float>, 2> preDelays;
+	std::array<nvs::delays::Delay<32768, float>, 2> preDelays;
 	struct DiffusedDelay {
 		void setSampleRate(float sampleRate){
 			for (auto &d : delays){
@@ -129,58 +131,65 @@ public:
 		};
 	};
 	
-    std::array<DiffusedDelay, D_IJ> D;
-    float D_times_ranged[D_IJ];
+	std::array<DiffusedDelay, D_IJ> D;
+	float D_times_ranged[D_IJ];
 
-    std::array<nvs::filters::tvap<float>, D_IJ> tvap;
+	std::array<nvs::filters::tvap<float>, D_IJ> tvap;
 	std::array<nvs::filters::svf_lin_naive<float>, D_IJ> fm_bp;
-    std::array<nvs::filters::onePole<float>, D_IJ> hp6dB;
-    
-    std::array<nvs::filters::butterworth2p<double>, D_IJ> butters;
-private:
+	std::array<nvs::filters::onePole<float>, D_IJ> hp6dB;
+	
+	std::array<nvs::filters::butterworth2p<double>, D_IJ> butters;
 	static constexpr float timeScaling {2.78f};    // multiplier for the [0..1) delay times, PRE-size parameter
     float minDelTimeMS, maxDelTimeMS, maxPreDelTimeMS;
-
+//==================================================================================
 	juce::ValueTree  presetNode;
 
     juce::AudioProcessorValueTreeState paramVT;
-	
-    std::atomic<float>* driveParam = nullptr;
-    std::atomic<float>* predelayParam = nullptr;
+	std::unordered_map<param_stuff::params_e, std::atomic<float>*> paramPtrs;
 
-    std::atomic<float>* decayParam  = nullptr;
-    std::atomic<float>* sizeParam = nullptr;
-    std::atomic<float>* lopParam = nullptr;
-    std::atomic<float>* hipParam = nullptr;
-    std::atomic<float>* dryWetParam = nullptr;
-
-    std::atomic<float>* allpassFrequencyPiParam0 = nullptr;
-    std::atomic<float>* allpassFrequencyPiParam1 = nullptr;
-    std::atomic<float>* allpassFrequencyPiParam2 = nullptr;
-    std::atomic<float>* allpassFrequencyPiParam3 = nullptr;
-    
-    std::atomic<float>* allpassBandwidthParam0 = nullptr;
-    std::atomic<float>* allpassBandwidthParam1 = nullptr;
-    std::atomic<float>* allpassBandwidthParam2 = nullptr;
-    std::atomic<float>* allpassBandwidthParam3 = nullptr;
-    
-    std::atomic<float>* dist1inerParam = nullptr;//metaparams for direct to L-R tvap outputs, controls f_pi_mod
-    std::atomic<float>* dist1outrParam = nullptr;//metaparams for indirect to L-R tvap outputs, controls f_pi_mod
-    std::atomic<float>* dist2inerParam = nullptr;//metaparams for direct to L-R tvap outputs, controls f_b_mod
-    std::atomic<float>* dist2outrParam = nullptr;//metaparams for indirect to L-R tvap outputs, controls f_b_mod
-    
-    std::atomic<float>* time0Param = nullptr;
-    std::atomic<float>* time1Param = nullptr;
-    std::atomic<float>* time2Param = nullptr;
-    std::atomic<float>* time3Param = nullptr;
+	void initializeParameterPointers();
+	float getParamValue(param_stuff::params_e paramId) const;
 	
-	std::array<std::atomic<float>*, D_IJ> apdGparams {
-		nullptr, nullptr, nullptr, nullptr
-	};
-    std::atomic<float>* wetGainParam = nullptr;
-    std::atomic<float>* interpParam = nullptr;
-    std::atomic<float>* randomizeParam = nullptr;
-    
+	float getParam(param_stuff::params_e paramId) const;
+	template<size_t N>
+	std::array<float, N> getParamArray(const std::array<param_stuff::params_e, N>& paramIds) const;
+
+		// Static arrays for grouped parameter IDs (cleaner than individual variables)
+	 static constexpr std::array<param_stuff::params_e, 4> TVAP_F_PI_PARAMS = {
+		 param_stuff::params_e::tvap0_f_pi,
+		 param_stuff::params_e::tvap1_f_pi,
+		 param_stuff::params_e::tvap2_f_pi,
+		 param_stuff::params_e::tvap3_f_pi
+	 };
+	 
+	 static constexpr std::array<param_stuff::params_e, 4> TVAP_F_B_PARAMS = {
+		 param_stuff::params_e::tvap0_f_b,
+		 param_stuff::params_e::tvap1_f_b,
+		 param_stuff::params_e::tvap2_f_b,
+		 param_stuff::params_e::tvap3_f_b
+	 };
+	 
+	 static constexpr std::array<param_stuff::params_e, 4> TIME_PARAMS = {
+		 param_stuff::params_e::time0,
+		 param_stuff::params_e::time1,
+		 param_stuff::params_e::time2,
+		 param_stuff::params_e::time3
+	 };
+	 
+	 static constexpr std::array<param_stuff::params_e, 4> DELAY_GAIN_PARAMS = {
+		 param_stuff::params_e::g0,
+		 param_stuff::params_e::g1,
+		 param_stuff::params_e::g2,
+		 param_stuff::params_e::g3
+	 };
+	 
+	 static constexpr std::array<param_stuff::params_e, 4> DISTORTION_PARAMS = {
+		 param_stuff::params_e::dist1_inner,
+		 param_stuff::params_e::dist1_outer,
+		 param_stuff::params_e::dist2_inner,
+		 param_stuff::params_e::dist2_outer
+	 };
+	
     juce::Random rando;
 	void randomizeParams();
 	template<size_t N>

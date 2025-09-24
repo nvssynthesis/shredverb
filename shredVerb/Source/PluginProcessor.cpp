@@ -46,45 +46,8 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
     // this is how i was loading default, but docs actually say to do this as return... in createEditor
     magicState.setGuiValueTree (BinaryData::_19_9_25_xml, BinaryData::_19_9_25_xmlSize);
 	
-    // pointers are copied to items declared in object so they don't go out of scope
-    driveParam    = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::drive));
-    predelayParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::predelay));
-
-    decayParam   = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::decay));
-    sizeParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::size));
-    lopParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::lowpass));
-    hipParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::highpass));
-    dryWetParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::drywet));
-
-    allpassFrequencyPiParam0 = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::tvap0_f_pi));
-    allpassFrequencyPiParam1 = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::tvap1_f_pi));
-    allpassFrequencyPiParam2 = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::tvap2_f_pi));
-    allpassFrequencyPiParam3 = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::tvap3_f_pi));
-    
-    allpassBandwidthParam0 = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::tvap0_f_b));
-    allpassBandwidthParam1 = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::tvap1_f_b));
-    allpassBandwidthParam2 = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::tvap2_f_b));
-    allpassBandwidthParam3 = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::tvap3_f_b));
-    
-    dist1inerParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::dist1_inner));
-    dist1outrParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::dist1_outer));
-    dist2inerParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::dist2_inner));
-    dist2outrParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::dist2_outer));
-    
-    time0Param = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::time0));
-    time1Param = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::time1));
-    time2Param = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::time2));
-    time3Param = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::time3));
-
-	apdGparams[0] = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::g0));
-	apdGparams[1] = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::g1));
-	apdGparams[2] = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::g2));
-	apdGparams[3] = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::g3));
+	initializeParameterPointers();
 	
-    wetGainParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::wet_gain));
-    interpParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::interp_type));
-    randomizeParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::randomize));
-		
 	for (auto &pd : preDelays){
 		pd.setInterpolation(nvs::delays::interp_e::floor);
 		pd.setDelayTimeMS(param_stuff::paramDefaults.at(param_stuff::params_e::predelay));
@@ -108,6 +71,49 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
 	for (auto &hp : hp6dB){
 		hp.setMode(nvs::filters::mode_e::HP);
 	}
+}
+void ShredVerbAudioProcessor::initializeParameterPointers()
+{
+	// Use initializer list for cleaner setup
+	std::vector<param_stuff::params_e> allParams = {
+		param_stuff::params_e::drive,
+		param_stuff::params_e::predelay,
+		param_stuff::params_e::decay,
+		param_stuff::params_e::size,
+		param_stuff::params_e::lowpass,
+		param_stuff::params_e::highpass,
+		param_stuff::params_e::drywet,
+		param_stuff::params_e::wet_gain,
+		param_stuff::params_e::interp_type,
+		param_stuff::params_e::randomize,
+		param_stuff::params_e::dist1_inner,
+		param_stuff::params_e::dist1_outer,
+		param_stuff::params_e::dist2_inner,
+		param_stuff::params_e::dist2_outer
+	};
+	
+	allParams.insert(allParams.end(), TVAP_F_PI_PARAMS.begin(), TVAP_F_PI_PARAMS.end());
+	allParams.insert(allParams.end(), TVAP_F_B_PARAMS.begin(), TVAP_F_B_PARAMS.end());
+	allParams.insert(allParams.end(), TIME_PARAMS.begin(), TIME_PARAMS.end());
+	allParams.insert(allParams.end(), DELAY_GAIN_PARAMS.begin(), DELAY_GAIN_PARAMS.end());
+	allParams.insert(allParams.end(), DISTORTION_PARAMS.begin(), DISTORTION_PARAMS.end());
+	
+	for (auto paramId : allParams) {
+		paramPtrs[paramId] = paramVT.getRawParameterValue(param_stuff::paramIDs.at(paramId));
+	}
+}
+float ShredVerbAudioProcessor::getParam(param_stuff::params_e paramId) const
+{
+	auto it = paramPtrs.find(paramId);
+	jassert(it != paramPtrs.end());
+	return it->second->load();
+}
+template<size_t N>
+std::array<float, N> ShredVerbAudioProcessor::getParamArray(const std::array<param_stuff::params_e, N>& paramIds) const
+{
+	std::array<float, N> result;
+	std::ranges::transform(paramIds, result.begin(), [this](auto paramId) { return getParam(paramId); });
+	return result;
 }
 template<size_t N>
 void ShredVerbAudioProcessor::randomizeParams(std::array<param_stuff::params_e, N> params){
@@ -173,67 +179,6 @@ void ShredVerbAudioProcessor::randomizeParams(){
 	randomizeQualia();
 	randomizeCharacter();
 	randomizeAllpass();
-}
-
-class PresetPanelItem : public foleys::GuiItem
-{
-public:
-	FOLEYS_DECLARE_GUI_FACTORY(PresetPanelItem)
-	
-	PresetPanelItem (foleys::MagicGUIBuilder& builder, const juce::ValueTree& node) : foleys::GuiItem (builder, node)
-	{}
-
-	std::vector<foleys::SettableProperty> getSettableProperties() const override
-	{
-		return {};
-	}
-
-	void update() override
-	{
-		_presetPanel.reset();
-		auto *manager = magicBuilder.getMagicState().getObjectWithType<nvs::service::PresetManager>("PresetManager");
-		if (manager != nullptr){
-			_presetPanel = std::make_unique<nvs::gui::PresetPanel>(manager);
-			addAndMakeVisible(*_presetPanel);
-		}
-	}
-
-	juce::Component* getWrappedComponent() override
-	{
-		return _presetPanel.get();
-	}
-
-private:
-	std::unique_ptr<nvs::gui::PresetPanel> _presetPanel;
-
-	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PresetPanelItem)
-};
-
-void ShredVerbAudioProcessor::initialiseBuilder(foleys::MagicGUIBuilder& builder) {
-	builder.registerJUCEFactories();
-	builder.registerJUCELookAndFeels();
-	
-	builder.registerFactory("PresetPanel", *PresetPanelItem::factory);
-	
-	foleys::MagicGUIState& state = builder.getMagicState();
-	
-	state.addTrigger("randomize", [this]{
-		randomizeParams();
-	});
-	state.addTrigger("randomize delays", [this]{
-		randomizeDelays();
-	});
-	state.addTrigger("randomize qualia", [this]{
-		randomizeQualia();
-	});
-	state.addTrigger("randomize shred", [this]{
-		randomizeCharacter();
-	});
-	state.addTrigger("randomize allpass", [this]{
-		randomizeAllpass();
-	});
-	
-	state.createAndAddObject<nvs::service::PresetManager>("PresetManager", paramVT);
 }
 
 #if DEF_EDITOR
@@ -377,75 +322,22 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 		buffer.getWritePointer(0),
 		(getTotalNumOutputChannels() > 1) ? buffer.getWritePointer(1) : buffer.getWritePointer(0)
 	};
-    
-	float const inDrive = juce::Decibels::decibelsToGain<float>(driveParam->load());
+	auto const times = getParamArray(TIME_PARAMS);
+	auto const delayGains = getParamArray(DELAY_GAIN_PARAMS);
+	auto const allpassFreqs = getParamArray(TVAP_F_PI_PARAMS);
+	auto const allpassBandwidths = getParamArray(TVAP_F_B_PARAMS);
+	auto const distortionParams = getParamArray(DISTORTION_PARAMS);
 	
-	float const predel = nvs::memoryless::clamp(
-					 static_cast<float>(predelayParam->load()), minDelTimeMS, maxPreDelTimeMS);
-
-    float const decay = decayParam->load();
-    float size_val = sizeParam->load();
-    size_val *= size_val;		// breaking const is a sign that the param itself should be shaped
-	
-    float const hip_cutoff = hipParam->load();
-    float const lop_cutoff = lopParam->load();
-	
-    std::array<float const, 4> const times {
-		time0Param->load(),
-		time1Param->load(),
-		time2Param->load(),
-		time3Param->load()
-	};
-	
-	std::array<float const, 4> const del_gs {
-		apdGparams[0]->load(),
-		apdGparams[1]->load(),
-		apdGparams[2]->load(),
-		apdGparams[3]->load()
-	};
-	
-	auto const [dry_amt, wet_amt] = [this](){
-		auto const wet = dryWetParam->load() / 100.f;
-		return std::make_pair(std::sqrt(1.f - wet), std::sqrt(wet));
+	auto const [dryAmt, wetAmt] = [this]() {
+		auto const wet = getParam(param_stuff::params_e::drywet) / 100.0f;
+		return std::make_pair(std::sqrt(1.0f - wet), std::sqrt(wet));
 	}();
 	
-	float const wetGain = juce::Decibels::decibelsToGain<float>(wetGainParam->load());
+	float const wetGain = juce::Decibels::decibelsToGain<float>(getParam(param_stuff::params_e::wet_gain));
+	float const sizeVal = getParam(param_stuff::params_e::size);
+	float const decay = getParam(param_stuff::params_e::decay);
+	float const inDrive = juce::Decibels::decibelsToGain<float>(getParam(param_stuff::params_e::drive));
 
-	std::array<float, 4> _ap_f_pi {
-		allpassFrequencyPiParam0->load(),
-		allpassFrequencyPiParam1->load(),
-		allpassFrequencyPiParam2->load(),
-		allpassFrequencyPiParam3->load()
-	};
-	
-	std::array<float, 4> _ap_fb {
-		allpassBandwidthParam0->load(),
-		allpassBandwidthParam1->load(),
-		allpassBandwidthParam2->load(),
-		allpassBandwidthParam3->load()
-	};
-	
-	/* these cannot be std::arrays until i redo  nvs::memoryless::metaparamA */
-//    float inner_f_pi[2], outer_f_pi[2];
-//    float inner_f_b[2], outer_f_b[2];
-
-    // ACTUALLY RESHAPE FROM 2 METAPARAMS INTO 4 PARAMS:
-//    auto dist1Iner = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist1_inner));
-//    auto dist1Outr = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist1_outer));
-//    auto dist2Iner = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist2_inner));
-//    auto dist2Outr = paramVT.getRawParameterValue(param_stuff::paramIDs.at(param_stuff::params_e::dist2_outer));
-    
-//    nvs::memoryless::metaparamA(float(*dist1Iner), inner_f_pi);
-//    nvs::memoryless::metaparamA(float(*dist1Outr), outer_f_pi);
-//    nvs::memoryless::metaparamA(float(*dist2Iner), inner_f_b);
-//    nvs::memoryless::metaparamA(float(*dist2Outr), outer_f_b);
-    
-	float dist1inner = dist1inerParam->load();
-	float dist2inner = dist2inerParam->load();
-	float dist1outer = dist1outrParam->load();
-	float dist2outer = dist2outrParam->load();
-    //=============================================================================
-	
     for (int i = 0; i < D_IJ; i++) {
         D_times_ranged[i] = times[i];
     }
@@ -453,38 +345,38 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     Array4 current_Dtime;
     for (int i = 0; i < D_IJ; i++) {
         current_Dtime[i] = D_times_ranged[i];
-        current_Dtime[i] *= size_val;
+        current_Dtime[i] *= sizeVal;
     }
 	
 	for (int i = 0; i < D_IJ; ++i){
-		float bw = _ap_fb[i];
-		tvap[i].setCutoffTarget(_ap_f_pi[i]);
+		float bw = allpassBandwidths[i]; //_ap_fb[i];
+		tvap[i].setCutoffTarget(allpassFreqs[i]); //(_ap_f_pi[i]);
 		tvap[i].setResonanceTarget(bw);
 		
-		fm_bp[i].setCutoffTarget(_ap_f_pi[i]);
+		fm_bp[i].setCutoffTarget(allpassFreqs[i]);//(_ap_f_pi[i]);
 		
 		bw = nvs::memoryless::clamp_low(bw, 0.2f);
-		float reso = _ap_f_pi[i] / bw;
+		float reso = /*_ap_f_pi[i]*/ allpassFreqs[i] / bw;
 		fm_bp[i].setResonanceTarget(reso);
 	}
 	
 	for (auto &filt : butters){
-		filt.setCutoffTarget(lop_cutoff);
+		filt.setCutoffTarget(getParam(param_stuff::params_e::lowpass));
 	}
     for (auto &filt : hp6dB)  {
-        filt.setCutoffTarget(hip_cutoff);
+        filt.setCutoffTarget(getParam(param_stuff::params_e::highpass));
     }
-    
+	
     for (int samp = 0; samp < numSamps; samp++)
     {
         for (auto &pd : preDelays){
-            pd.updateDelayTimeMS(predel, (float)oneOverBlockSize);
+            pd.updateDelayTimeMS(getParam(param_stuff::params_e::predelay), (float)oneOverBlockSize);
         }
         for (int i = 0; i < D_IJ; i++) {
             D[i].updateDelayTimeMS(nvs::memoryless::clamp
 										(current_Dtime[i] * timeScaling, minDelTimeMS, maxDelTimeMS),
 									(float)oneOverBlockSize);
-			D[i].update_g(del_gs[i] * decay, (float)oneOverBlockSize);
+			D[i].update_g(delayGains[i] * decay, (float)oneOverBlockSize);
         }
 		for (auto &filt : tvap){
 			filt.update_f_pi();
@@ -556,10 +448,10 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 			nvs::memoryless::unboundSat2(fm_bp[3](tmp[3]) * 1000000000.f) * 100.f * inDrive
 		};
 #pragma message("need to smooth these cutoff/reso if doing it this way")
-/*L	INTERNAL*/ tmp[0] = tvap[0](tmp[0], _ap_f_pi[0] + dist1inner*intrnlWcModSig[0], _ap_fb[0]);
-/*L DIRECT*/ tmp[1] = tvap[1](tmp[1], _ap_f_pi[1] + dist1outer*intrnlWcModSig[1], _ap_fb[1]);
-/*R DIRECT*/ tmp[2] = tvap[2](tmp[2], _ap_f_pi[2] + dist2outer*intrnlWcModSig[2], _ap_fb[2]);
-/*R INTERNAL*/ tmp[3] = tvap[3](tmp[3], _ap_f_pi[3] + dist2inner*intrnlWcModSig[3], _ap_fb[3]);
+		tmp[0] = tvap[0](tmp[0], allpassFreqs[0] + distortionParams[0]*intrnlWcModSig[0], allpassBandwidths[0]); /*L INTERNAL*/
+		tmp[1] = tvap[1](tmp[1], allpassFreqs[1] + distortionParams[1]*intrnlWcModSig[1], allpassBandwidths[1]); /*L DIRECT*/
+		tmp[2] = tvap[2](tmp[2], allpassFreqs[2] + distortionParams[2]*intrnlWcModSig[2], allpassBandwidths[2]); /*R DIRECT*/
+		tmp[3] = tvap[3](tmp[3], allpassFreqs[3] + distortionParams[3]*intrnlWcModSig[3], allpassBandwidths[3]); /*R INTERNAL*/
 #endif
         Y[0] = D[0](tmp[0]);
         Y[1] = D[1](tmp[1]);
@@ -577,8 +469,8 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 		}
 #endif
 		std::array<float, 2> finalOut {
-			dry_amt * inSamps[0] + wet_amt * wet[0],
-			dry_amt * inSamps[1] + wet_amt * wet[1]
+			dryAmt * inSamps[0] + wetAmt * wet[0],
+			dryAmt * inSamps[1] + wetAmt * wet[1]
 		};
 		
 		for (int i = 0; i < 2; ++i){
@@ -760,4 +652,68 @@ juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 	addDistorionParameters (layout);
 	addOutputParameters (layout);
 	return layout;
+}
+
+
+//=====================================================GUI STUFF=====================================================
+
+class PresetPanelItem : public foleys::GuiItem
+{
+public:
+	FOLEYS_DECLARE_GUI_FACTORY(PresetPanelItem)
+	
+	PresetPanelItem (foleys::MagicGUIBuilder& builder, const juce::ValueTree& node) : foleys::GuiItem (builder, node)
+	{}
+
+	std::vector<foleys::SettableProperty> getSettableProperties() const override
+	{
+		return {};
+	}
+
+	void update() override
+	{
+		_presetPanel.reset();
+		auto *manager = magicBuilder.getMagicState().getObjectWithType<nvs::service::PresetManager>("PresetManager");
+		if (manager != nullptr){
+			_presetPanel = std::make_unique<nvs::gui::PresetPanel>(manager);
+			addAndMakeVisible(*_presetPanel);
+		}
+	}
+
+	juce::Component* getWrappedComponent() override
+	{
+		return _presetPanel.get();
+	}
+
+private:
+	std::unique_ptr<nvs::gui::PresetPanel> _presetPanel;
+
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PresetPanelItem)
+};
+
+void ShredVerbAudioProcessor::initialiseBuilder(foleys::MagicGUIBuilder& builder) {
+	builder.registerJUCEFactories();
+	builder.registerJUCELookAndFeels();
+	
+	builder.registerFactory("PresetPanel", *PresetPanelItem::factory);
+	
+	foleys::MagicGUIState& state = builder.getMagicState();
+	
+	state.addTrigger("randomize", [this]{
+		randomizeParams();
+	});
+	state.addTrigger("randomize delays", [this]{
+		randomizeDelays();
+	});
+	state.addTrigger("randomize qualia", [this]{
+		randomizeQualia();
+	});
+	state.addTrigger("randomize shred", [this]{
+		randomizeCharacter();
+	});
+	state.addTrigger("randomize allpass", [this]{
+		randomizeAllpass();
+	});
+	
+	state.createAndAddObject<nvs::service::PresetManager>("PresetManager", paramVT);
 }
