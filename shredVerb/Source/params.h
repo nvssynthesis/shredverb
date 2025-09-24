@@ -457,7 +457,7 @@ namespace bast{	// from https://github.com/Mrugalla/ParametersExample
 	
 	namespace strToVal
 	{
-		 StrToVal db()
+		inline StrToVal db()
 		{
 			return [](const String& str)
 			{
@@ -537,7 +537,7 @@ namespace bast{	// from https://github.com/Mrugalla/ParametersExample
 		{params_e::wet_gain, 	Unit::Db}
 	};
 
-std::unique_ptr<APF> createParam(params_e param)
+static std::unique_ptr<APF> createParam(params_e param)
 	{
 		ValToStr valToStrFunc;
 		StrToVal strToValFunc;

@@ -15,11 +15,8 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "nvs_libraries/include/nvs_delayFilters.h"
-#include "nvs_libraries/include/nvs_filters.h"
 #include "params.h"
-
-static constexpr int D_IJ {4};
+#include "Shredverb.h"
 
 //==============================================================================
 class ShredVerbAudioProcessor  :  public foleys::MagicProcessor,
@@ -36,7 +33,6 @@ public:
 	void prepareToPlay (double sampleRate, int samplesPerBlock) override;
 	void releaseResources() override;
 	//==============================================================================
-	using Array4 = std::array<float, D_IJ>;
 	
     void parameterChanged (const juce::String& param, float value) override;
 
@@ -70,86 +66,13 @@ public:
 	void initialiseBuilder(foleys::MagicGUIBuilder& builder) override;
 
 private:
-	// should be reverb internals:
-	static constexpr std::array<Array4, 4> G = {{
-		{0.f,  1.f,  1.f,  0.f},
-		{-1.f, 0.f,  0.f, -1.f},
-		{1.f,  0.f,  0.f, -1.f},
-		{0.f,  1.f, -1.f,  0.f}
-	}};
-	Array4 X;
-	Array4 Y;
-	
-	std::array<nvs::delays::Delay<32768, float>, 2> preDelays;
-	struct DiffusedDelay {
-		void setSampleRate(float sampleRate){
-			for (auto &d : delays){
-				d.setSampleRate(sampleRate);
-			}
-		}
-		void clear(){
-			for (auto &d : delays){
-				d.clear();
-			}
-		}
-		void setDelayTimeMS(double t){
-			for (int i = 0; i < n_delays; ++i){
-				delays[i].setDelayTimeMS(t * ratios[i]);
-			}
-		}
-		[[deprecated]]
-		void updateDelayTimeMS(float target, float oneOverBlockSize){
-			for (int i = 0; i < n_delays; ++i){
-				delays[i].updateDelayTimeMS(target * ratios[i], oneOverBlockSize);
-			}
-		}
-		void setInterpolation(nvs::delays::interp_e interp){
-			for (auto &d : delays){
-				d.setInterpolation(interp);
-			}
-		}
-		void update_g(float g_target, float oneOverBlockSize){
-			for (auto &d : delays){
-				d.update_g(g_target, oneOverBlockSize);
-			}
-		}
-		unsigned int getDelaySize() const {
-			return delays[0].getDelaySize();
-		}
-		float operator()(float inp){
-			float val = delays[3].filter(delays[2].filter(delays[1].filter(delays[0].filter(inp))));
-			return val;
-		}
-		float getLargestRatio() const {
-			return ratios.back();
-		}
-	private:
-		static constexpr size_t n_delays {4};
-		std::array<nvs::delays::AllpassDelay<8192, float>, n_delays> delays;
-		std::array<float, n_delays> ratios {
-			5.f, 13.f, 23.f, 53.f
-		};
-	};
-	
-	std::array<DiffusedDelay, D_IJ> D;
-	float D_times_ranged[D_IJ];
-
-	std::array<nvs::filters::tvap<float>, D_IJ> tvap;
-	std::array<nvs::filters::svf_lin_naive<float>, D_IJ> fm_bp;
-	std::array<nvs::filters::onePole<float>, D_IJ> hp6dB;
-	
-	std::array<nvs::filters::butterworth2p<double>, D_IJ> butters;
-	static constexpr float timeScaling {2.78f};    // multiplier for the [0..1) delay times, PRE-size parameter
-    float minDelTimeMS, maxDelTimeMS, maxPreDelTimeMS;
-//==================================================================================
+	nvs::Shredverb shredverb;
 	juce::ValueTree  presetNode;
 
     juce::AudioProcessorValueTreeState paramVT;
 	std::unordered_map<param::params_e, std::atomic<float>*> paramPtrs;
-
 	void initializeParameterPointers();
 	float getParamValue(param::params_e paramId) const;
-	
 	float getParam(param::params_e paramId) const;
 	template<size_t N>
 	std::array<float, N> getParamArray(const std::array<param::params_e, N>& paramIds) const;

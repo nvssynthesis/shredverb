@@ -47,30 +47,6 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
     magicState.setGuiValueTree (BinaryData::_19_9_25_xml, BinaryData::_19_9_25_xmlSize);
 	
 	initializeParameterPointers();
-	
-	for (auto &pd : preDelays){
-		pd.setInterpolation(nvs::delays::interp_e::floor);
-		pd.setDelayTimeMS(param::paramDefaults.at(param::params_e::predelay));
-	}
-	
-	D_times_ranged[0] = param::paramDefaults.at(param::params_e::time0);
-	D_times_ranged[1] = param::paramDefaults.at(param::params_e::time1);
-	D_times_ranged[2] = param::paramDefaults.at(param::params_e::time2);
-	D_times_ranged[3] = param::paramDefaults.at(param::params_e::time3);
-	
-	X.fill(0.f);
-	Y.fill(0.f);
-	
-    for (int n = 0; n < D_IJ; n++) {
-        D[n].setDelayTimeMS(D_times_ranged[n] * timeScaling);
-        D[n].setInterpolation(nvs::delays::interp_e::floor);
-	}
-	for (auto &bp : fm_bp){
-		bp.setMode(nvs::filters::mode_e::BP);
-	}
-	for (auto &hp : hp6dB){
-		hp.setMode(nvs::filters::mode_e::HP);
-	}
 }
 void ShredVerbAudioProcessor::initializeParameterPointers()
 {
@@ -232,46 +208,7 @@ void ShredVerbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 {
     auto nIn = getTotalNumInputChannels();
     auto nOut = getTotalNumOutputChannels();
-    
-	maxPreDelTimeMS = float((preDelays[0].getDelaySize() - 10) * 1000) / (float)sampleRate; // no more than buffer length - 10
-
-    maxDelTimeMS = float((D[0].getDelaySize() - 10) * 1000) / ((float)sampleRate * D[0].getLargestRatio()); // no more than buffer length - 10
-    minDelTimeMS = float(3 * 1000) / (float)sampleRate; // no less than 3 samples
-    
-	//feed forward pair
-	for (auto &pd : preDelays){
-		pd.clear();
-		pd.setSampleRate(sampleRate);
-#pragma message("set predelay block size!")
-	}
-	
-    for (int n = 0; n < D_IJ; n++) {
-        tvap[n].clear();
-        tvap[n].setSampleRate(sampleRate);
-		tvap[n].setBlockSize(samplesPerBlock);
-    }
-	for (auto &bp : fm_bp){
-		bp.clear();
-		bp.setSampleRate(sampleRate);
-		bp.setBlockSize(samplesPerBlock);
-	}
-
-	for (auto &d : D)  {
-		d.clear();
-		d.setSampleRate((float)sampleRate);
-#pragma message("set delay block size!")
-	}
-    for (int n = 0; n < (nIn + nOut); n++)
-    {
-		hp6dB[n].clear();
-		hp6dB[n].setSampleRate((float)sampleRate);
-		hp6dB[n].setBlockSize(samplesPerBlock);
-    }
-    for (auto &b : butters){
-		b.clear();
-        b.setSampleRate(sampleRate);
-		b.setBlockSize(samplesPerBlock);
-    }
+	shredverb.prepareToPlay(sampleRate, samplesPerBlock, nIn);
 }
 
 void ShredVerbAudioProcessor::releaseResources()
@@ -310,173 +247,34 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 		buffer.clear (i, 0, numSamps);
 	}
 	
-	[[deprecated]]	// any function using this param during processBlock should be deprecated
-    double const oneOverBlockSize = 1.0 / (double)numSamps;
-	
-	std::array<float const* const, 2> inBuff {
-		buffer.getReadPointer(0),
-		(getTotalNumInputChannels() > 1) ? buffer.getReadPointer(1) : buffer.getReadPointer(0)
-	};
+	nvs::Shredverb::BlockwiseParams params;
+	params.predelay = getParam(param::params_e::predelay);
+	params.size = getParam(param::params_e::size);
+	params.decay = getParam(param::params_e::decay);
+	params.lowpass = getParam(param::params_e::lowpass);
+	params.highpass = getParam(param::params_e::highpass);
+	params.drive = juce::Decibels::decibelsToGain<float>(getParam(param::params_e::drive));
 
-	std::array<float* const, 2> outBuff {
-		buffer.getWritePointer(0),
-		(getTotalNumOutputChannels() > 1) ? buffer.getWritePointer(1) : buffer.getWritePointer(0)
-	};
-	auto const times = getParamArray(param::TIME_PARAMS);
-	auto const delayGains = getParamArray(param::DELAY_GAIN_PARAMS);
-	auto const allpassFreqs = getParamArray(param::TVAP_F_PI_PARAMS);
-	auto const allpassBandwidths = getParamArray(param::TVAP_F_B_PARAMS);
-	auto const distortionParams = getParamArray(param::DISTORTION_PARAMS);
+	params.times = getParamArray(param::TIME_PARAMS);
+	params.delayGains = getParamArray(param::DELAY_GAIN_PARAMS);
+	params.allpassFreqs = getParamArray(param::TVAP_F_PI_PARAMS);
+	params.allpassBandwidths = getParamArray(param::TVAP_F_B_PARAMS);
+	params.distortionParams = getParamArray(param::DISTORTION_PARAMS);
 	
-	auto const [dryAmt, wetAmt] = [this]() {
-		auto const wet = getParam(param::params_e::drywet) / 100.0f;
-		return std::make_pair(std::sqrt(1.0f - wet), std::sqrt(wet));
-	}();
+	params.wetMix = getParam(param::params_e::drywet) / 100.0f;
+	params.wetGain = juce::Decibels::decibelsToGain<float>(getParam(param::params_e::wet_gain));
 	
-	float const wetGain = juce::Decibels::decibelsToGain<float>(getParam(param::params_e::wet_gain));
-	float const sizeVal = getParam(param::params_e::size);
-	float const decay = getParam(param::params_e::decay);
-	float const inDrive = juce::Decibels::decibelsToGain<float>(getParam(param::params_e::drive));
-
-    for (int i = 0; i < D_IJ; i++) {
-        D_times_ranged[i] = times[i];
-    }
-	
-    Array4 current_Dtime;
-    for (int i = 0; i < D_IJ; i++) {
-        current_Dtime[i] = D_times_ranged[i];
-        current_Dtime[i] *= sizeVal;
-    }
-	
-	for (int i = 0; i < D_IJ; ++i){
-		float bw = allpassBandwidths[i]; //_ap_fb[i];
-		tvap[i].setCutoffTarget(allpassFreqs[i]); //(_ap_f_pi[i]);
-		tvap[i].setResonanceTarget(bw);
-		
-		fm_bp[i].setCutoffTarget(allpassFreqs[i]);//(_ap_f_pi[i]);
-		
-		bw = nvs::memoryless::clamp_low(bw, 0.2f);
-		float reso = /*_ap_f_pi[i]*/ allpassFreqs[i] / bw;
-		fm_bp[i].setResonanceTarget(reso);
-	}
-	
-	for (auto &filt : butters){
-		filt.setCutoffTarget(getParam(param::params_e::lowpass));
-	}
-    for (auto &filt : hp6dB)  {
-        filt.setCutoffTarget(getParam(param::params_e::highpass));
-    }
-	
-    for (int samp = 0; samp < numSamps; samp++)
-    {
-        for (auto &pd : preDelays){
-            pd.updateDelayTimeMS(getParam(param::params_e::predelay), (float)oneOverBlockSize);
-        }
-        for (int i = 0; i < D_IJ; i++) {
-            D[i].updateDelayTimeMS(nvs::memoryless::clamp
-										(current_Dtime[i] * timeScaling, minDelTimeMS, maxDelTimeMS),
-									(float)oneOverBlockSize);
-			D[i].update_g(delayGains[i] * decay, (float)oneOverBlockSize);
-        }
-		for (auto &filt : tvap){
-			filt.update_f_pi();
-			filt.update_f_b();
-		}
-		for (auto &filt : fm_bp){
-			filt.updateCutoff();
-			filt.updateResonance();
-		}
-		for (auto &f : hp6dB){
-			f.updateCutoff();
-		}
-		for (auto &f : butters){
-			f.updateCutoff();
-		}
-//=============================================================================
-		// now the actual signal path
-		
-		// preserve these until end for dry/wet mixing
-		std::array<float, 2> inSamps {
-			*(inBuff[0] + samp),
-			*(inBuff[1] + samp)
-		};
-		
-        {	// scope for preDelSamp
-			std::array<float, 2> preDelSamp;
-			
-			for (auto i = 0; i < preDelays.size(); ++i){
-				preDelSamp[i]  = preDelays[i].tick_cubic(inSamps[i]);
-			}
-			
-			X[0] = 0.f;
-			X[1] = preDelSamp[0];// * inDrive;
-			X[2] = preDelSamp[1];// * inDrive;
-			X[3] = 0.f;
-        }
-
-        Array4 tmp {0.f, 0.f, 0.f, 0.f};
-        
-		/* G:
-			{0.f,  1.f,  1.f,  0.f},
-			{-1.f, 0.f,  0.f, -1.f},
-			{1.f,  0.f,  0.f, -1.f},
-			{0.f,  1.f, -1.f,  0.f}
-		*/
-		auto const g = decay * 0.707106781186548;
-        for (int i = 0; i < D_IJ; i++) {
-            for (int j = 0; j < D_IJ; j++) {
-                tmp[i] += G[i][j] * Y[j] * (g);
-            }
-            tmp[i] += X[i];
-			for (int j = 0; j < D_IJ; ++j){
-				tmp[j] = butters[j](tmp[j]);
-			}
-			for (int j = 0; j < D_IJ; ++j){
-				tmp[j] = hp6dB[j](tmp[j]);
-			}
-        }
-#if CLASSIC_WAY
-/*L	INTERNAL*/ tmp[0] = tvap[0].filter_fbmod(tmp[0], inner_f_pi[1], inner_f_b[0]);
-/*L DIRECT*/ tmp[1] = tvap[1].filter_fbmod(tmp[1], outer_f_pi[0], outer_f_b[1]);
-/*R DIRECT*/ tmp[2] = tvap[2].filter_fbmod(tmp[2], outer_f_pi[1], outer_f_b[0]);
-/*R INTERNAL*/ tmp[3] = tvap[3].filter_fbmod(tmp[3], inner_f_pi[0], inner_f_b[1]);
-#else
-		Array4 intrnlWcModSig = {
-			nvs::memoryless::unboundSat2(fm_bp[0](tmp[0]) * 1000000000.f) * 100.f * inDrive,
-			nvs::memoryless::unboundSat2(fm_bp[1](tmp[1]) * 1000000000.f) * 100.f * inDrive,
-			nvs::memoryless::unboundSat2(fm_bp[2](tmp[2]) * 1000000000.f) * 100.f * inDrive,
-			nvs::memoryless::unboundSat2(fm_bp[3](tmp[3]) * 1000000000.f) * 100.f * inDrive
-		};
-#pragma message("need to smooth these cutoff/reso if doing it this way")
-		tmp[0] = tvap[0](tmp[0], allpassFreqs[0] + distortionParams[0]*intrnlWcModSig[0], allpassBandwidths[0]); /*L INTERNAL*/
-		tmp[1] = tvap[1](tmp[1], allpassFreqs[1] + distortionParams[1]*intrnlWcModSig[1], allpassBandwidths[1]); /*L DIRECT*/
-		tmp[2] = tvap[2](tmp[2], allpassFreqs[2] + distortionParams[2]*intrnlWcModSig[2], allpassBandwidths[2]); /*R DIRECT*/
-		tmp[3] = tvap[3](tmp[3], allpassFreqs[3] + distortionParams[3]*intrnlWcModSig[3], allpassBandwidths[3]); /*R INTERNAL*/
-#endif
-        Y[0] = D[0](tmp[0]);
-        Y[1] = D[1](tmp[1]);
-        Y[2] = D[2](tmp[2]);
-        Y[3] = D[3](tmp[3]);
-
-		std::array<float, 2> wet {
-			Y[1] * wetGain,// * outDrive,
-			Y[2] * wetGain // * outDrive
-		};
+	shredverb.processBlock(buffer, params);
 
 #if PROTECT_OUTPUT
-		for (auto &w : wet){
-			w = nvs::memoryless::clamp(w, -2.5f, 2.5f);
-		}
-#endif
-		std::array<float, 2> finalOut {
-			dryAmt * inSamps[0] + wetAmt * wet[0],
-			dryAmt * inSamps[1] + wetAmt * wet[1]
-		};
+	for (int chan = 0; chan < nOut; ++chan) {
+		float *outBuff = buffer.getWritePointer(chan);
 		
-		for (int i = 0; i < 2; ++i){
-			*(outBuff[i] + samp) = finalOut[i] * 0.999;
+		for (int samp = 0; samp < numSamps; ++samp) {
+			outBuff[samp] = nvs::memoryless::clamp(outBuff[samp], -2.5f, 2.5f);
 		}
-    }
+	}
+#endif
 }
 #if DEF_EDITOR
 //==============================================================================

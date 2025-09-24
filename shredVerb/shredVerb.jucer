@@ -34,6 +34,8 @@
         <FILE id="c5NwSJ" name="PresetPanel.h" compile="0" resource="0" file="Source/PresetPanel.h"/>
       </GROUP>
       <FILE id="pDh9QS" name="params.h" compile="0" resource="0" file="Source/params.h"/>
+      <FILE id="x4Fff2" name="Shredverb.cpp" compile="1" resource="0" file="Source/Shredverb.cpp"/>
+      <FILE id="gZAyKb" name="Shredverb.h" compile="0" resource="0" file="Source/Shredverb.h"/>
       <FILE id="OMlUdc" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="Fg14UV" name="PluginProcessor.h" compile="0" resource="0"
