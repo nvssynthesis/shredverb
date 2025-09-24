@@ -18,14 +18,8 @@
 #include "nvs_libraries/include/nvs_delayFilters.h"
 #include "nvs_libraries/include/nvs_filters.h"
 #include "params.h"
-#include "PresetListBox.h"
 
-#include "PresetPanel.h"
-#include "Service/PresetManager.h"
-
-#include <string>
-#include <array>
-#define D_IJ 4
+static constexpr int D_IJ {4};
 
 //==============================================================================
 class ShredVerbAudioProcessor  :  public foleys::MagicProcessor,
@@ -35,37 +29,38 @@ public:
     //==============================================================================
     ShredVerbAudioProcessor ();
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
-    void releaseResources() override;
-
-   #ifndef JucePlugin_PreferredChannelConfigurations
+#ifndef JucePlugin_PreferredChannelConfigurations
     bool isBusesLayoutSupported (const juce::AudioProcessor::BusesLayout& layouts) const override;
-   #endif
+#endif
+	//==============================================================================
+	void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+	void releaseResources() override;
+	//==============================================================================
+	using Array4 = std::array<float, D_IJ>;
+
     void parameterChanged (const juce::String& param, float value) override;
 
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 
 #if DEF_EDITOR
     //==============================================================================
-    juce::AudioProcessorEditor* createEditor() override;//
+    juce::AudioProcessorEditor* createEditor() override;
     bool hasEditor() const override;//
 
     //==============================================================================
-    const juce::String getName() const override;//
+    const juce::String getName() const override;
 
-    bool acceptsMidi() const override;//
-    bool producesMidi() const override;//
-    bool isMidiEffect() const override;//
+    bool acceptsMidi() const override;
+    bool producesMidi() const override;
+    bool isMidiEffect() const override;
+	//==============================================================================
+	int getNumPrograms() override;//
+	int getCurrentProgram() override;//
+	void setCurrentProgram (int index) override;//
+	const juce::String getProgramName (int index) override;//
+	void changeProgramName (int index, const juce::String& newName) override;
 #endif
     double getTailLengthSeconds() const override;
-#if DEF_EDITOR
-    //==============================================================================
-    int getNumPrograms() override;//
-    int getCurrentProgram() override;//
-    void setCurrentProgram (int index) override;//
-    const juce::String getProgramName (int index) override;//
-    void changeProgramName (int index, const juce::String& newName) override;//
-#endif
 
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;//
@@ -76,14 +71,14 @@ public:
 
 	// explore code of rev2~ and rev3~
     
-    float G[D_IJ][D_IJ] = {
-        {0.f,  1.f,  1.f,  0.f},
-        {-1.f, 0.f,  0.f, -1.f},
-        {1.f,  0.f,  0.f, -1.f},
-        {0.f,  1.f, -1.f,  0.f}
-    };
-	std::array<float, D_IJ> X;
-	std::array<float, D_IJ> Y;
+	static constexpr std::array<std::array<float, 4>, 4> G = {{
+		{0.f,  1.f,  1.f,  0.f},
+		{-1.f, 0.f,  0.f, -1.f},
+		{1.f,  0.f,  0.f, -1.f},
+		{0.f,  1.f, -1.f,  0.f}
+	}};
+	Array4 X;
+	Array4 Y;
 	
     std::array<nvs::delays::Delay<32768, float>, 2> preDelays;
 	struct DiffusedDelay {
@@ -151,16 +146,6 @@ private:
 	juce::ValueTree  presetNode;
 
     juce::AudioProcessorValueTreeState paramVT;
-
-    void addReverbParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
-    void addDelayParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
-    void addDistorionParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
-    void addAllpassParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
-    
-    void addModulationParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
-
-    void addOutputParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
-    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 	
     std::atomic<float>* driveParam = nullptr;
     std::atomic<float>* predelayParam = nullptr;
@@ -194,10 +179,7 @@ private:
 	std::array<std::atomic<float>*, D_IJ> apdGparams {
 		nullptr, nullptr, nullptr, nullptr
 	};
-
-
     std::atomic<float>* wetGainParam = nullptr;
-    
     std::atomic<float>* interpParam = nullptr;
     std::atomic<float>* randomizeParam = nullptr;
     
@@ -209,8 +191,17 @@ private:
 	void randomizeQualia();
 	void randomizeCharacter();
 	void randomizeAllpass();
-
-//    foleys::MagicProcessorState magicState ;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ShredVerbAudioProcessor)
 };
+
+
+void addReverbParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
+void addDelayParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
+void addDistorionParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
+void addAllpassParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
+
+void addModulationParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
+
+void addOutputParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout);
+juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();

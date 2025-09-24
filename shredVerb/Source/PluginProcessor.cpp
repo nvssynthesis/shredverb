@@ -7,6 +7,10 @@
 */
 
 #include "PluginProcessor.h"
+
+#include "PresetPanel.h"
+#include "Service/PresetManager.h"
+
 #if DEF_EDITOR
 #include "PluginEditor.h"
 #else
@@ -38,7 +42,6 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
 {
     FOLEYS_SET_SOURCE_PATH (__FILE__);
 
-//	presetManager = std::make_unique<nvs::service::PresetManager>(paramVT);
 	// set GUI
     // this is how i was loading default, but docs actually say to do this as return... in createEditor
     magicState.setGuiValueTree (BinaryData::_19_9_25_xml, BinaryData::_19_9_25_xmlSize);
@@ -244,18 +247,10 @@ bool ShredVerbAudioProcessor::acceptsMidi() const {
    #endif
 }
 bool ShredVerbAudioProcessor::producesMidi() const {
-   #if JucePlugin_ProducesMidiOutput
-    return true;
-   #else
     return false;
-   #endif
 }
 bool ShredVerbAudioProcessor::isMidiEffect() const {
-   #if JucePlugin_IsMidiEffect
-    return true;
-   #else
     return false;
-   #endif
 }
 #endif
 double ShredVerbAudioProcessor::getTailLengthSeconds() const
@@ -302,7 +297,6 @@ void ShredVerbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 	for (auto &pd : preDelays){
 		pd.clear();
 		pd.setSampleRate(sampleRate);
-//		pd.set
 #pragma message("set predelay block size!")
 	}
 	
@@ -344,10 +338,6 @@ void ShredVerbAudioProcessor::releaseResources()
 #ifndef JucePlugin_PreferredChannelConfigurations
 bool ShredVerbAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
-  #if JucePlugin_IsMidiEffect
-    juce::ignoreUnused (layouts);
-    return true;
-  #else
     // This is the place where you check if the layout is supported.
     // In this template code we only support mono or stereo.
     if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
@@ -355,13 +345,10 @@ bool ShredVerbAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
         return false;
 
     // This checks if the input layout matches the output layout
-   #if ! JucePlugin_IsSynth
     if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
         return false;
-   #endif
 
     return true;
-  #endif
 }
 #endif
 
@@ -463,7 +450,7 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
         D_times_ranged[i] = times[i];
     }
 	
-    std::array<float, D_IJ> current_Dtime;
+    Array4 current_Dtime;
     for (int i = 0; i < D_IJ; i++) {
         current_Dtime[i] = D_times_ranged[i];
         current_Dtime[i] *= size_val;
@@ -535,7 +522,7 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 			X[3] = 0.f;
         }
 
-        std::array<float, D_IJ> tmp {0.f, 0.f, 0.f, 0.f};
+        Array4 tmp {0.f, 0.f, 0.f, 0.f};
         
 		/* G:
 			{0.f,  1.f,  1.f,  0.f},
@@ -562,7 +549,7 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 /*R DIRECT*/ tmp[2] = tvap[2].filter_fbmod(tmp[2], outer_f_pi[1], outer_f_b[0]);
 /*R INTERNAL*/ tmp[3] = tvap[3].filter_fbmod(tmp[3], inner_f_pi[0], inner_f_b[1]);
 #else
-		std::array<float, 4> intrnlWcModSig = {
+		Array4 intrnlWcModSig = {
 			nvs::memoryless::unboundSat2(fm_bp[0](tmp[0]) * 1000000000.f) * 100.f * inDrive,
 			nvs::memoryless::unboundSat2(fm_bp[1](tmp[1]) * 1000000000.f) * 100.f * inDrive,
 			nvs::memoryless::unboundSat2(fm_bp[2](tmp[2]) * 1000000000.f) * 100.f * inDrive,
@@ -626,54 +613,62 @@ void ShredVerbAudioProcessor::setStateInformation (const void* data, int sizeInB
         if (xmlState->hasTagName (paramVT.state.getType()))
             paramVT.replaceState (juce::ValueTree::fromXml (*xmlState));
 }
-void ShredVerbAudioProcessor::addReverbParameters (juce::AudioProcessorValueTreeState::ParameterLayout& layout){
-	auto predel  = param_stuff::bast::createParam(param_stuff::params_e::predelay);
-    auto size = param_stuff::bast::createParam(param_stuff::params_e::size);
-    auto decay = param_stuff::bast::createParam(param_stuff::params_e::decay);
-    auto lowpass = param_stuff::bast::createParam(param_stuff::params_e::lowpass);
-    auto hipass = param_stuff::bast::createParam(param_stuff::params_e::highpass);
 
-    predel->range.setSkewForCentre(250.f);
-    
-    size->range.setSkewForCentre(0.66f);
-    
-    decay->range.setSkewForCentre(0.55f);
-    decay->range.interval = 0.01f;
-
-    lowpass->range.setSkewForCentre(4000.f);
-    hipass->range.setSkewForCentre(200.f);
-
-    auto group = std::make_unique<juce::AudioProcessorParameterGroup>("qualia", "QUALIA", "|",
-                                                                      std::move (predel),
-                                                                      std::move (size),
-                                                                      std::move (decay),
-                                                                      std::move (hipass),
-                                                                      std::move (lowpass));
-    layout.add (std::move (group));
+//==============================================================================
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+{
+    return new ShredVerbAudioProcessor();
 }
-void ShredVerbAudioProcessor::addDelayParameters (juce::AudioProcessorValueTreeState::ParameterLayout& layout){
-    std::unique_ptr<juce::AudioParameterFloat> time0  = param_stuff::bast::createParam(param_stuff::params_e::time0);
-    std::unique_ptr<juce::AudioParameterFloat> time1  = param_stuff::bast::createParam(param_stuff::params_e::time1);
-    std::unique_ptr<juce::AudioParameterFloat> time2  = param_stuff::bast::createParam(param_stuff::params_e::time2);
-    std::unique_ptr<juce::AudioParameterFloat> time3  = param_stuff::bast::createParam(param_stuff::params_e::time3);
-        
-    float centrVal = 0.7f;
-    float interval = 0.0002f;
-    time0->range.setSkewForCentre(centrVal);
-    time0->range.interval = interval;
-    time1->range.setSkewForCentre(centrVal);
-    time1->range.interval = interval;
-    time2->range.setSkewForCentre(centrVal);
-    time2->range.interval = interval;
-    time3->range.setSkewForCentre(centrVal);
-    time3->range.interval = interval;
+//==============================================================================
 
-    auto group = std::make_unique<juce::AudioProcessorParameterGroup>("timings", "TIMINGS", "|",
-                                                                      std::move (time0),
-                                                                      std::move (time1),
-                                                                      std::move (time2),
-                                                                      std::move (time3));
-    layout.add (std::move (group));
+void addReverbParameters (juce::AudioProcessorValueTreeState::ParameterLayout& layout){
+	auto predel  = param_stuff::bast::createParam(param_stuff::params_e::predelay);
+	auto size = param_stuff::bast::createParam(param_stuff::params_e::size);
+	auto decay = param_stuff::bast::createParam(param_stuff::params_e::decay);
+	auto lowpass = param_stuff::bast::createParam(param_stuff::params_e::lowpass);
+	auto hipass = param_stuff::bast::createParam(param_stuff::params_e::highpass);
+
+	predel->range.setSkewForCentre(250.f);
+	
+	size->range.setSkewForCentre(0.66f);
+	
+	decay->range.setSkewForCentre(0.55f);
+	decay->range.interval = 0.01f;
+
+	lowpass->range.setSkewForCentre(4000.f);
+	hipass->range.setSkewForCentre(200.f);
+
+	auto group = std::make_unique<juce::AudioProcessorParameterGroup>("qualia", "QUALIA", "|",
+																	  std::move (predel),
+																	  std::move (size),
+																	  std::move (decay),
+																	  std::move (hipass),
+																	  std::move (lowpass));
+	layout.add (std::move (group));
+}
+void addDelayParameters (juce::AudioProcessorValueTreeState::ParameterLayout& layout){
+	std::unique_ptr<juce::AudioParameterFloat> time0  = param_stuff::bast::createParam(param_stuff::params_e::time0);
+	std::unique_ptr<juce::AudioParameterFloat> time1  = param_stuff::bast::createParam(param_stuff::params_e::time1);
+	std::unique_ptr<juce::AudioParameterFloat> time2  = param_stuff::bast::createParam(param_stuff::params_e::time2);
+	std::unique_ptr<juce::AudioParameterFloat> time3  = param_stuff::bast::createParam(param_stuff::params_e::time3);
+		
+	float centrVal = 0.7f;
+	float interval = 0.0002f;
+	time0->range.setSkewForCentre(centrVal);
+	time0->range.interval = interval;
+	time1->range.setSkewForCentre(centrVal);
+	time1->range.interval = interval;
+	time2->range.setSkewForCentre(centrVal);
+	time2->range.interval = interval;
+	time3->range.setSkewForCentre(centrVal);
+	time3->range.interval = interval;
+
+	auto group = std::make_unique<juce::AudioProcessorParameterGroup>("timings", "TIMINGS", "|",
+																	  std::move (time0),
+																	  std::move (time1),
+																	  std::move (time2),
+																	  std::move (time3));
+	layout.add (std::move (group));
 	
 	std::array<
 		std::unique_ptr<juce::AudioParameterFloat>,
@@ -698,75 +693,71 @@ void ShredVerbAudioProcessor::addDelayParameters (juce::AudioProcessorValueTreeS
 																	  std::move (gs[3]));
 	layout.add(std::move(group));
 }
-void ShredVerbAudioProcessor::addAllpassParameters (juce::AudioProcessorValueTreeState::ParameterLayout& layout){
+void addAllpassParameters (juce::AudioProcessorValueTreeState::ParameterLayout& layout){
 
-    auto ap0f = param_stuff::bast::createParam(param_stuff::params_e::tvap0_f_pi);
-    auto ap0b = param_stuff::bast::createParam(param_stuff::params_e::tvap0_f_b);
-    auto ap1f = param_stuff::bast::createParam(param_stuff::params_e::tvap1_f_pi);
-    auto ap1b = param_stuff::bast::createParam(param_stuff::params_e::tvap1_f_b);
-    auto ap2f = param_stuff::bast::createParam(param_stuff::params_e::tvap2_f_pi);
-    auto ap2b = param_stuff::bast::createParam(param_stuff::params_e::tvap2_f_b);
-    auto ap3f = param_stuff::bast::createParam(param_stuff::params_e::tvap3_f_pi);
-    auto ap3b = param_stuff::bast::createParam(param_stuff::params_e::tvap3_f_b);
+	auto ap0f = param_stuff::bast::createParam(param_stuff::params_e::tvap0_f_pi);
+	auto ap0b = param_stuff::bast::createParam(param_stuff::params_e::tvap0_f_b);
+	auto ap1f = param_stuff::bast::createParam(param_stuff::params_e::tvap1_f_pi);
+	auto ap1b = param_stuff::bast::createParam(param_stuff::params_e::tvap1_f_b);
+	auto ap2f = param_stuff::bast::createParam(param_stuff::params_e::tvap2_f_pi);
+	auto ap2b = param_stuff::bast::createParam(param_stuff::params_e::tvap2_f_b);
+	auto ap3f = param_stuff::bast::createParam(param_stuff::params_e::tvap3_f_pi);
+	auto ap3b = param_stuff::bast::createParam(param_stuff::params_e::tvap3_f_b);
 
-    auto group = std::make_unique<juce::AudioProcessorParameterGroup>("allpass", "ALLPASS", "|",
-                                                                      std::move (ap0f),
-                                                                      std::move (ap0b),
-                                                                      std::move (ap1f),
-                                                                      std::move (ap1b),
-                                                                      std::move (ap2f),
-                                                                      std::move (ap2b),
-                                                                      std::move (ap3f),
-                                                                      std::move (ap3b));
-    layout.add (std::move (group));
+	auto group = std::make_unique<juce::AudioProcessorParameterGroup>("allpass", "ALLPASS", "|",
+																	  std::move (ap0f),
+																	  std::move (ap0b),
+																	  std::move (ap1f),
+																	  std::move (ap1b),
+																	  std::move (ap2f),
+																	  std::move (ap2b),
+																	  std::move (ap3f),
+																	  std::move (ap3b));
+	layout.add (std::move (group));
 }
-void ShredVerbAudioProcessor::addDistorionParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout){
-    
-    auto drive  = param_stuff::bast::createParam(param_stuff::params_e::drive);
-    auto inner1 = param_stuff::bast::createParam(param_stuff::params_e::dist1_inner);
-    auto outer1 = param_stuff::bast::createParam(param_stuff::params_e::dist1_outer);
-    auto inner2 = param_stuff::bast::createParam(param_stuff::params_e::dist2_inner);
-    auto outer2 = param_stuff::bast::createParam(param_stuff::params_e::dist2_outer);
-    
-    float centrVal = 0.2f;
-    inner1->range.setSkewForCentre(centrVal);
-    inner2->range.setSkewForCentre(centrVal);
-    outer1->range.setSkewForCentre(centrVal);
-    outer2->range.setSkewForCentre(centrVal);
+void addDistorionParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout){
 	
-    auto group = std::make_unique<juce::AudioProcessorParameterGroup>("shred", "SHRED", "|",
-                                                                      std::move (drive),
-                                                                      std::move (inner1),
-                                                                      std::move (outer1),
-                                                                      std::move (inner2),
-                                                                      std::move (outer2));
-    layout.add (std::move (group));
+	auto drive  = param_stuff::bast::createParam(param_stuff::params_e::drive);
+	auto inner1 = param_stuff::bast::createParam(param_stuff::params_e::dist1_inner);
+	auto outer1 = param_stuff::bast::createParam(param_stuff::params_e::dist1_outer);
+	auto inner2 = param_stuff::bast::createParam(param_stuff::params_e::dist2_inner);
+	auto outer2 = param_stuff::bast::createParam(param_stuff::params_e::dist2_outer);
+	
+	float centrVal = 0.2f;
+	inner1->range.setSkewForCentre(centrVal);
+	inner2->range.setSkewForCentre(centrVal);
+	outer1->range.setSkewForCentre(centrVal);
+	outer2->range.setSkewForCentre(centrVal);
+	
+	auto group = std::make_unique<juce::AudioProcessorParameterGroup>("shred", "SHRED", "|",
+																	  std::move (drive),
+																	  std::move (inner1),
+																	  std::move (outer1),
+																	  std::move (inner2),
+																	  std::move (outer2));
+	layout.add (std::move (group));
 }
-void ShredVerbAudioProcessor::addModulationParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout)
-{}
-void ShredVerbAudioProcessor::addOutputParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout){
-    auto drywet = param_stuff::bast::createParam(param_stuff::params_e::drywet);
-    auto wet_gain = param_stuff::bast::createParam(param_stuff::params_e::wet_gain);
-
-    auto group = std::make_unique<juce::AudioProcessorParameterGroup>("output", "OUTPUT", "|",
-                                                                      std::move (drywet),
-                                                                      std::move (wet_gain));
-    layout.add (std::move (group));
-}
-juce::AudioProcessorValueTreeState::ParameterLayout ShredVerbAudioProcessor::createParameterLayout()
+void addModulationParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout)
 {
-    juce::AudioProcessorValueTreeState::ParameterLayout layout;
-    ShredVerbAudioProcessor::addReverbParameters (layout);
-    ShredVerbAudioProcessor::addDelayParameters (layout);
-    ShredVerbAudioProcessor::addAllpassParameters (layout);
-    ShredVerbAudioProcessor::addDistorionParameters (layout);
-    ShredVerbAudioProcessor::addOutputParameters (layout);
-    return layout;
+#pragma message("we should add some modulation params")
+}
+void addOutputParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout){
+	auto drywet = param_stuff::bast::createParam(param_stuff::params_e::drywet);
+	auto wet_gain = param_stuff::bast::createParam(param_stuff::params_e::wet_gain);
+
+	auto group = std::make_unique<juce::AudioProcessorParameterGroup>("output", "OUTPUT", "|",
+																	  std::move (drywet),
+																	  std::move (wet_gain));
+	layout.add (std::move (group));
 }
 
-//==============================================================================
-// This creates new instances of the plugin..
-juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 {
-    return new ShredVerbAudioProcessor();
+	juce::AudioProcessorValueTreeState::ParameterLayout layout;
+	addReverbParameters (layout);
+	addDelayParameters (layout);
+	addAllpassParameters (layout);
+	addDistorionParameters (layout);
+	addOutputParameters (layout);
+	return layout;
 }
