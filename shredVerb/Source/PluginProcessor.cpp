@@ -78,7 +78,7 @@ ShredVerbAudioProcessor::ShredVerbAudioProcessor()	:
 	apdGparams[2] = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::g2));
 	apdGparams[3] = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::g3));
 	
-    outputGainParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::output_gain));
+    wetGainParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::wet_gain));
     interpParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::interp_type));
     randomizeParam = paramVT.getRawParameterValue (param_stuff::paramIDs.at(param_stuff::params_e::randomize));
 		
@@ -417,8 +417,12 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 		apdGparams[3]->load()
 	};
 	
-    float const _dryWet = dryWetParam->load() / 100.f;
-	float const outGain = juce::Decibels::decibelsToGain<float>(outputGainParam->load());
+	auto const [dry_amt, wet_amt] = [this](){
+		auto const wet = dryWetParam->load() / 100.f;
+		return std::make_pair(std::sqrt(1.f - wet), std::sqrt(wet));
+	}();
+	
+	float const wetGain = juce::Decibels::decibelsToGain<float>(wetGainParam->load());
 
 	std::array<float, 4> _ap_f_pi {
 		allpassFrequencyPiParam0->load(),
@@ -576,8 +580,8 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
         Y[3] = D[3](tmp[3]);
 
 		std::array<float, 2> wet {
-			Y[1] * outGain,// * outDrive,
-			Y[2] * outGain // * outDrive
+			Y[1] * wetGain,// * outDrive,
+			Y[2] * wetGain // * outDrive
 		};
 
 #if PROTECT_OUTPUT
@@ -586,8 +590,8 @@ void ShredVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 		}
 #endif
 		std::array<float, 2> finalOut {
-			wet[0] * _dryWet + inSamps[0] * (1 - _dryWet),
-			wet[1] * _dryWet + inSamps[1] * (1 - _dryWet)
+			dry_amt * inSamps[0] + wet_amt * wet[0],
+			dry_amt * inSamps[1] + wet_amt * wet[1]
 		};
 		
 		for (int i = 0; i < 2; ++i){
@@ -614,8 +618,6 @@ void ShredVerbAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 	std::unique_ptr<juce::XmlElement> xml (state.createXml());
 	copyXmlToBinary (*xml, destData);
 }
-
-
 void ShredVerbAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
 	std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
@@ -731,11 +733,7 @@ void ShredVerbAudioProcessor::addDistorionParameters(juce::AudioProcessorValueTr
     inner2->range.setSkewForCentre(centrVal);
     outer1->range.setSkewForCentre(centrVal);
     outer2->range.setSkewForCentre(centrVal);
-//    inner1->range.interval = distInterval / 25.f;
-//    inner2->range.interval = distInterval / 25.f;
-//    outer1->range.interval = distInterval / 25.f;
-//    outer2->range.interval = distInterval / 25.f;
-
+	
     auto group = std::make_unique<juce::AudioProcessorParameterGroup>("shred", "SHRED", "|",
                                                                       std::move (drive),
                                                                       std::move (inner1),
@@ -748,11 +746,11 @@ void ShredVerbAudioProcessor::addModulationParameters(juce::AudioProcessorValueT
 {}
 void ShredVerbAudioProcessor::addOutputParameters(juce::AudioProcessorValueTreeState::ParameterLayout& layout){
     auto drywet = param_stuff::bast::createParam(param_stuff::params_e::drywet);
-    auto output = param_stuff::bast::createParam(param_stuff::params_e::output_gain);
+    auto wet_gain = param_stuff::bast::createParam(param_stuff::params_e::wet_gain);
 
     auto group = std::make_unique<juce::AudioProcessorParameterGroup>("output", "OUTPUT", "|",
                                                                       std::move (drywet),
-                                                                      std::move (output));
+                                                                      std::move (wet_gain));
     layout.add (std::move (group));
 }
 juce::AudioProcessorValueTreeState::ParameterLayout ShredVerbAudioProcessor::createParameterLayout()

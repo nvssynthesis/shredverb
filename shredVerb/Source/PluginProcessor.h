@@ -196,7 +196,7 @@ private:
 	};
 
 
-    std::atomic<float>* outputGainParam = nullptr;
+    std::atomic<float>* wetGainParam = nullptr;
     
     std::atomic<float>* interpParam = nullptr;
     std::atomic<float>* randomizeParam = nullptr;
