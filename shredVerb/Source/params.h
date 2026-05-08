@@ -47,47 +47,48 @@ enum class params_e {
 	drywet,
 	wet_gain,
 	
-	count,
-	
-	interp_type,
-	randomize
+	count
 };
 
-// Static arrays for grouped parameter IDs (cleaner than individual variables)
-   static constexpr std::array<params_e, 4> TVAP_F_PI_PARAMS = {
-	   params_e::tvap0_f_pi,
-	   params_e::tvap1_f_pi,
-	   params_e::tvap2_f_pi,
-	   params_e::tvap3_f_pi
-   };
-   
-   static constexpr std::array<params_e, 4> TVAP_F_B_PARAMS = {
-	   params_e::tvap0_f_b,
-	   params_e::tvap1_f_b,
-	   params_e::tvap2_f_b,
-	   params_e::tvap3_f_b
-   };
-   
-   static constexpr std::array<params_e, 4> TIME_PARAMS = {
-	   params_e::time0,
-	   params_e::time1,
-	   params_e::time2,
-	   params_e::time3
-   };
-   
-   static constexpr std::array<params_e, 4> DELAY_GAIN_PARAMS = {
-	   params_e::g0,
-	   params_e::g1,
-	   params_e::g2,
-	   params_e::g3
-   };
-   
-   static constexpr std::array<params_e, 4> DISTORTION_PARAMS = {
-	   params_e::dist1_inner,
-	   params_e::dist1_outer,
-	   params_e::dist2_inner,
-	   params_e::dist2_outer
-   };
+static constexpr std::array<params_e, 4> TVAP_F_PI_PARAMS =
+{
+   params_e::tvap0_f_pi,
+   params_e::tvap1_f_pi,
+   params_e::tvap2_f_pi,
+   params_e::tvap3_f_pi
+};
+
+static constexpr std::array<params_e, 4> TVAP_F_B_PARAMS =
+{
+   params_e::tvap0_f_b,
+   params_e::tvap1_f_b,
+   params_e::tvap2_f_b,
+   params_e::tvap3_f_b
+};
+
+static constexpr std::array<params_e, 4> TIME_PARAMS =
+{
+   params_e::time0,
+   params_e::time1,
+   params_e::time2,
+   params_e::time3
+};
+
+static constexpr std::array<params_e, 4> DELAY_GAIN_PARAMS =
+{
+   params_e::g0,
+   params_e::g1,
+   params_e::g2,
+   params_e::g3
+};
+
+static constexpr std::array<params_e, 4> DISTORTION_PARAMS =
+{
+   params_e::dist1_inner,
+   params_e::dist1_outer,
+   params_e::dist2_outer,
+   params_e::dist2_inner
+};
   
 inline static const std::map<params_e, std::string> paramIDs =
 {
@@ -110,8 +111,6 @@ inline static const std::map<params_e, std::string> paramIDs =
 	{params_e::dist1_outer, "outer distortion 1"},
 	{params_e::dist2_inner, "inner distortion 2"},
 	{params_e::dist2_outer, "outer distortion 2"},
-	{params_e::interp_type, "interpolation type"},
-	{params_e::randomize, "randomizzze"},
 	{params_e::wet_gain, "wet gain"},
 	{params_e::time0, "delay time 0"},
 	{params_e::time1, "delay time 1"},
@@ -143,8 +142,6 @@ inline static const std::map<params_e, std::string> paramNames =
 	{params_e::dist1_outer, "Outer Distortion 1"},
 	{params_e::dist2_inner, "Inner Distortion 2"},
 	{params_e::dist2_outer, "Outer Distortion 2"},
-	{params_e::interp_type, "Interpolation Type"},
-	{params_e::randomize, "Randomize"},
 	{params_e::wet_gain, "Wet Gain"},
 	{params_e::time0, "Delay 0"},
 	{params_e::time1, "Delay 1"},
@@ -245,8 +242,6 @@ inline static const std::map<params_e, float> paramSkewFactorFromMidpoints =
 	{params_e::dist1_outer, 0.3f},
 	{params_e::dist2_inner, 0.3f},
 	{params_e::dist2_outer, 0.3f},
-	{params_e::interp_type, 0.3f},
-	{params_e::randomize,   0.5f},
 	{params_e::wet_gain, 0.f},
 	{params_e::time0,       0.5f},
 	{params_e::time1,       0.5f},
@@ -278,8 +273,6 @@ inline static const std::map<params_e, int> paramNumDecimalPlacesToDisplay =
 	{params_e::dist1_outer, 3},
 	{params_e::dist2_inner, 3},
 	{params_e::dist2_outer, 3},
-	{params_e::interp_type, 3},
-	{params_e::randomize,   2},
 	{params_e::wet_gain, 2},
 	{params_e::time0,       2},
 	{params_e::time1,       2},

@@ -25,7 +25,6 @@ Shredverb::Shredverb()
 	D_times_ranged[2] = param::paramDefaults.at(param::params_e::time2);
 	D_times_ranged[3] = param::paramDefaults.at(param::params_e::time3);
 	
-	X.fill(0.f);
 	Y.fill(0.f);
 	
 	for (int n = 0; n < D_IJ; n++) {
@@ -35,7 +34,7 @@ Shredverb::Shredverb()
 	for (auto &bp : fm_bp){
 		bp.setMode(nvs::filters::mode_e::BP);
 	}
-	for (auto &hp : hp6dB){
+	for (auto &hp : HPbutters){
 		hp.setMode(nvs::filters::mode_e::HP);
 	}
 }
@@ -68,13 +67,13 @@ void Shredverb::prepareToPlay (double sampleRate, int samplesPerBlock, int numIn
 		d.setSampleRate((float)sampleRate);
 #pragma message("set delay block size!")
 	}
-	for (auto& hp : hp6dB)
+	for (auto& hp : HPbutters)
 	{
 		hp.clear();
 		hp.setSampleRate((float)sampleRate);
 		hp.setBlockSize(samplesPerBlock);
 	}
-	for (auto &b : butters){
+	for (auto &b : LPbutters){
 		b.clear();
 		b.setSampleRate(sampleRate);
 		b.setBlockSize(samplesPerBlock);
@@ -104,10 +103,10 @@ void Shredverb::processBlock (juce::AudioBuffer<float>& buff, BlockwiseParams co
 		fm_bp[i].setResonanceTarget(reso);
 	}
 
-	for (auto &filt : butters){
+	for (auto &filt : LPbutters){
 		filt.setCutoffTarget(params.lowpass);
 	}
-	for (auto &filt : hp6dB)  {
+	for (auto &filt : HPbutters)  {
 		filt.setCutoffTarget(params.highpass);
 	}
 	auto const [dryAmt, wetAmt] = [wet = params.wetMix]() {
@@ -137,10 +136,10 @@ void Shredverb::processBlock (juce::AudioBuffer<float>& buff, BlockwiseParams co
 			filt.updateCutoff();
 			filt.updateResonance();
 		}
-		for (auto &f : hp6dB){
+		for (auto &f : HPbutters){
 			f.updateCutoff();
 		}
-		for (auto &f : butters){
+		for (auto &f : LPbutters){
 			f.updateCutoff();
 		}
 		//=============================================================================
@@ -162,6 +161,7 @@ void Shredverb::processBlock (juce::AudioBuffer<float>& buff, BlockwiseParams co
 			*(inBuff[1] + samp)
 		};
 
+		Array4 X;
 		{	// scope for preDelSamp
 			std::array<float, 2> preDelSamp;
 
@@ -169,19 +169,21 @@ void Shredverb::processBlock (juce::AudioBuffer<float>& buff, BlockwiseParams co
 				preDelSamp[i]  = preDelays[i].tick_cubic(inSamps[i]);
 			}
 
-			X[0] = 0.f;
-			X[1] = preDelSamp[0];// * inDrive;
-			X[2] = preDelSamp[1];// * inDrive;
-			X[3] = 0.f;
+#pragma message("here is actually a great opportunity to try something like equal power xfade on where the input is FED INTO. maybe it'd change perceived location?")
+			float const place = 0.0f;
+			X[0] = place * preDelSamp[0];
+			X[1] = (1.f - place) * preDelSamp[0];
+			X[2] = (1.f - place) * preDelSamp[1];
+			X[3] = place * preDelSamp[1];
 		}
 
 		Array4 tmp {0.f, 0.f, 0.f, 0.f};
 
-		static constexpr std::array<Array4, 4> G {{
-			{0.f,  1.f,  1.f,  0.f},
-			{-1.f, 0.f,  0.f, -1.f},
-			{1.f,  0.f,  0.f, -1.f},
-			{0.f,  1.f, -1.f,  0.f}
+		static constexpr std::array<Array4, D_IJ> G {{
+			{+0, +1, +1, +0},
+			{-1, +0, +0, -1},
+			{+1, +0, +0, -1},
+			{+0, +1, -1, +0}
 		}};
 		
 		auto const g = params.decay * 0.707106781186548;
@@ -191,10 +193,10 @@ void Shredverb::processBlock (juce::AudioBuffer<float>& buff, BlockwiseParams co
 			}
 			tmp[i] += X[i];
 			for (int j = 0; j < D_IJ; ++j){
-				tmp[j] = butters[j](tmp[j]);
+				tmp[j] = LPbutters[j](tmp[j]);
 			}
 			for (int j = 0; j < D_IJ; ++j){
-				tmp[j] = hp6dB[j](tmp[j]);
+				tmp[j] = HPbutters[j](tmp[j]);
 			}
 		}
 		#if CLASSIC_WAY

@@ -25,7 +25,9 @@ public:
 	struct BlockwiseParams
 	{
 		float predelay, size, decay, lowpass, highpass, drive, wetMix, wetGain;
-		Array4 times, delayGains, allpassFreqs, allpassBandwidths, distortionParams;
+		Array4 times, delayGains,
+			allpassFreqs, allpassBandwidths,
+			distortionParams;
 	};
 	
 	void prepareToPlay (double sampleRate, int samplesPerBlock, int numInputChannels);
@@ -92,13 +94,12 @@ private:
 	
 	std::array<nvs::filters::tvap<float>, D_IJ> tvap;
 	std::array<nvs::filters::svf_lin_naive<float>, D_IJ> fm_bp;
-	std::array<nvs::filters::onePole<float>, D_IJ> hp6dB;
 	
-	std::array<nvs::filters::butterworth2p<double>, D_IJ> butters;
+	std::array<nvs::filters::butterworth2p<double>, D_IJ> LPbutters;
+	std::array<nvs::filters::butterworth2p<double>, D_IJ> HPbutters;
 	static constexpr float timeScaling {2.78f};    // multiplier for the [0..1) delay times, PRE-size parameter
 	float minDelTimeMS, maxDelTimeMS, maxPreDelTimeMS;
 	
-	Array4 X;
 	Array4 Y;
 	//==================================================================================
 };

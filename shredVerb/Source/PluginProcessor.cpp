@@ -59,13 +59,7 @@ void ShredVerbAudioProcessor::initializeParameterPointers()
 		param::params_e::lowpass,
 		param::params_e::highpass,
 		param::params_e::drywet,
-		param::params_e::wet_gain,
-		param::params_e::interp_type,
-		param::params_e::randomize,
-		param::params_e::dist1_inner,
-		param::params_e::dist1_outer,
-		param::params_e::dist2_inner,
-		param::params_e::dist2_outer
+		param::params_e::wet_gain
 	};
 	
 	allParams.insert(allParams.end(), param::TVAP_F_PI_PARAMS.begin(), param::TVAP_F_PI_PARAMS.end());
